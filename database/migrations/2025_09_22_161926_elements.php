@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('link');
             $table->string('cover');
             $table->text('desc');
+             $table->tinyInteger('etate')->default(0);
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('elementype_id');
             $table->unsignedBigInteger('categorie_id');

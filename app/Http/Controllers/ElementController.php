@@ -135,4 +135,20 @@ class ElementController extends Controller
 
         return redirect()->route('element.list')->with('success', 'Element update with success.' . "---- " . now());
     }
+
+    public function endesable($id): RedirectResponse
+    {
+        $etate = DB::table('elements')->where('id', $id)->value('etate');
+        if($etate == 0){
+            Element::where('id', $id)->update([
+                'etate' => 1,
+            ]);
+            return redirect()->route('element.list')->with('success', 'Element enabled.' . "-------- " . now());
+        }else{
+            Element::where('id', $id)->update([
+                'etate' => 0,
+            ]);
+            return redirect()->route('element.list')->with('success', 'Element disabled.' . "-------- " . now());
+        }
+    }
 }

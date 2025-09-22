@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/element/list', [ElementController::class, 'list'])->name('element.list');
     Route::get('/element/{id}/edit/', [ElementController::class, 'edit'])->name('element.edit');
     Route::put('/element/{id}/update', [ElementController::class, 'update'])->name('element.update');
-    Route::delete('/element/{id}/destroy', [ElementController::class, 'destroy'])->name('element.destroy');
+    Route::get('/element/{id}/endesable', [ElementController::class, 'endesable'])->name('element.endesable');
 });
 
 require __DIR__.'/auth.php';

@@ -44,8 +44,9 @@ import {
     ChevronRight,
     ChevronsLeft,
     ChevronsRight,
+    Eye,
     Pencil,
-    Trash,
+    X,
 } from 'lucide-react';
 import * as React from 'react';
 import { useEffect } from 'react';
@@ -61,6 +62,7 @@ interface Element {
     cat_name: string;
     et_name: string;
     cover: string;
+    etate: number;
 }
 
 interface FlashMessages {
@@ -158,30 +160,6 @@ const columns: ColumnDef<Element>[] = [
         enableColumnFilter: true,
     },
 
-    // {
-    //     accessorKey: "cont",
-    //     header: ({ column }) => (
-    //         <Button
-    //             variant="ghost"
-    //             onClick={() =>
-    //                 column.toggleSorting(column.getIsSorted() === "asc")
-    //             }
-    //         >
-    //             Montant <ArrowUpDown className="ml-2" />
-    //         </Button>
-    //     ),
-    //     cell: ({ row }) => {
-    //         const value = row.original.cont;
-    //         const formattedValue = new Intl.NumberFormat("fr-FR", {
-    //             style: "decimal",
-    //             minimumFractionDigits: 0,
-    //             maximumFractionDigits: 0,
-    //         }).format(value);
-    //         return <div>{formattedValue}</div>;
-    //     },
-    //     enableColumnFilter: true,
-    // },
-
     {
         accessorKey: 'cover',
         header: ({ column }) => (
@@ -274,6 +252,115 @@ const columns: ColumnDef<Element>[] = [
 
             return (
                 <div className="flex gap-2">
+                    {elements.etate == 1 ? (
+                        <TooltipProvider>
+                            <Tooltip>
+                                <Dialog.Root>
+                                    <Dialog.Trigger asChild>
+                                        <TooltipTrigger asChild>
+                                            <Button
+                                                variant="ghost"
+                                                className="flex h-10 w-10 items-center justify-center rounded-full bg-green-700 hover:bg-gray-300"
+                                            >
+                                                <Eye className="h-5 w-5 text-white" />
+                                            </Button>
+                                        </TooltipTrigger>
+                                    </Dialog.Trigger>
+                                    <TooltipContent side="top">
+                                        Disable
+                                    </TooltipContent>
+                                    <Dialog.Portal>
+                                        <Dialog.Overlay className="fixed inset-0 bg-black/50" />
+                                        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform rounded-lg bg-white p-6 shadow-lg">
+                                            <Dialog.Title className="text-lg font-semibold">
+                                                Disable confimation
+                                            </Dialog.Title>
+                                            <Dialog.Description className="mb-4 mt-2 text-sm text-gray-600">
+                                                Are you sure to disable this
+                                                element?
+                                            </Dialog.Description>
+                                            <div className="flex justify-end gap-4">
+                                                <Dialog.Close asChild>
+                                                    <Button
+                                                        variant="outline"
+                                                        className="bg-green-700 text-white"
+                                                    >
+                                                        No
+                                                    </Button>
+                                                </Dialog.Close>
+                                                <Dialog.Close asChild>
+                                                    <Button
+                                                        variant="destructive"
+                                                        onClick={() =>
+                                                            router.get(
+                                                                `/element/${elements.id}/endesable`,
+                                                            )
+                                                        }
+                                                    >
+                                                        Yes
+                                                    </Button>
+                                                </Dialog.Close>
+                                            </div>
+                                        </Dialog.Content>
+                                    </Dialog.Portal>
+                                </Dialog.Root>
+                            </Tooltip>
+                        </TooltipProvider>
+                    ) : (
+                        <TooltipProvider>
+                            <Tooltip>
+                                <Dialog.Root>
+                                    <Dialog.Trigger asChild>
+                                        <TooltipTrigger asChild>
+                                            <Button
+                                                variant="ghost"
+                                                className="flex h-10 w-10 items-center justify-center rounded-full bg-red-700 hover:bg-gray-300"
+                                            >
+                                                <X className="h-5 w-5 text-white" />
+                                            </Button>
+                                        </TooltipTrigger>
+                                    </Dialog.Trigger>
+                                    <TooltipContent side="top">
+                                        Enable
+                                    </TooltipContent>
+                                    <Dialog.Portal>
+                                        <Dialog.Overlay className="fixed inset-0 bg-black/50" />
+                                        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform rounded-lg bg-white p-6 shadow-lg">
+                                            <Dialog.Title className="text-lg font-semibold">
+                                                Enable Confirmation
+                                            </Dialog.Title>
+                                            <Dialog.Description className="mb-4 mt-2 text-sm text-gray-600">
+                                                Are you sure to enable this
+                                                element?
+                                            </Dialog.Description>
+                                            <div className="flex justify-end gap-4">
+                                                <Dialog.Close asChild>
+                                                    <Button
+                                                        variant="outline"
+                                                        className="bg-green-700 text-white"
+                                                    >
+                                                        No
+                                                    </Button>
+                                                </Dialog.Close>
+                                                <Dialog.Close asChild>
+                                                    <Button
+                                                        variant="destructive"
+                                                        onClick={() =>
+                                                            router.get(
+                                                                `/element/${elements.id}/endesable`,
+                                                            )
+                                                        }
+                                                    >
+                                                        Yes
+                                                    </Button>
+                                                </Dialog.Close>
+                                            </div>
+                                        </Dialog.Content>
+                                    </Dialog.Portal>
+                                </Dialog.Root>
+                            </Tooltip>
+                        </TooltipProvider>
+                    )}
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger asChild>
@@ -290,58 +377,6 @@ const columns: ColumnDef<Element>[] = [
                                 </Button>
                             </TooltipTrigger>
                             <TooltipContent side="top">Edit</TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                    <TooltipProvider>
-                        <Tooltip>
-                            <Dialog.Root>
-                                <Dialog.Trigger asChild>
-                                    <TooltipTrigger asChild>
-                                        <Button
-                                            variant="ghost"
-                                            className="flex h-10 w-10 items-center justify-center rounded-full bg-red-700 hover:bg-gray-300"
-                                        >
-                                            <Trash className="h-5 w-5 text-white" />
-                                        </Button>
-                                    </TooltipTrigger>
-                                </Dialog.Trigger>
-                                <TooltipContent side="top">
-                                    Delete
-                                </TooltipContent>
-                                <Dialog.Portal>
-                                    <Dialog.Overlay className="fixed inset-0 bg-black/50" />
-                                    <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform rounded-lg bg-white p-6 shadow-lg">
-                                        <Dialog.Title className="text-lg font-semibold">
-                                            Deletion Confirmation
-                                        </Dialog.Title>
-                                        <Dialog.Description className="mb-4 mt-2 text-sm text-gray-600">
-                                            Are you sure to delete this element?
-                                        </Dialog.Description>
-                                        <div className="flex justify-end gap-4">
-                                            <Dialog.Close asChild>
-                                                <Button
-                                                    variant="outline"
-                                                    className="bg-green-700 text-white"
-                                                >
-                                                    No
-                                                </Button>
-                                            </Dialog.Close>
-                                            <Dialog.Close asChild>
-                                                <Button
-                                                    variant="destructive"
-                                                    onClick={() =>
-                                                        router.delete(
-                                                            `/element/${elements.id}/destroy`,
-                                                        )
-                                                    }
-                                                >
-                                                    Yes
-                                                </Button>
-                                            </Dialog.Close>
-                                        </div>
-                                    </Dialog.Content>
-                                </Dialog.Portal>
-                            </Dialog.Root>
                         </Tooltip>
                     </TooltipProvider>
                 </div>
