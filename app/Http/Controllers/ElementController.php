@@ -24,28 +24,38 @@ class ElementController extends Controller
 
      public function store(Request $request): RedirectResponse
      {
-        dd($request);
+
         $validatedData = $request->validate([
             'link' => 'required|string|max:255',
-            'cover' => 'required|file',
+            'cover' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'title' => 'required|string|max:255',
             'desc' => 'required|string|max:255',
             'elementype' => 'required|integer',
-            'categorie' => 'required|integer',
+            'category' => 'required|integer',
         ]);
 
         // Save data on database
         try {
+            if ($request->hasFile('cover')) {
+                // save in storage/app/public/element_images
+                $file = $request->file('cover');
+                $filename = Auth::user()->id.'_'.time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
+                $path = $file->storeAs('element_images', $filename, 'public');
+
+                // save the path
+                $validatedData['cover'] = $path;
+            }
             Element::create([
                 'link' => $validatedData['link'],
-                //'cover' => $path,
+                'cover' => $validatedData['cover'],
                 'title' => $validatedData['title'],
                 'desc' => $validatedData['desc'],
                 'elementype_id' => $validatedData['elementype'],
-                'categorie_id' => $validatedData['categorie'],
+                'categorie_id' => $validatedData['category'],
+                'user_id' => Auth::user()->id,
             ]);
         } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Error' . "-------- " . now() /*. $e->getMessage()*/);
+        return redirect()->back()->with('error', 'Error' . "-------- " . now() . $e->getMessage());
         }
 
         return redirect()->route('element.list')->with('success', 'Element save with success.' . "---- " . now());

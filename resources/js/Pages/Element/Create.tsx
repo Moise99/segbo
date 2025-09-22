@@ -29,7 +29,7 @@ import { z } from 'zod';
 
 const formSchema = z.object({
     desc: z.string().min(10, {
-        message: '20 character minimum.',
+        message: '10 character minimum.',
     }),
     title: z.string().min(4, {
         message: '10 character minimum.',
@@ -40,8 +40,9 @@ const formSchema = z.object({
     cover: z
         .instanceof(File)
         .refine(
-            (file) => ['image/jpeg', 'image/png'].includes(file.type),
-            'Only .jpeg and .png formats are allowed.',
+            (file) =>
+                ['image/jpeg', 'image/jpg', 'image/png'].includes(file.type),
+            'Only .jpeg, .jpg and .png formats are allowed.',
         )
         .refine(
             (file) => file.size <= 2 * 1024 * 1024, // 2MB max
@@ -144,6 +145,7 @@ export default function Create() {
                                                 <Input
                                                     placeholder="20 character minimum"
                                                     {...field}
+                                                    value={field.value ?? ''}
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -167,6 +169,7 @@ export default function Create() {
                                                 <Input
                                                     placeholder="7 character minimum"
                                                     {...field}
+                                                    value={field.value ?? ''}
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -201,6 +204,7 @@ export default function Create() {
                                             {errors.cover && (
                                                 <p className="text-red-700">
                                                     {errors.cover}
+                                                    pas bien
                                                 </p>
                                             )}
                                         </FormItem>

@@ -112,7 +112,20 @@ const columns: ColumnDef<Element>[] = [
                 Title <ArrowUpDown className="ml-2" />
             </Button>
         ),
-        cell: ({ row }) => <div>{row.original.title}</div>,
+        cell: ({ row }) => {
+            const maxLength = 10;
+            const obs = row.original.title;
+
+            if (!obs) {
+                return <div className="tiptap italic text-gray-400">—</div>;
+            }
+            const textOnly = row.original.title.replace(/<[^>]+>/g, '');
+            const displayText =
+                textOnly.length > maxLength
+                    ? textOnly.substring(0, maxLength) + ' (…) '
+                    : textOnly;
+            return <div className="tiptap">{displayText}</div>;
+        },
         enableColumnFilter: true,
     },
     {
@@ -137,7 +150,7 @@ const columns: ColumnDef<Element>[] = [
                         rel="noopener noreferrer"
                         className="text-blue-600 hover:underline"
                     >
-                        {link}
+                        The link
                     </a>
                 </div>
             );
@@ -186,7 +199,7 @@ const columns: ColumnDef<Element>[] = [
             return (
                 <div className="flex items-center">
                     <img
-                        src={cover}
+                        src={`/storage/${cover}`}
                         alt="Cover"
                         className="h-10 w-10 rounded-full object-cover"
                     />
@@ -209,7 +222,7 @@ const columns: ColumnDef<Element>[] = [
             </Button>
         ),
         cell: ({ row }) => {
-            const maxLength = 20;
+            const maxLength = 15;
             const obs = row.original.desc;
 
             if (!obs) {
