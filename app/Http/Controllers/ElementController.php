@@ -11,15 +11,15 @@ use App\Models\Bdepense;
 
 class ElementController extends Controller
 {
-    public function new() {
-        return Inertia::render('element.new');
+    public function create() {
+        return Inertia::render('Element/Create');
     }
 
     public function list() {
-        return Inertia::render('element.list');
+        return Inertia::render('Element/List');
     }
 
     public function edit() {
-        return Inertia::render('element.edit');
+        return Inertia::render('Element/Edit');
     }
 }

@@ -94,7 +94,7 @@ export default function Login({
                             />
                         </div>
 
-                        <div className="mt-4 block">
+                        {/* <div className="mt-4 block">
                             <label className="flex items-center">
                                 <Checkbox
                                     name="remember"
@@ -111,9 +111,9 @@ export default function Login({
                                     Remember me
                                 </span>
                             </label>
-                        </div>
+                        </div> */}
 
-                        <div className="mt-4 flex items-center justify-end">
+                        <div className="mt-8 flex items-center justify-center">
                             {canResetPassword && (
                                 <Link
                                     href={route('password.request')}
