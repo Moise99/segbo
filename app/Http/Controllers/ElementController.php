@@ -55,7 +55,7 @@ class ElementController extends Controller
                 'user_id' => Auth::user()->id,
             ]);
         } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Error' . "-------- " . now() . $e->getMessage());
+        return redirect()->back()->with('error', 'Error' . "-------- " . now() /*. $e->getMessage()*/);
         }
 
         return redirect()->route('element.list')->with('success', 'Element save with success.' . "---- " . now());
@@ -77,35 +77,60 @@ class ElementController extends Controller
 
     public function edit($id) {
         $element = DB::table('elements')->where('id', $id)->first();
+        $elementypes = DB::table('elementypes')->get();
+        $categories = DB::table('categories')->get();
 
         return Inertia::render('Element/Edit', [
             'element' => $element,
+            'elementypes' => $elementypes,
+            'categories' => $categories,
         ]);
     }
 
-     public function update(Request $request, $id): RedirectResponse
-     {
+    public function update(Request $request, $id): RedirectResponse
+    {
         $validatedData = $request->validate([
             'link' => 'required|string|max:255',
-            'cover' => 'required|file',
+            'cover' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'title' => 'required|string|max:255',
             'desc' => 'required|string|max:255',
             'elementype' => 'required|integer',
-            'categorie' => 'required|integer',
+            'category' => 'required|integer',
         ]);
 
         // Save data on database
+
         try {
-            Element::where('id', $id)->update([
-                'link' => $validatedData['link'],
-               // 'cover' => $path,
-                'title' => $validatedData['title'],
-                'desc' => $validatedData['desc'],
-                'elementype_id' => $validatedData['elementype'],
-                'categorie_id' => $validatedData['categorie'],
-            ]);
+            if ($request->hasFile('cover')) {
+                // save in storage/app/public/element_images
+                $file = $request->file('cover');
+                $filename = Auth::user()->id.'_'.time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
+                $path = $file->storeAs('element_images', $filename, 'public');
+
+                // save the path
+                $validatedData['cover'] = $path;
+
+                Element::where('id', $id)->update([
+                    'link' => $validatedData['link'],
+                    'cover' => $validatedData['cover'],
+                    'title' => $validatedData['title'],
+                    'desc' => $validatedData['desc'],
+                    'elementype_id' => $validatedData['elementype'],
+                    'categorie_id' => $validatedData['category'],
+                    'user_id' => Auth::user()->id,
+                ]);
+            }else{
+                Element::where('id', $id)->update([
+                    'link' => $validatedData['link'],
+                    'title' => $validatedData['title'],
+                    'desc' => $validatedData['desc'],
+                    'elementype_id' => $validatedData['elementype'],
+                    'categorie_id' => $validatedData['category'],
+                    'user_id' => Auth::user()->id,
+                ]);
+            }
         } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Error' . "-------- " . now() /*. $e->getMessage()*/);
+        return redirect()->back()->with('error', 'Error' . "-------- " . now() . $e->getMessage());
         }
 
         return redirect()->route('element.list')->with('success', 'Element update with success.' . "---- " . now());
