@@ -27,8 +27,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    // Route for Element
-    Route::get('/element/create', [ElementController::class, 'new'])->name('element.create');
+    // Routes for Element
+    Route::get('/element/create', [ElementController::class, 'create'])->name('element.create');
     Route::post('/element/store', [ElementController::class, 'store'])->name('element.store');
     Route::get('/element/list', [ElementController::class, 'list'])->name('element.list');
     Route::get('/element/{id}/edit/', [ElementController::class, 'edit'])->name('element.edit');
