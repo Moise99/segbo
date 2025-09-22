@@ -96,10 +96,25 @@ const columns: ColumnDef<Element>[] = [
                     column.toggleSorting(column.getIsSorted() === 'asc')
                 }
             >
-                Categorie <ArrowUpDown className="ml-2" />
+                Category <ArrowUpDown className="ml-2" />
             </Button>
         ),
         cell: ({ row }) => <div>{row.original.cat_name}</div>,
+        enableColumnFilter: true,
+    },
+    {
+        accessorKey: 'et_name',
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === 'asc')
+                }
+            >
+                Type <ArrowUpDown className="ml-2" />
+            </Button>
+        ),
+        cell: ({ row }) => <div>{row.original.et_name}</div>,
         enableColumnFilter: true,
     },
     {
