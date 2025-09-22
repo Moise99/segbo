@@ -1,11 +1,30 @@
-"use client";
-
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { PageProps } from "@/types";
-import { Head, usePage, router } from "@inertiajs/react";
-import * as React from "react";
-import { useEffect } from "react";
-import toast, { Toaster } from "react-hot-toast";
+'use client';
+import { Button } from '@/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { PageProps } from '@/types';
+import { Head, router, usePage } from '@inertiajs/react';
+import * as Dialog from '@radix-ui/react-dialog';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@radix-ui/react-tooltip';
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -17,45 +36,20 @@ import {
     getPaginationRowModel,
     getSortedRowModel,
     useReactTable,
-} from "@tanstack/react-table";
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@tanstack/react-table';
 import {
     ArrowUpDown,
-    MoreHorizontal,
     ChevronDown,
     ChevronLeft,
     ChevronRight,
     ChevronsLeft,
     ChevronsRight,
+    Pencil,
     Trash,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Pencil } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-import {
-    TooltipProvider,
-    Tooltip,
-    TooltipTrigger,
-    TooltipContent,
-} from "@radix-ui/react-tooltip";
-import * as Dialog from "@radix-ui/react-dialog";
+} from 'lucide-react';
+import * as React from 'react';
+import { useEffect } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 // Interface Element
 interface Element {
@@ -82,158 +76,188 @@ interface Props extends PageProps {
 
 // Définition des colonnes pour le tableau
 const columnLabels: Record<string, string> = {
-    cat_name: "Category",
-    title: "Title",
-    link: "Link",
-    desc: "Desc",
-    cover: "Cover",
-    et_name: "Type",
-    updated_at: "registered",
+    cat_name: 'Category',
+    title: 'Title',
+    link: 'Link',
+    desc: 'Desc',
+    cover: 'Cover',
+    et_name: 'Type',
+    updated_at: 'registered',
 };
 const columns: ColumnDef<Element>[] = [
     {
-        accessorKey: "nom_ccat",
+        accessorKey: 'cat_name',
         header: ({ column }) => (
             <Button
                 variant="ghost"
                 onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === "asc")
+                    column.toggleSorting(column.getIsSorted() === 'asc')
                 }
             >
-                Con / Prae <ArrowUpDown className="ml-2" />
+                Categorie <ArrowUpDown className="ml-2" />
             </Button>
         ),
-        cell: ({ row }) => <div>{row.original.nom_ccat}</div>,
+        cell: ({ row }) => <div>{row.original.cat_name}</div>,
         enableColumnFilter: true,
     },
     {
-        accessorKey: "nom",
+        accessorKey: 'title',
         header: ({ column }) => (
             <Button
                 variant="ghost"
                 onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === "asc")
+                    column.toggleSorting(column.getIsSorted() === 'asc')
                 }
             >
-                Vocable <ArrowUpDown className="ml-2" />
+                Title <ArrowUpDown className="ml-2" />
             </Button>
         ),
-        cell: ({ row }) => <div>{row.original.nom}</div>,
+        cell: ({ row }) => <div>{row.original.title}</div>,
         enableColumnFilter: true,
     },
     {
-        accessorKey: "prenom",
+        accessorKey: 'link',
         header: ({ column }) => (
             <Button
                 variant="ghost"
                 onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === "asc")
+                    column.toggleSorting(column.getIsSorted() === 'asc')
                 }
             >
-                Territoire <ArrowUpDown className="ml-2" />
-            </Button>
-        ),
-        cell: ({ row }) => <div>{row.original.prenom}</div>,
-        enableColumnFilter: true,
-    },
-
-    {
-        accessorKey: "cont",
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === "asc")
-                }
-            >
-                Montant <ArrowUpDown className="ml-2" />
+                Link <ArrowUpDown className="ml-2" />
             </Button>
         ),
         cell: ({ row }) => {
-            const value = row.original.cont;
-            const formattedValue = new Intl.NumberFormat("fr-FR", {
-                style: "decimal",
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0,
-            }).format(value);
-            return <div>{formattedValue}</div>;
+            const link = row.original.link;
+            return (
+                <div>
+                    <a
+                        href={link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline"
+                    >
+                        {link}
+                    </a>
+                </div>
+            );
+        },
+        enableColumnFilter: true,
+    },
+
+    // {
+    //     accessorKey: "cont",
+    //     header: ({ column }) => (
+    //         <Button
+    //             variant="ghost"
+    //             onClick={() =>
+    //                 column.toggleSorting(column.getIsSorted() === "asc")
+    //             }
+    //         >
+    //             Montant <ArrowUpDown className="ml-2" />
+    //         </Button>
+    //     ),
+    //     cell: ({ row }) => {
+    //         const value = row.original.cont;
+    //         const formattedValue = new Intl.NumberFormat("fr-FR", {
+    //             style: "decimal",
+    //             minimumFractionDigits: 0,
+    //             maximumFractionDigits: 0,
+    //         }).format(value);
+    //         return <div>{formattedValue}</div>;
+    //     },
+    //     enableColumnFilter: true,
+    // },
+
+    {
+        accessorKey: 'cover',
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === 'asc')
+                }
+            >
+                Cover <ArrowUpDown className="ml-2" />
+            </Button>
+        ),
+        cell: ({ row }) => {
+            const cover = row.original.cover;
+            return (
+                <div className="flex items-center">
+                    <img
+                        src={cover}
+                        alt="Cover"
+                        className="h-10 w-10 rounded-full object-cover"
+                    />
+                </div>
+            );
         },
         enableColumnFilter: true,
     },
 
     {
-        accessorKey: "periode",
+        accessorKey: 'desc',
         header: ({ column }) => (
             <Button
                 variant="ghost"
                 onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === "asc")
+                    column.toggleSorting(column.getIsSorted() === 'asc')
                 }
             >
-                Période <ArrowUpDown className="ml-2" />
-            </Button>
-        ),
-        cell: ({ row }) => <div>{row.original.periode}</div>,
-        enableColumnFilter: true,
-    },
-
-    {
-        accessorKey: "moisde",
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === "asc")
-                }
-            >
-                Reçu en <ArrowUpDown className="ml-2" />
+                Desc <ArrowUpDown className="ml-2" />
             </Button>
         ),
         cell: ({ row }) => {
-            const date = new Date(row.original.moisde);
-            const options: Intl.DateTimeFormatOptions = {
-                month: "long",
-                year: "numeric",
-            };
-            const formattedDate = date.toLocaleDateString("fr-FR", options);
-            return <div>{formattedDate}</div>;
+            const maxLength = 20;
+            const obs = row.original.desc;
+
+            if (!obs) {
+                return <div className="tiptap italic text-gray-400">—</div>;
+            }
+            const textOnly = row.original.desc.replace(/<[^>]+>/g, '');
+            const displayText =
+                textOnly.length > maxLength
+                    ? textOnly.substring(0, maxLength) + ' (…) '
+                    : textOnly;
+            return <div className="tiptap">{displayText}</div>;
         },
         enableColumnFilter: true,
     },
 
     {
-        accessorKey: "updated_at",
+        accessorKey: 'updated_at',
         header: ({ column }) => (
             <Button
                 variant="ghost"
                 onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === "asc")
+                    column.toggleSorting(column.getIsSorted() === 'asc')
                 }
             >
-                Modifié le <ArrowUpDown className="ml-2" />
+                Registered <ArrowUpDown className="ml-2" />
             </Button>
         ),
         cell: ({ row }) => {
             const date = new Date(row.original.updated_at);
             const options: Intl.DateTimeFormatOptions = {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
+                day: 'numeric',
+                month: 'numeric',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
             };
-            const formattedDate = date.toLocaleDateString("fr-FR", options);
+            const formattedDate = date.toLocaleDateString('en-EN', options);
             return <div>{formattedDate}</div>;
         },
         enableColumnFilter: true,
     },
 
     {
-        id: "actions",
+        id: 'actions',
         enableHiding: false,
         header: () => <Button variant="ghost">Actions</Button>,
         cell: ({ row }) => {
-            const conmen = row.original;
+            const elements = row.original;
 
             return (
                 <div className="flex gap-2">
@@ -242,15 +266,17 @@ const columns: ColumnDef<Element>[] = [
                             <TooltipTrigger asChild>
                                 <Button
                                     variant="ghost"
-                                    className="h-10 w-10 rounded-full flex items-center justify-center bg-blue-700 hover:bg-gray-300"
+                                    className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-700 hover:bg-gray-300"
                                     onClick={() =>
-                                        router.get(`/conmens/${conmen.id}/edit`)
+                                        router.get(
+                                            `/element/${elements.id}/edit`,
+                                        )
                                     }
                                 >
-                                    <Pencil className="w-5 h-5 text-white" />
+                                    <Pencil className="h-5 w-5 text-white" />
                                 </Button>
                             </TooltipTrigger>
-                            <TooltipContent side="top">Modifier</TooltipContent>
+                            <TooltipContent side="top">Edit</TooltipContent>
                         </Tooltip>
                     </TooltipProvider>
                     <TooltipProvider>
@@ -260,29 +286,31 @@ const columns: ColumnDef<Element>[] = [
                                     <TooltipTrigger asChild>
                                         <Button
                                             variant="ghost"
-                                            className="h-10 w-10 rounded-full flex items-center justify-center bg-red-700 hover:bg-gray-300"
+                                            className="flex h-10 w-10 items-center justify-center rounded-full bg-red-700 hover:bg-gray-300"
                                         >
-                                            <Trash className="w-5 h-5 text-white" />
+                                            <Trash className="h-5 w-5 text-white" />
                                         </Button>
                                     </TooltipTrigger>
                                 </Dialog.Trigger>
                                 <TooltipContent side="top">
-                                    Supprimer
+                                    Delete
                                 </TooltipContent>
                                 <Dialog.Portal>
                                     <Dialog.Overlay className="fixed inset-0 bg-black/50" />
-                                    <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg">
+                                    <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform rounded-lg bg-white p-6 shadow-lg">
                                         <Dialog.Title className="text-lg font-semibold">
-                                            Confirmation de suppression
+                                            Deletion Confirmation
                                         </Dialog.Title>
-                                        <Dialog.Description className="mt-2 mb-4 text-sm text-gray-600">
-                                            Êtes-vous sûr de vouloir supprimer
-                                            cette contribution ?
+                                        <Dialog.Description className="mb-4 mt-2 text-sm text-gray-600">
+                                            Are you sure to delete this element?
                                         </Dialog.Description>
                                         <div className="flex justify-end gap-4">
                                             <Dialog.Close asChild>
-                                                <Button variant="outline" className="bg-green-700 text-white">
-                                                    Annuler
+                                                <Button
+                                                    variant="outline"
+                                                    className="bg-green-700 text-white"
+                                                >
+                                                    No
                                                 </Button>
                                             </Dialog.Close>
                                             <Dialog.Close asChild>
@@ -290,11 +318,11 @@ const columns: ColumnDef<Element>[] = [
                                                     variant="destructive"
                                                     onClick={() =>
                                                         router.delete(
-                                                            `/conmens/${conmen.id}/destroy`
+                                                            `/element/${elements.id}/destroy`,
                                                         )
                                                     }
                                                 >
-                                                    Oui
+                                                    Yes
                                                 </Button>
                                             </Dialog.Close>
                                         </div>
@@ -310,7 +338,7 @@ const columns: ColumnDef<Element>[] = [
 ];
 
 export default function List() {
-    const { conmens, flash = {} } = usePage<Props>().props;
+    const { elements, flash = {} } = usePage<Props>().props;
     useEffect(() => {
         if (flash.success) {
             toast.success(flash.success);
@@ -326,7 +354,7 @@ export default function List() {
 
     // Configuration de la table
     const table = useReactTable({
-        data: conmens,
+        data: elements,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -345,20 +373,14 @@ export default function List() {
     });
 
     return (
-        <AuthenticatedLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Contributions Mensuelles
-                </h2>
-            }
-        >
-            <Head title="Cont Mens" />
+        <AuthenticatedLayout>
+            <Head title="Elements list" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg p-6">
-                        <div className="text-2xl text-blue-900 mb-4">
-                            Liste des Contributions Mensuelles
+                    <div className="overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg">
+                        <div className="mb-4 text-2xl text-blue-900">
+                            List of elements
                         </div>
                         <Toaster
                             position="top-center"
@@ -371,12 +393,12 @@ export default function List() {
                                 duration: 5000,
                             }}
                         />
-                        <div className="flex justify-between gap-x-8 items-center mb-4">
+                        <div className="mb-4 flex items-center justify-between gap-x-8">
                             <Input
-                                placeholder="Rechercher par date, conseil ...."
+                                placeholder="Search by date, title ...."
                                 value={
                                     (table.getState().globalFilter as string) ??
-                                    ""
+                                    ''
                                 }
                                 onChange={(event) =>
                                     table.setGlobalFilter(event.target.value)
@@ -385,9 +407,10 @@ export default function List() {
                             />
                             <Button
                                 variant="default"
-                                onClick={() => router.get("/conmens/create")}
+                                className="bg-orange-600"
+                                onClick={() => router.get('/element/create')}
                             >
-                                + Nouvelle Contribution
+                                + New element
                             </Button>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
@@ -395,7 +418,7 @@ export default function List() {
                                         variant="outline"
                                         className="ml-auto"
                                     >
-                                        Colonnes <ChevronDown />
+                                        Columns <ChevronDown />
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
@@ -410,7 +433,7 @@ export default function List() {
                                                     checked={column.getIsVisible()}
                                                     onCheckedChange={(value) =>
                                                         column.toggleVisibility(
-                                                            !!value
+                                                            !!value,
                                                         )
                                                     }
                                                 >
@@ -443,10 +466,10 @@ export default function List() {
                                                                           .column
                                                                           .columnDef
                                                                           .header,
-                                                                      header.getContext()
+                                                                      header.getContext(),
                                                                   )}
                                                         </TableHead>
-                                                    )
+                                                    ),
                                                 )}
                                             </TableRow>
                                         ))}
@@ -458,7 +481,7 @@ export default function List() {
                                                 key={row.id}
                                                 data-state={
                                                     row.getIsSelected() &&
-                                                    "selected"
+                                                    'selected'
                                                 }
                                             >
                                                 {row
@@ -471,7 +494,7 @@ export default function List() {
                                                                 cell.column
                                                                     .columnDef
                                                                     .cell,
-                                                                cell.getContext()
+                                                                cell.getContext(),
                                                             )}
                                                         </TableCell>
                                                     ))}
@@ -492,7 +515,7 @@ export default function List() {
                         </div>
                         <div className="flex items-center justify-between py-4">
                             <div className="text-sm text-muted-foreground">
-                                Page {table.getState().pagination.pageIndex + 1}{" "}
+                                Page {table.getState().pagination.pageIndex + 1}{' '}
                                 / {table.getPageCount()}
                             </div>
                             <div className="space-x-2">
@@ -502,7 +525,7 @@ export default function List() {
                                     onClick={() => table.setPageIndex(0)}
                                     disabled={!table.getCanPreviousPage()}
                                 >
-                                    <ChevronsLeft className="w-4 h-4" />
+                                    <ChevronsLeft className="h-4 w-4" />
                                 </Button>
                                 <Button
                                     variant="outline"
@@ -510,7 +533,7 @@ export default function List() {
                                     onClick={() => table.previousPage()}
                                     disabled={!table.getCanPreviousPage()}
                                 >
-                                    <ChevronLeft className="w-4 h-4" />
+                                    <ChevronLeft className="h-4 w-4" />
                                 </Button>
                                 <Button
                                     variant="outline"
@@ -518,19 +541,19 @@ export default function List() {
                                     onClick={() => table.nextPage()}
                                     disabled={!table.getCanNextPage()}
                                 >
-                                    <ChevronRight className="w-4 h-4" />
+                                    <ChevronRight className="h-4 w-4" />
                                 </Button>
                                 <Button
                                     variant="outline"
                                     size="sm"
                                     onClick={() =>
                                         table.setPageIndex(
-                                            table.getPageCount() - 1
+                                            table.getPageCount() - 1,
                                         )
                                     }
                                     disabled={!table.getCanNextPage()}
                                 >
-                                    <ChevronsRight className="w-4 h-4" />
+                                    <ChevronsRight className="h-4 w-4" />
                                 </Button>
                             </div>
                         </div>
