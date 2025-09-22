@@ -113,12 +113,12 @@ export default function Welcome({
                                             <Dropdown.Link
                                                 href={route('login')}
                                             >
-                                                Register
+                                                Login
                                             </Dropdown.Link>
                                             <Dropdown.Link
                                                 href={route('register')}
                                             >
-                                                Login
+                                                Register
                                             </Dropdown.Link>
                                         </Dropdown.Content>
                                     </Dropdown>
