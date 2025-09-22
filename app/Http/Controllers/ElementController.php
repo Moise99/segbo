@@ -12,6 +12,7 @@ use App\Models\Element;
 class ElementController extends Controller
 {
     public function create() {
+
         $elementypes = DB::table('elementypes')->get();
         $categories = DB::table('categories')->get();
 
@@ -23,6 +24,7 @@ class ElementController extends Controller
 
      public function store(Request $request): RedirectResponse
      {
+        dd($request);
         $validatedData = $request->validate([
             'link' => 'required|string|max:255',
             'cover' => 'required|file',
