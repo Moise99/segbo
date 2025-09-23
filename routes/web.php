@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ElementController;
+use App\Http\Controllers\FindController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -36,6 +37,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/element/{id}/edit/', [ElementController::class, 'edit'])->name('element.edit');
     Route::put('/element/{id}/update', [ElementController::class, 'update'])->name('element.update');
     Route::get('/element/{id}/endesable', [ElementController::class, 'endesable'])->name('element.endesable');
+
+    // Routes for Element
+    Route::get('/find/reporter', [FindController::class, 'findReporter'])->name('find.reporter');
+    Route::get('/find/article', [FindController::class, 'findArticle'])->name('find.article');
 });
 
 require __DIR__.'/auth.php';

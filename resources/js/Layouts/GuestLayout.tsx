@@ -26,16 +26,16 @@ export default function Welcome({
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
+                                    href={route('find.reporter')}
+                                    active={route().current('find.reporter')}
                                 >
                                     Find Reporter
                                 </NavLink>
                             </div>
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
+                                    href={route('find.article')}
+                                    active={route().current('find.article')}
                                 >
                                     Articles
                                 </NavLink>
