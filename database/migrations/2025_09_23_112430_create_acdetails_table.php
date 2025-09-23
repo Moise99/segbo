@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('acdetails', function (Blueprint $table) {
             $table->id();
-            $table->string('photo');
-            $table->text('present');
-            $table->string('linkedin');
-            $table->string('facebook');
-            $table->string('instagram');
-            $table->string('x');
+            $table->string('photo')->nullable();
+            $table->text('present')->nullable();
+            $table->string('linkedin')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('instagram')->nullable();
+            $table->string('x')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
