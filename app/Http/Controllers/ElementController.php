@@ -110,7 +110,10 @@ class ElementController extends Controller
                 // save the path
                 $validatedData['cover'] = $path;
 
-                Element::where('id', $id)->update([
+                DB::table('elements')
+                ->where('id', $id)
+                ->where('user_id', Auth::user()->id)
+                ->update([
                     'link' => $validatedData['link'],
                     'cover' => $validatedData['cover'],
                     'title' => $validatedData['title'],
@@ -120,7 +123,10 @@ class ElementController extends Controller
                     'user_id' => Auth::user()->id,
                 ]);
             }else{
-                Element::where('id', $id)->update([
+                DB::table('elements')
+                ->where('id', $id)
+                ->where('user_id', Auth::user()->id)
+                ->update([
                     'link' => $validatedData['link'],
                     'title' => $validatedData['title'],
                     'desc' => $validatedData['desc'],

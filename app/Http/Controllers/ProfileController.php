@@ -102,7 +102,10 @@ class ProfileController extends Controller
                     'present' => $validatedData['present'],
                 ]);
             }else{
-                Acdetail::where('id', $id)->update([
+                DB::table('acdetails')
+                ->where('id', $id)
+                ->where('user_id', Auth::user()->id)
+                ->update([
                     'linkedin' => $validatedData['linkedin'],
                     'x' => $validatedData['x'],
                     'facebook' => $validatedData['facebook'],
