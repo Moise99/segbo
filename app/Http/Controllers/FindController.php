@@ -35,7 +35,6 @@ class FindController extends Controller
             $user = $userCategories->first();
 
             return (object) [
-                'user_id' => $user->user_id,
                 'name' => $user->name,
                 'username' => $user->username,
                 'photo' => $user->photo,
@@ -50,7 +49,54 @@ class FindController extends Controller
         //dd($reporters);
         return Inertia::render('Client/Reporters/List', [
             'reporters' => $reporters,
-            'total_reporters' => count($reporters),
+        ]);
+    }
+
+    public function findReporterDetails($username)
+    {
+        // Find the single reporter's basic details first.
+        // Use firstOrFail() to automatically handle cases where the user doesn't exist.
+        $reporterDetails = DB::table('users as u')
+            ->join('acdetails as acd', 'u.id', '=', 'acd.user_id')
+            ->select('u.name', 'u.username', 'acd.photo', 'acd.present')
+            ->where('u.username', $username)
+            ->firstOrFail();
+
+        // Now, get the top 3 categories for this specific reporter.
+        $topCategories = DB::table('elements as e')
+            ->join('categories as c', 'e.categorie_id', '=', 'c.id')
+            ->where('e.user_id', function ($query) use ($username) {
+                $query->select('id')->from('users')->where('username', $username);
+            })
+            ->select('c.cat_name as name', DB::raw('COUNT(e.id) as pub_count'))
+            ->groupBy('c.id', 'c.cat_name')
+            ->orderByDesc('pub_count')
+            ->take(3)
+            ->get();
+
+        // Combine the details and the categories into a single, clean object.
+        $reporter = (object) [
+            'name' => $reporterDetails->name,
+            'username' => $reporterDetails->username,
+            'present' => $reporterDetails->present,
+            'photo' => $reporterDetails->photo,
+            'categories' => $topCategories->toArray(), // Convert the collection to a simple array
+        ];
+
+        // articles
+        $user = DB::table('users')->where('username', $username)->value('id');
+        $elements = DB::table('elements')
+                    ->join('elementypes', 'elements.elementype_id', '=', 'elementypes.id')
+                    ->join('users', 'elements.user_id', '=', 'users.id')
+                    ->join('categories', 'elements.categorie_id', '=', 'categories.id')
+                    ->where('elements.user_id', $user)
+                    ->select('elements.*', 'elementypes.et_name', 'cat_name')
+                    ->get();
+                    
+
+        return Inertia::render('Client/Reporters/Details', [
+            'reporter' => $reporter,
+            'elements' => $elements,
         ]);
     }
 

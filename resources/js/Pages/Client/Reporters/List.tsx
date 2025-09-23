@@ -176,6 +176,7 @@ const columns: ColumnDef<Reporter>[] = [
 
 export default function Reporters() {
     const { reporters } = usePage<Props>().props;
+    const total_reporters = reporters.length;
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] =
         React.useState<ColumnFiltersState>([] as ColumnFiltersState);
@@ -208,7 +209,7 @@ export default function Reporters() {
             <Head title="Reporters" />
             <div className="mb-8 text-center">
                 <h1 className="mt-6 text-3xl font-bold text-gray-900 sm:text-4xl">
-                    Our Segbo
+                    Our {total_reporters} Segbo
                 </h1>
                 <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
                     Discover our talented journalists and their areas of

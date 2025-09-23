@@ -5,7 +5,7 @@ import ResponsiveNavLink from '@/components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
 
-export default function Welcome({
+export default function Guest({
     header,
     children,
 }: PropsWithChildren<{ header?: ReactNode }>) {
@@ -27,7 +27,10 @@ export default function Welcome({
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
                                     href={route('find.reporter')}
-                                    active={route().current('find.reporter')}
+                                    active={
+                                        route().current('find.reporter') ||
+                                        route().current('find.more')
+                                    }
                                 >
                                     Find Reporter
                                 </NavLink>

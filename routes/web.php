@@ -16,6 +16,10 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+    // Routes for client
+    Route::get('/find/reporter', [FindController::class, 'findReporter'])->name('find.reporter');
+    Route::get('/reporter/{username}/findmore', [FindController::class, 'findReporterDetails'])->name('find.more');
+    Route::get('/find/article', [FindController::class, 'findArticle'])->name('find.article');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -37,10 +41,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/element/{id}/edit/', [ElementController::class, 'edit'])->name('element.edit');
     Route::put('/element/{id}/update', [ElementController::class, 'update'])->name('element.update');
     Route::get('/element/{id}/endesable', [ElementController::class, 'endesable'])->name('element.endesable');
-
-    // Routes for Element
-    Route::get('/find/reporter', [FindController::class, 'findReporter'])->name('find.reporter');
-    Route::get('/find/article', [FindController::class, 'findArticle'])->name('find.article');
 });
 
 require __DIR__.'/auth.php';
