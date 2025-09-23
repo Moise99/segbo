@@ -12,11 +12,11 @@ class FindController extends Controller
      */
     public function findReporter()
     {
-        //
+        dd('here');
     }
 
     public function findArticle()
     {
-        //
+        dd('yes');
     }
 }
