@@ -86,10 +86,10 @@ export default function Create() {
     });
 
     function onSubmit(values: {
-        present?: string | null;
+        present: string | null;
         x: string | null;
         facebook: string | null;
-        cover?: File | null | undefined;
+        cover: File | null | undefined;
         instagram: number | null;
         linkedin: number | null;
     }) {
