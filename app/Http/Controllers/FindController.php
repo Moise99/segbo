@@ -12,6 +12,9 @@ class FindController extends Controller
      */
     public function findReporter()
     {
+        // $reporters = DB::table('users')
+        //             ->join('')
+        //             ->select('name', '')
         dd('here');
     }
 
