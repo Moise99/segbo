@@ -13,6 +13,7 @@ class Acdetail extends Model
         'facebook',
         'instagram',
         'x',
+        'user_id',
     ];
 
     protected function casts() : array

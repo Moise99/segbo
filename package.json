@@ -53,6 +53,7 @@
         "lucide-react": "^0.544.0",
         "react-hook-form": "^7.63.0",
         "react-hot-toast": "^2.6.0",
+        "react-multi-select-component": "^4.3.4",
         "tailwind-merge": "^3.3.1",
         "tailwindcss-animate": "^1.0.7",
         "zod": "^4.1.11"
