@@ -163,9 +163,7 @@ const columns: ColumnDef<Reporter>[] = [
                 <Button
                     variant="default"
                     className="bg-orange-600"
-                    onClick={() =>
-                        router.get(`/reporter/${reporters.username}/findmore`)
-                    }
+                    onClick={() => router.get(`/segbo/${reporters.username}`)}
                 >
                     See more
                 </Button>

@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
     // Routes for client
     Route::get('/find/reporter', [FindController::class, 'findReporter'])->name('find.reporter');
-    Route::get('/reporter/{username}/findmore', [FindController::class, 'findReporterDetails'])->name('find.more');
+    Route::get('/segbo/{username}', [FindController::class, 'findReporterDetails'])->name('find.more');
     Route::get('/find/article', [FindController::class, 'findArticle'])->name('find.article');
 
 Route::get('/dashboard', function () {
