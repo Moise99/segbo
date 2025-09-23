@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class FindController extends Controller
 {
@@ -46,7 +47,11 @@ class FindController extends Controller
                 })->toArray()
             ];
         })->values();
-        dd($reporters);
+        //dd($reporters);
+        return Inertia::render('Client/Reporters/List', [
+            'reporters' => $reporters,
+            'total_reporters' => count($reporters),
+        ]);
     }
 
     public function findArticle()
