@@ -64,7 +64,7 @@ export default function Login({
                 </div>
             )}
             <div className="py-12">
-                <div className="mx-auto max-w-2xl content-center rounded-lg bg-gradient-to-b from-blue-800 to-[#010336] sm:px-2 lg:px-4">
+                <div className="mx-auto max-w-md content-center rounded-lg bg-gradient-to-b from-blue-800 to-[#010336] sm:px-2 lg:px-4">
                     <form onSubmit={submit} className="py-12">
                         <div>
                             <InputLabel

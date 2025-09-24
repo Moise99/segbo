@@ -49,7 +49,7 @@ export default function Register() {
             <Head title="Register" />
 
             <div className="py-12">
-                <div className="mx-auto max-w-2xl content-center rounded-lg bg-gradient-to-b from-blue-800 to-[#010336] sm:px-2 lg:px-4">
+                <div className="mx-auto max-w-md content-center rounded-lg bg-gradient-to-b from-blue-800 to-[#010336] sm:px-2 lg:px-4">
                     <form onSubmit={submit} className="py-12">
                         <div>
                             <InputLabel
@@ -179,7 +179,6 @@ export default function Register() {
                             />
                         </div>
 
-                        {/* 👇 reCAPTCHA invisible */}
                         <ReCAPTCHA
                             ref={recaptchaRef}
                             size="invisible"
@@ -208,14 +207,14 @@ export default function Register() {
                         </div>
                     </form>
 
-                    <div className="mt-6 flex items-center">
+                    <div className="mt-2 flex items-center">
                         <hr className="w-full border-gray-300" />
                         <span className="px-3 text-center text-sm text-white">
                             or register with
                         </span>
                         <hr className="w-full border-gray-300" />
                     </div>
-                    <div className="mb-6 mt-5 flex justify-center">
+                    <div className="flex justify-center py-2">
                         <PrimaryButton
                             type="button"
                             className="bg-orange-600 text-white hover:bg-gray-800"
