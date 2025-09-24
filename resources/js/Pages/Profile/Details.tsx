@@ -89,13 +89,13 @@ export default function Create() {
     });
 
     function onSubmit(values: {
-        present: string | null;
-        x: string | null;
-        facebook: string | null;
-        cover: File | null | undefined;
-        instagram: number | null;
-        linkedin: number | null;
-        website: number | null;
+        present?: string | null;
+        x?: string | null;
+        facebook?: string | null;
+        instagram?: string | null;
+        linkedin?: string | null;
+        website?: string | null;
+        photo?: File | null | undefined;
     }) {
         router.post(
             `/acdetail/${acdetail.id}/update`,
