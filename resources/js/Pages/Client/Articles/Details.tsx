@@ -63,6 +63,7 @@ type Article = {
     et_name: string;
     name: string;
     username: string;
+    photo: string;
     cover: string;
 };
 
@@ -347,11 +348,30 @@ export default function ReporterProfile() {
                             <h1 className="mt-2 text-4xl font-extrabold leading-tight text-gray-900 md:text-5xl">
                                 {article.title}
                             </h1>
-                            <p className="mt-4 text-lg text-gray-600">
+                            <p className="mt-4 text-gray-600">
                                 By{' '}
-                                <span className="font-semibold text-gray-800">
-                                    {article.name}
-                                </span>{' '}
+                                <Button
+                                    variant="secondary"
+                                    className="border-2 border-gray-200 bg-white text-black"
+                                    onClick={() =>
+                                        router.get(`/segbo/${article.username}`)
+                                    }
+                                >
+                                    <span className="text-lg font-semibold text-gray-600">
+                                        {article.name}
+                                    </span>
+                                    <div className="flex items-center">
+                                        <img
+                                            src={
+                                                article.photo
+                                                    ? `/storage/${article.photo}`
+                                                    : '/storage/becomesegbo_images/default.png'
+                                            }
+                                            alt="Cover"
+                                            className="h-10 w-10 rounded-full object-cover"
+                                        />
+                                    </div>
+                                </Button>{' '}
                                 on{' '}
                                 <span className="text-gray-500">
                                     {formattedDate}
