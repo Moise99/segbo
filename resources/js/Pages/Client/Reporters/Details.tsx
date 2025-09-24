@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/table';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { PageProps } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -52,7 +52,6 @@ interface Element {
     cat_name: string;
     et_name: string;
     cover: string;
-    etate: number;
 }
 
 // Type definitions for the data
@@ -87,8 +86,37 @@ const columnLabels: Record<string, string> = {
     desc: 'Desc',
     cover: 'Cover',
     et_name: 'Type',
+    updated_at: 'Published',
+    name: 'Author',
 };
 const columns: ColumnDef<Element>[] = [
+    {
+        accessorKey: 'cover',
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === 'asc')
+                }
+            >
+                Cover <ArrowUpDown className="ml-2" />
+            </Button>
+        ),
+        cell: ({ row }) => {
+            const cover = row.original.cover;
+            return (
+                <div className="flex items-center">
+                    <img
+                        src={`/storage/${cover}`}
+                        alt="Cover"
+                        className="h-10 w-10 rounded-full object-cover"
+                    />
+                </div>
+            );
+        },
+        enableColumnFilter: true,
+    },
+
     {
         accessorKey: 'cat_name',
         header: ({ column }) => (
@@ -104,21 +132,7 @@ const columns: ColumnDef<Element>[] = [
         cell: ({ row }) => <div>{row.original.cat_name}</div>,
         enableColumnFilter: true,
     },
-    {
-        accessorKey: 'et_name',
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === 'asc')
-                }
-            >
-                Type <ArrowUpDown className="ml-2" />
-            </Button>
-        ),
-        cell: ({ row }) => <div>{row.original.et_name}</div>,
-        enableColumnFilter: true,
-    },
+
     {
         accessorKey: 'title',
         header: ({ column }) => (
@@ -144,62 +158,6 @@ const columns: ColumnDef<Element>[] = [
                     ? textOnly.substring(0, maxLength) + ' (…) '
                     : textOnly;
             return <div className="tiptap">{displayText}</div>;
-        },
-        enableColumnFilter: true,
-    },
-    {
-        accessorKey: 'link',
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === 'asc')
-                }
-            >
-                Link <ArrowUpDown className="ml-2" />
-            </Button>
-        ),
-        cell: ({ row }) => {
-            const link = row.original.link;
-            return (
-                <div>
-                    <a
-                        href={link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline"
-                    >
-                        The link
-                    </a>
-                </div>
-            );
-        },
-        enableColumnFilter: true,
-    },
-
-    {
-        accessorKey: 'cover',
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === 'asc')
-                }
-            >
-                Cover <ArrowUpDown className="ml-2" />
-            </Button>
-        ),
-        cell: ({ row }) => {
-            const cover = row.original.cover;
-            return (
-                <div className="flex items-center">
-                    <img
-                        src={`/storage/${cover}`}
-                        alt="Cover"
-                        className="h-10 w-10 rounded-full object-cover"
-                    />
-                </div>
-            );
         },
         enableColumnFilter: true,
     },
@@ -231,6 +189,69 @@ const columns: ColumnDef<Element>[] = [
             return <div className="tiptap">{displayText}</div>;
         },
         enableColumnFilter: true,
+    },
+
+    {
+        accessorKey: 'et_name',
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === 'asc')
+                }
+            >
+                Type <ArrowUpDown className="ml-2" />
+            </Button>
+        ),
+        cell: ({ row }) => <div>{row.original.et_name}</div>,
+        enableColumnFilter: true,
+    },
+
+    {
+        accessorKey: 'updated_at',
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === 'asc')
+                }
+            >
+                Published <ArrowUpDown className="ml-2" />
+            </Button>
+        ),
+        cell: ({ row }) => {
+            const date = new Date(row.original.updated_at);
+            const options: Intl.DateTimeFormatOptions = {
+                day: 'numeric',
+                month: 'numeric',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+            };
+            const formattedDate = date.toLocaleDateString('en-EN', options);
+            return <div>{formattedDate}</div>;
+        },
+        enableColumnFilter: true,
+    },
+
+    {
+        id: 'actions',
+        enableHiding: false,
+        cell: ({ row }) => {
+            const elements = row.original;
+
+            return (
+                <div className="flex gap-2">
+                    <Button
+                        variant="default"
+                        className="bg-orange-600"
+                        onClick={() => router.get(`/segbo/${elements.title}`)}
+                    >
+                        See pub
+                    </Button>
+                </div>
+            );
+        },
     },
 ];
 
