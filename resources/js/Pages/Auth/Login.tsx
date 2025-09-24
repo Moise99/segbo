@@ -4,13 +4,8 @@ import PrimaryButton from '@/components/PrimaryButton';
 import TextInput from '@/components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { FormEventHandler, useEffect } from 'react';
-// Extend the Window interface to include grecaptcha
-declare global {
-    interface Window {
-        grecaptcha: any;
-    }
-}
+import React, { useEffect, useRef } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 export default function Login({
     status,
@@ -19,77 +14,55 @@ export default function Login({
     status?: string;
     canResetPassword: boolean;
 }) {
+    // Explicitly type the useRef hook with the ReCAPTCHA type
+    const recaptchaRef = useRef<ReCAPTCHA | null>(null);
+
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
-        recaptcha_token: '',
+        'g-recaptcha-response': '',
+        remember: false,
     });
 
-    useEffect(() => {
-        const siteKey = '6Lc429MrAAAAAHF79yIvNDdPt61fj9w1DOmp4kIQ';
-
-        // Si le script n'est pas encore injecté
-        if (!document.getElementById('recaptcha-script')) {
-            const script = document.createElement('script');
-            script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
-            script.id = 'recaptcha-script';
-            script.async = true;
-            document.body.appendChild(script);
-        }
-
-        const interval = setInterval(() => {
-            if (window.grecaptcha && window.grecaptcha.execute) {
-                clearInterval(interval);
-                window.grecaptcha.ready(() => {
-                    window.grecaptcha
-                        .execute(siteKey, { action: 'login' })
-                        .then((token: string) => {
-                            setData('recaptcha_token', token);
-                        })
-                        .catch(() => {
-                            console.error('reCAPTCHA error');
-                        });
-                });
-            }
-        }, 500);
-    }, [setData]);
-
-    const submit: FormEventHandler = (e) => {
+    const submit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Si token non rempli, force une nouvelle exécution de grecaptcha.execute
-        if (!data.recaptcha_token) {
-            const siteKey = '6Lc429MrAAAAAHF79yIvNDdPt61fj9w1DOmp4kIQ';
+        if (recaptchaRef.current) {
+            try {
+                const token = await recaptchaRef.current.executeAsync();
 
-            window.grecaptcha.ready(() => {
-                window.grecaptcha
-                    .execute(siteKey, { action: 'login' })
-                    .then((token: string) => {
-                        setData('recaptcha_token', token);
-
-                        // Envoie la requête APRÈS récupération du token
-                        post(route('login'), {
-                            onFinish: () => reset('password'),
-                        });
-                    });
-            });
+                // Check if the token is a valid string before proceeding
+                if (token) {
+                    setData('g-recaptcha-response', token);
+                    post(route('login'));
+                } else {
+                    console.error(
+                        'reCAPTCHA token is null. API call failed or was blocked.',
+                    );
+                    // You could also set a specific error message for the user here
+                }
+            } catch (error) {
+                console.error('reCAPTCHA failed:', error);
+            }
         } else {
-            post(route('login'), {
-                onFinish: () => reset('password'),
-            });
+            console.error('reCAPTCHA component is not ready.');
         }
     };
+
+    useEffect(() => {
+        return () => {
+            reset('password');
+        };
+    }, [reset]);
 
     return (
         <GuestLayout>
             <Head title="Log in" />
-
             {status && (
                 <div className="mb-4 text-sm font-medium text-green-600">
                     {status}
                 </div>
             )}
-
             <div className="py-12">
                 <div className="mx-auto max-w-2xl content-center rounded-lg bg-gradient-to-b from-blue-800 to-[#010336] sm:px-2 lg:px-4">
                     <form onSubmit={submit} className="py-12">
@@ -99,7 +72,6 @@ export default function Login({
                                 htmlFor="email"
                                 value="Email"
                             />
-
                             <TextInput
                                 id="email"
                                 type="email"
@@ -112,20 +84,17 @@ export default function Login({
                                     setData('email', e.target.value)
                                 }
                             />
-
                             <InputError
                                 message={errors.email}
                                 className="mt-2"
                             />
                         </div>
-
                         <div className="mt-4">
                             <InputLabel
                                 className="text-white"
                                 htmlFor="password"
                                 value="Password"
                             />
-
                             <TextInput
                                 id="password"
                                 type="password"
@@ -137,32 +106,16 @@ export default function Login({
                                     setData('password', e.target.value)
                                 }
                             />
-
                             <InputError
                                 message={errors.password}
                                 className="mt-2"
                             />
                         </div>
-
-                        {/* <div className="mt-4 block">
-                            <label className="flex items-center">
-                                <Checkbox
-                                    name="remember"
-                                    checked={data.remember}
-                                    onChange={(e) =>
-                                        setData(
-                                            'remember',
-                                            (e.target.checked ||
-                                                false) as false,
-                                        )
-                                    }
-                                />
-                                <span className="ms-2 text-sm text-white">
-                                    Remember me
-                                </span>
-                            </label>
-                        </div> */}
-
+                        <ReCAPTCHA
+                            ref={recaptchaRef}
+                            size="invisible"
+                            sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                        />
                         <div className="mt-8 flex items-center justify-center">
                             {canResetPassword && (
                                 <Link
@@ -172,7 +125,6 @@ export default function Login({
                                     Forgot your password?
                                 </Link>
                             )}
-
                             <PrimaryButton
                                 className="ms-4 bg-orange-600"
                                 disabled={processing}

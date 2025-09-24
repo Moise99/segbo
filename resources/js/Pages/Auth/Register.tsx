@@ -4,23 +4,44 @@ import PrimaryButton from '@/components/PrimaryButton';
 import TextInput from '@/components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import React, { useRef } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 export default function Register() {
+    const recaptchaRef = useRef<ReCAPTCHA | null>(null);
+
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         username: '',
         email: '',
         password: '',
         password_confirmation: '',
+        'g-recaptcha-response': '',
     });
 
-    const submit: FormEventHandler = (e) => {
+    const submit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
-        });
+        if (recaptchaRef.current) {
+            try {
+                const token = await recaptchaRef.current.executeAsync();
+
+                if (token) {
+                    setData('g-recaptcha-response', token);
+
+                    post(route('register'), {
+                        onFinish: () =>
+                            reset('password', 'password_confirmation'),
+                    });
+                } else {
+                    console.error('reCAPTCHA token null');
+                }
+            } catch (error) {
+                console.error('reCAPTCHA failed:', error);
+            }
+        } else {
+            console.error('reCAPTCHA component not ready.');
+        }
     };
 
     return (
@@ -36,7 +57,6 @@ export default function Register() {
                                 htmlFor="name"
                                 value="Name"
                             />
-
                             <TextInput
                                 id="name"
                                 name="name"
@@ -49,7 +69,6 @@ export default function Register() {
                                 }
                                 required
                             />
-
                             <InputError
                                 message={errors.name}
                                 className="mt-2"
@@ -62,7 +81,6 @@ export default function Register() {
                                 htmlFor="email"
                                 value="Email"
                             />
-
                             <TextInput
                                 id="email"
                                 type="email"
@@ -75,7 +93,6 @@ export default function Register() {
                                 }
                                 required
                             />
-
                             <InputError
                                 message={errors.email}
                                 className="mt-2"
@@ -88,7 +105,6 @@ export default function Register() {
                                 htmlFor="username"
                                 value="Username"
                             />
-
                             <TextInput
                                 id="username"
                                 name="username"
@@ -97,20 +113,11 @@ export default function Register() {
                                 autoComplete="user"
                                 isFocused={true}
                                 onChange={(e) => {
-                                    // Obtenez la valeur actuelle de l'entrée
-                                    const inputValue = e.target.value;
-
-                                    // Nettoyez la valeur
-                                    const sanitizedValue = inputValue
-                                        // Supprimez les accents
+                                    const sanitizedValue = e.target.value
                                         .normalize('NFD')
                                         .replace(/[\u0300-\u036f]/g, '')
-                                        // Remplacez les caractères non autorisés (y compris les espaces) par un underscore
                                         .replace(/[^a-zA-Z0-9_]/g, '_')
-                                        // Convertissez en minuscules
                                         .toLowerCase();
-
-                                    // Mettez à jour l'état avec la valeur nettoyée
                                     setData('username', sanitizedValue);
                                 }}
                                 required
@@ -127,7 +134,6 @@ export default function Register() {
                                 htmlFor="password"
                                 value="Password"
                             />
-
                             <TextInput
                                 id="password"
                                 type="password"
@@ -140,7 +146,6 @@ export default function Register() {
                                 }
                                 required
                             />
-
                             <InputError
                                 message={errors.password}
                                 className="mt-2"
@@ -153,7 +158,6 @@ export default function Register() {
                                 htmlFor="password_confirmation"
                                 value="Confirm Password"
                             />
-
                             <TextInput
                                 id="password_confirmation"
                                 type="password"
@@ -169,17 +173,28 @@ export default function Register() {
                                 }
                                 required
                             />
-
                             <InputError
                                 message={errors.password_confirmation}
                                 className="mt-2"
                             />
                         </div>
 
+                        {/* 👇 reCAPTCHA invisible */}
+                        <ReCAPTCHA
+                            ref={recaptchaRef}
+                            size="invisible"
+                            sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                        />
+
+                        <InputError
+                            message={errors['g-recaptcha-response']}
+                            className="mt-2"
+                        />
+
                         <div className="mt-4 flex items-center justify-center">
                             <Link
                                 href={route('login')}
-                                className="rounded-md text-sm text-white underline hover:text-orange-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                className="rounded-md text-sm text-white underline hover:text-orange-600"
                             >
                                 Already registered?
                             </Link>
