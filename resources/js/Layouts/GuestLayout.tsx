@@ -176,6 +176,34 @@ export default function Guest({
                 </div>
 
                 {/* Responsive begin */}
+                <div
+                    className={
+                        (showingNavigationDropdown ? 'block' : 'hidden') +
+                        ' sm:hidden'
+                    }
+                >
+                    <div className="space-y-1 pb-3 pt-2">
+                        <ResponsiveNavLink
+                            href={route('find.reporter')}
+                            active={
+                                route().current('find.reporter') ||
+                                route().current('find.more')
+                            }
+                        >
+                            Find reporter
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('find.article')}
+                            active={
+                                route().current('find.article') ||
+                                route().current('find.pubmore')
+                            }
+                        >
+                            Publications
+                        </ResponsiveNavLink>
+                    </div>
+                </div>
+
                 {auth.user ? (
                     <div
                         className={
@@ -195,7 +223,7 @@ export default function Guest({
 
                         <div className="border-t border-gray-200 pb-1 pt-4">
                             <div className="px-4">
-                                <div className="text-base font-medium text-gray-800">
+                                <div className="text-base font-medium text-orange-600">
                                     {auth.user.name}
                                 </div>
                             </div>

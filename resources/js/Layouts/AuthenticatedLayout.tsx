@@ -53,7 +53,7 @@ export default function Authenticated({
                                         <span className="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+                                                className="inline-flex items-center rounded-full border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-orange-600 transition duration-150 ease-in-out hover:text-orange-600 focus:outline-none"
                                             >
                                                 {user.name}
 
@@ -152,11 +152,21 @@ export default function Authenticated({
                         >
                             Dashboard
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('element.list')}
+                            active={
+                                route().current('element.list') ||
+                                route().current('element.create') ||
+                                route().current('element.edit')
+                            }
+                        >
+                            Elements
+                        </ResponsiveNavLink>
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4">
                         <div className="px-4">
-                            <div className="text-base font-medium text-gray-800">
+                            <div className="text-base font-medium text-orange-600">
                                 {user.name}
                             </div>
                         </div>
