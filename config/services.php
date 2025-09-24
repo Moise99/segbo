@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'recaptcha' => [
+        'site' => env('RECAPTCHA_SITE_KEY'),
+        'secret' => env('RECAPTCHA_SECRET_KEY'),
+        'enabled' => filter_var(env('RECAPTCHA_ENABLE', true), FILTER_VALIDATE_BOOL),
+    ],
+
 ];

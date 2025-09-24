@@ -4,7 +4,13 @@ import PrimaryButton from '@/components/PrimaryButton';
 import TextInput from '@/components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useEffect } from 'react';
+// Extend the Window interface to include grecaptcha
+declare global {
+    interface Window {
+        grecaptcha: any;
+    }
+}
 
 export default function Login({
     status,
@@ -16,15 +22,62 @@ export default function Login({
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
-        remember: false as boolean,
+        recaptcha_token: '',
     });
+
+    useEffect(() => {
+        const siteKey = '6Lc429MrAAAAAHF79yIvNDdPt61fj9w1DOmp4kIQ';
+
+        // Si le script n'est pas encore injecté
+        if (!document.getElementById('recaptcha-script')) {
+            const script = document.createElement('script');
+            script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
+            script.id = 'recaptcha-script';
+            script.async = true;
+            document.body.appendChild(script);
+        }
+
+        const interval = setInterval(() => {
+            if (window.grecaptcha && window.grecaptcha.execute) {
+                clearInterval(interval);
+                window.grecaptcha.ready(() => {
+                    window.grecaptcha
+                        .execute(siteKey, { action: 'login' })
+                        .then((token: string) => {
+                            setData('recaptcha_token', token);
+                        })
+                        .catch(() => {
+                            console.error('reCAPTCHA error');
+                        });
+                });
+            }
+        }, 500);
+    }, [setData]);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('login'), {
-            onFinish: () => reset('password'),
-        });
+        // Si token non rempli, force une nouvelle exécution de grecaptcha.execute
+        if (!data.recaptcha_token) {
+            const siteKey = '6Lc429MrAAAAAHF79yIvNDdPt61fj9w1DOmp4kIQ';
+
+            window.grecaptcha.ready(() => {
+                window.grecaptcha
+                    .execute(siteKey, { action: 'login' })
+                    .then((token: string) => {
+                        setData('recaptcha_token', token);
+
+                        // Envoie la requête APRÈS récupération du token
+                        post(route('login'), {
+                            onFinish: () => reset('password'),
+                        });
+                    });
+            });
+        } else {
+            post(route('login'), {
+                onFinish: () => reset('password'),
+            });
+        }
     };
 
     return (

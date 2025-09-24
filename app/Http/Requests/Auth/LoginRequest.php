@@ -29,7 +29,41 @@ class LoginRequest extends FormRequest
         return [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
+            'recaptcha_token' => ['required', 'string'],
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $renableCaptcha = config('services.recaptcha.enabled');
+
+        if ($renableCaptcha === true) {
+            $validator->after(function ($validator) {
+
+                $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                    'secret'   => config('services.recaptcha.secret'),
+                    'response' => $this->recaptcha_token,
+                    'remoteip' => $this->ip(),
+                ]);
+
+                $result = $response->json();
+
+                if (!($result['success'] ?? false)) {
+                    $validator->errors()->add('recaptcha_token', 'La vérification reCAPTCHA a échoué : réponse invalide.');
+                    return;
+                }
+
+                if (($result['action'] ?? '') !== 'login') {
+                    $validator->errors()->add('recaptcha_token', 'La vérification reCAPTCHA a échoué : action incorrecte.');
+                    return;
+                }
+
+                if (($result['score'] ?? 0) < 0.5) {
+                    $validator->errors()->add('recaptcha_token', 'La vérification reCAPTCHA a échoué : score trop bas.');
+                    return;
+                }
+            });
+        }
     }
 
     /**
