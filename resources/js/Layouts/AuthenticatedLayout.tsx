@@ -16,7 +16,7 @@ export default function Authenticated({
 
     return (
         <div className="min-h-screen bg-gray-100">
-            <nav className="border-b border-gray-100 bg-[#010336]">
+            <nav className="border-b border-gray-100 bg-gradient-to-l from-blue-800 to-[#010336]">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
                         <div className="flex">
