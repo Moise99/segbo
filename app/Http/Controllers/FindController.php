@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Crypt;
 
 class FindController extends Controller
 {
@@ -94,7 +95,12 @@ class FindController extends Controller
                     ->where('elements.user_id', $reporterDetails->id)
                     ->select('elements.*', 'elementypes.et_name', 'cat_name')
                     ->orderBy('elements.id', 'desc')
-                    ->get();
+                    ->get()
+                    ->map(function ($element) {
+                        // Encrypt the original ID and add it to the collection
+                        $element->encrypted_id = Crypt::encryptString($element->id);
+                        return $element;
+                    });
 
 
         return Inertia::render('Client/Reporters/Details', [
@@ -112,15 +118,20 @@ class FindController extends Controller
                      ->join('acdetails', 'users.id', '=', 'acdetails.user_id')
                     ->select('elements.*', 'elementypes.et_name', 'cat_name', 'acdetails.photo', 'users.name', 'users.username')
                     ->orderBy('elements.id', 'desc')
-                    ->get();
+                    ->get()
+                    ->map(function ($element) {
+                        // Encrypt the original ID and add it to the collection
+                        $element->encrypted_id = Crypt::encryptString($element->id);
+                        return $element;
+                    });
         return Inertia::render('Client/Articles/List', [
             'elements' => $elements,
         ]);
     }
 
-    public function findArticleDetails($id)
+    public function findArticleDetails($encryptedId)
     {
-        //dd($id);
+        $id = Crypt::decryptString($encryptedId);
         $article = DB::table('elements')
                     ->join('elementypes', 'elements.elementype_id', '=', 'elementypes.id')
                     ->join('users', 'elements.user_id', '=', 'users.id')
@@ -138,7 +149,12 @@ class FindController extends Controller
                     ->where('elements.id', '!=', $article->id)
                     ->select('elements.*', 'elementypes.et_name', 'cat_name')
                     ->orderBy('elements.id', 'desc')
-                    ->get();
+                    ->get()
+                    ->map(function ($element) {
+                        // Encrypt the original ID and add it to the collection
+                        $element->encrypted_id = Crypt::encryptString($element->id);
+                        return $element;
+                    });
         return Inertia::render('Client/Articles/Details', [
             'elements' => $elements,
             'article' => $article,

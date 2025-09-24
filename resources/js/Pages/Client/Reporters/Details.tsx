@@ -44,7 +44,7 @@ import * as React from 'react';
 
 // Interface Element
 interface Element {
-    id: number;
+    encrypted_id: number;
     title: string;
     desc: string;
     updated_at: Date;
@@ -244,7 +244,9 @@ const columns: ColumnDef<Element>[] = [
                     <Button
                         variant="default"
                         className="bg-orange-600"
-                        onClick={() => router.get(`/segbopub/${elements.id}`)}
+                        onClick={() =>
+                            router.get(`/segbopub/${elements.encrypted_id}`)
+                        }
                     >
                         See pub
                     </Button>
