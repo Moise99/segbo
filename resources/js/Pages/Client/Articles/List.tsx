@@ -53,6 +53,7 @@ interface Element {
     et_name: string;
     cover: string;
     username: string;
+    name: string;
     photo: string;
 }
 
@@ -76,6 +77,7 @@ const columnLabels: Record<string, string> = {
     cover: 'Cover',
     et_name: 'Type',
     updated_at: 'Published',
+    name: 'Author',
 };
 const columns: ColumnDef<Element>[] = [
     {
@@ -146,6 +148,49 @@ const columns: ColumnDef<Element>[] = [
                     ? textOnly.substring(0, maxLength) + ' (…) '
                     : textOnly;
             return <div className="tiptap">{displayText}</div>;
+        },
+        enableColumnFilter: true,
+    },
+
+    {
+        accessorKey: 'name',
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === 'asc')
+                }
+            >
+                Author <ArrowUpDown className="ml-2" />
+            </Button>
+        ),
+        cell: ({ row }) => {
+            const username = row.original.username;
+            const name = row.original.name;
+            const photo = row.original.photo;
+
+            return (
+                <div>
+                    <Button
+                        variant="secondary"
+                        className="border-2 border-gray-200 bg-white text-black"
+                        onClick={() => router.get(`/segbo/${username}`)}
+                    >
+                        {name}
+                        <div className="flex items-center">
+                            <img
+                                src={
+                                    photo
+                                        ? `/storage/${photo}`
+                                        : '/storage/becomesegbo_images/default.png'
+                                }
+                                alt="Cover"
+                                className="h-10 w-10 rounded-full object-cover"
+                            />
+                        </div>
+                    </Button>
+                </div>
+            );
         },
         enableColumnFilter: true,
     },
@@ -230,26 +275,6 @@ const columns: ColumnDef<Element>[] = [
 
             return (
                 <div className="flex gap-2">
-                    <Button
-                        variant="secondary"
-                        className="border-2 border-orange-600 bg-white text-black"
-                        onClick={() =>
-                            router.get(`/segbo/${elements.username}`)
-                        }
-                    >
-                        By {elements.username}
-                        <div className="flex items-center">
-                            <img
-                                src={
-                                    elements.photo
-                                        ? `/storage/${elements.photo}`
-                                        : '/storage/becomesegbo_images/default.png'
-                                }
-                                alt="Cover"
-                                className="h-10 w-10 rounded-full object-cover"
-                            />
-                        </div>
-                    </Button>
                     <Button
                         variant="default"
                         className="bg-orange-600"
