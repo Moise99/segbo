@@ -15,16 +15,9 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import GuestLayout from '@/Layouts/GuestLayout';
 import { PageProps } from '@/types';
-import { Head, router, usePage } from '@inertiajs/react';
-import * as Dialog from '@radix-ui/react-dialog';
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from '@radix-ui/react-tooltip';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -44,13 +37,10 @@ import {
     ChevronRight,
     ChevronsLeft,
     ChevronsRight,
-    Eye,
-    Pencil,
-    X,
 } from 'lucide-react';
 import * as React from 'react';
 import { useEffect } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 // Interface Element
 interface Element {
@@ -62,7 +52,8 @@ interface Element {
     cat_name: string;
     et_name: string;
     cover: string;
-    etate: number;
+    username: string;
+    photo: string;
 }
 
 interface FlashMessages {
@@ -84,9 +75,36 @@ const columnLabels: Record<string, string> = {
     desc: 'Desc',
     cover: 'Cover',
     et_name: 'Type',
-    updated_at: 'registered',
+    updated_at: 'Published',
 };
 const columns: ColumnDef<Element>[] = [
+    {
+        accessorKey: 'cover',
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === 'asc')
+                }
+            >
+                Cover <ArrowUpDown className="ml-2" />
+            </Button>
+        ),
+        cell: ({ row }) => {
+            const cover = row.original.cover;
+            return (
+                <div className="flex items-center">
+                    <img
+                        src={`/storage/${cover}`}
+                        alt="Cover"
+                        className="h-10 w-10 rounded-full object-cover"
+                    />
+                </div>
+            );
+        },
+        enableColumnFilter: true,
+    },
+
     {
         accessorKey: 'cat_name',
         header: ({ column }) => (
@@ -102,21 +120,7 @@ const columns: ColumnDef<Element>[] = [
         cell: ({ row }) => <div>{row.original.cat_name}</div>,
         enableColumnFilter: true,
     },
-    {
-        accessorKey: 'et_name',
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === 'asc')
-                }
-            >
-                Type <ArrowUpDown className="ml-2" />
-            </Button>
-        ),
-        cell: ({ row }) => <div>{row.original.et_name}</div>,
-        enableColumnFilter: true,
-    },
+
     {
         accessorKey: 'title',
         header: ({ column }) => (
@@ -142,62 +146,6 @@ const columns: ColumnDef<Element>[] = [
                     ? textOnly.substring(0, maxLength) + ' (…) '
                     : textOnly;
             return <div className="tiptap">{displayText}</div>;
-        },
-        enableColumnFilter: true,
-    },
-    {
-        accessorKey: 'link',
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === 'asc')
-                }
-            >
-                Link <ArrowUpDown className="ml-2" />
-            </Button>
-        ),
-        cell: ({ row }) => {
-            const link = row.original.link;
-            return (
-                <div>
-                    <a
-                        href={link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline"
-                    >
-                        The link
-                    </a>
-                </div>
-            );
-        },
-        enableColumnFilter: true,
-    },
-
-    {
-        accessorKey: 'cover',
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === 'asc')
-                }
-            >
-                Cover <ArrowUpDown className="ml-2" />
-            </Button>
-        ),
-        cell: ({ row }) => {
-            const cover = row.original.cover;
-            return (
-                <div className="flex items-center">
-                    <img
-                        src={`/storage/${cover}`}
-                        alt="Cover"
-                        className="h-10 w-10 rounded-full object-cover"
-                    />
-                </div>
-            );
         },
         enableColumnFilter: true,
     },
@@ -232,6 +180,22 @@ const columns: ColumnDef<Element>[] = [
     },
 
     {
+        accessorKey: 'et_name',
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === 'asc')
+                }
+            >
+                Type <ArrowUpDown className="ml-2" />
+            </Button>
+        ),
+        cell: ({ row }) => <div>{row.original.et_name}</div>,
+        enableColumnFilter: true,
+    },
+
+    {
         accessorKey: 'updated_at',
         header: ({ column }) => (
             <Button
@@ -261,139 +225,38 @@ const columns: ColumnDef<Element>[] = [
     {
         id: 'actions',
         enableHiding: false,
-        header: () => <Button variant="ghost">Actions</Button>,
         cell: ({ row }) => {
             const elements = row.original;
 
             return (
                 <div className="flex gap-2">
-                    {elements.etate == 1 ? (
-                        <TooltipProvider>
-                            <Tooltip>
-                                <Dialog.Root>
-                                    <Dialog.Trigger asChild>
-                                        <TooltipTrigger asChild>
-                                            <Button
-                                                variant="ghost"
-                                                className="flex h-10 w-10 items-center justify-center rounded-full bg-green-700 hover:bg-gray-300"
-                                            >
-                                                <Eye className="h-5 w-5 text-white" />
-                                            </Button>
-                                        </TooltipTrigger>
-                                    </Dialog.Trigger>
-                                    <TooltipContent side="top">
-                                        Disable
-                                    </TooltipContent>
-                                    <Dialog.Portal>
-                                        <Dialog.Overlay className="fixed inset-0 bg-black/50" />
-                                        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform rounded-lg bg-white p-6 shadow-lg">
-                                            <Dialog.Title className="text-lg font-semibold">
-                                                Disable confimation
-                                            </Dialog.Title>
-                                            <Dialog.Description className="mb-4 mt-2 text-sm text-gray-600">
-                                                Are you sure to disable this
-                                                element?
-                                            </Dialog.Description>
-                                            <div className="flex justify-end gap-4">
-                                                <Dialog.Close asChild>
-                                                    <Button
-                                                        variant="outline"
-                                                        className="bg-green-700 text-white"
-                                                    >
-                                                        No
-                                                    </Button>
-                                                </Dialog.Close>
-                                                <Dialog.Close asChild>
-                                                    <Button
-                                                        variant="destructive"
-                                                        onClick={() =>
-                                                            router.get(
-                                                                `/element/${elements.id}/endesable`,
-                                                            )
-                                                        }
-                                                    >
-                                                        Yes
-                                                    </Button>
-                                                </Dialog.Close>
-                                            </div>
-                                        </Dialog.Content>
-                                    </Dialog.Portal>
-                                </Dialog.Root>
-                            </Tooltip>
-                        </TooltipProvider>
-                    ) : (
-                        <TooltipProvider>
-                            <Tooltip>
-                                <Dialog.Root>
-                                    <Dialog.Trigger asChild>
-                                        <TooltipTrigger asChild>
-                                            <Button
-                                                variant="ghost"
-                                                className="flex h-10 w-10 items-center justify-center rounded-full bg-red-700 hover:bg-gray-300"
-                                            >
-                                                <X className="h-5 w-5 text-white" />
-                                            </Button>
-                                        </TooltipTrigger>
-                                    </Dialog.Trigger>
-                                    <TooltipContent side="top">
-                                        Enable
-                                    </TooltipContent>
-                                    <Dialog.Portal>
-                                        <Dialog.Overlay className="fixed inset-0 bg-black/50" />
-                                        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform rounded-lg bg-white p-6 shadow-lg">
-                                            <Dialog.Title className="text-lg font-semibold">
-                                                Enable Confirmation
-                                            </Dialog.Title>
-                                            <Dialog.Description className="mb-4 mt-2 text-sm text-gray-600">
-                                                Are you sure to enable this
-                                                element?
-                                            </Dialog.Description>
-                                            <div className="flex justify-end gap-4">
-                                                <Dialog.Close asChild>
-                                                    <Button
-                                                        variant="outline"
-                                                        className="bg-green-700 text-white"
-                                                    >
-                                                        No
-                                                    </Button>
-                                                </Dialog.Close>
-                                                <Dialog.Close asChild>
-                                                    <Button
-                                                        variant="destructive"
-                                                        onClick={() =>
-                                                            router.get(
-                                                                `/element/${elements.id}/endesable`,
-                                                            )
-                                                        }
-                                                    >
-                                                        Yes
-                                                    </Button>
-                                                </Dialog.Close>
-                                            </div>
-                                        </Dialog.Content>
-                                    </Dialog.Portal>
-                                </Dialog.Root>
-                            </Tooltip>
-                        </TooltipProvider>
-                    )}
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Button
-                                    variant="ghost"
-                                    className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-700 hover:bg-gray-300"
-                                    onClick={() =>
-                                        router.get(
-                                            `/element/${elements.id}/edit`,
-                                        )
-                                    }
-                                >
-                                    <Pencil className="h-5 w-5 text-white" />
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent side="top">Edit</TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
+                    <Button
+                        variant="secondary"
+                        className="border-2 border-orange-600 bg-white text-black"
+                        onClick={() =>
+                            router.get(`/segbo/${elements.username}`)
+                        }
+                    >
+                        By {elements.username}
+                        <div className="flex items-center">
+                            <img
+                                src={
+                                    elements.photo
+                                        ? `/storage/${elements.photo}`
+                                        : '/storage/becomesegbo_images/default.png'
+                                }
+                                alt="Cover"
+                                className="h-10 w-10 rounded-full object-cover"
+                            />
+                        </div>
+                    </Button>
+                    <Button
+                        variant="default"
+                        className="bg-orange-600"
+                        onClick={() => router.get(`/segbo/${elements.title}`)}
+                    >
+                        See pub
+                    </Button>
                 </div>
             );
         },
@@ -436,29 +299,35 @@ export default function List() {
     });
 
     return (
-        <AuthenticatedLayout>
-            <Head title="Elements list" />
+        <GuestLayout>
+            <Head title="Publications" />
+            <div className="mb-8 text-center">
+                <h1 className="mt-6 text-3xl font-bold text-gray-900 sm:text-4xl">
+                    Our Segbo's publications
+                </h1>
+                <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
+                    <Link href={route('find.reporter')} className="mb-8">
+                        <Button
+                            variant="default"
+                            className="bg-orange-600 text-white"
+                        >
+                            Discover our talented journalists and their areas of
+                            expertise
+                        </Button>
+                    </Link>
+                </p>
+            </div>
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg">
                         <div className="mb-4 text-2xl text-blue-900">
-                            List of elements
+                            List of publications
                         </div>
-                        <Toaster
-                            position="top-center"
-                            reverseOrder={false}
-                            gutter={8}
-                            containerClassName=""
-                            containerStyle={{}}
-                            toastOptions={{
-                                // Définit la durée par défaut
-                                duration: 5000,
-                            }}
-                        />
+
                         <div className="mb-4 flex items-center justify-between gap-x-8">
                             <Input
-                                placeholder="Search by date, title ...."
+                                placeholder="Search by category, title ...."
                                 value={
                                     (table.getState().globalFilter as string) ??
                                     ''
@@ -468,13 +337,6 @@ export default function List() {
                                 }
                                 className="max-w-sm"
                             />
-                            <Button
-                                variant="default"
-                                className="bg-orange-600"
-                                onClick={() => router.get('/element/create')}
-                            >
-                                + New element
-                            </Button>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button
@@ -623,6 +485,6 @@ export default function List() {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </GuestLayout>
     );
 }

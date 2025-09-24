@@ -40,7 +40,7 @@ export default function Guest({
                                     href={route('find.article')}
                                     active={route().current('find.article')}
                                 >
-                                    Articles
+                                    Publications
                                 </NavLink>
                             </div>
                         </div>

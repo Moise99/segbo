@@ -104,6 +104,15 @@ class FindController extends Controller
 
     public function findArticle()
     {
-        dd('yes');
+        $elements = DB::table('elements')
+                    ->join('elementypes', 'elements.elementype_id', '=', 'elementypes.id')
+                    ->join('users', 'elements.user_id', '=', 'users.id')
+                    ->join('categories', 'elements.categorie_id', '=', 'categories.id')
+                     ->join('acdetails', 'users.id', '=', 'acdetails.user_id')
+                    ->select('elements.*', 'elementypes.et_name', 'cat_name', 'acdetails.photo', 'users.username')
+                    ->get();
+        return Inertia::render('Client/Articles/List', [
+            'elements' => $elements,
+        ]);
     }
 }
