@@ -18,6 +18,7 @@ class FindController extends Controller
             ->join('acdetails as acd', 'u.id', '=', 'acd.user_id')
             ->join('elements as e', 'u.id', '=', 'e.user_id')
             ->join('categories as c', 'e.categorie_id', '=', 'c.id')
+            ->where('u.etatu', 1)
             ->select(
                 'u.id as user_id',
                 'u.name',
@@ -60,6 +61,7 @@ class FindController extends Controller
         $reporterDetails = DB::table('users as u')
             ->join('acdetails as acd', 'u.id', '=', 'acd.user_id')
             ->select('u.id', 'u.name', 'u.username', 'acd.*')
+            ->where('u.etatu', 1)
             ->where('u.username', $username)
             ->firstOrFail();
 
@@ -67,6 +69,7 @@ class FindController extends Controller
         $topCategories = DB::table('elements as e')
             ->join('categories as c', 'e.categorie_id', '=', 'c.id')
             ->where('e.user_id', $reporterDetails->id)
+            ->where('e.etate', 1)
             ->select('c.cat_name as name', DB::raw('COUNT(e.id) as pub_count'))
             ->groupBy('c.id', 'c.cat_name')
             ->orderByDesc('pub_count')
@@ -93,6 +96,7 @@ class FindController extends Controller
                     ->join('users', 'elements.user_id', '=', 'users.id')
                     ->join('categories', 'elements.categorie_id', '=', 'categories.id')
                     ->where('elements.user_id', $reporterDetails->id)
+                    ->where('elements.etate', 1)
                     ->select('elements.*', 'elementypes.et_name', 'cat_name')
                     ->orderBy('elements.id', 'desc')
                     ->get()
@@ -115,7 +119,9 @@ class FindController extends Controller
                     ->join('elementypes', 'elements.elementype_id', '=', 'elementypes.id')
                     ->join('users', 'elements.user_id', '=', 'users.id')
                     ->join('categories', 'elements.categorie_id', '=', 'categories.id')
-                     ->join('acdetails', 'users.id', '=', 'acdetails.user_id')
+                    ->join('acdetails', 'users.id', '=', 'acdetails.user_id')
+                    ->where('users.etatu', 1)
+                    ->where('elements.etate', 1)
                     ->select('elements.*', 'elementypes.et_name', 'cat_name', 'acdetails.photo', 'users.name', 'users.username')
                     ->orderBy('elements.id', 'desc')
                     ->get()
@@ -138,6 +144,8 @@ class FindController extends Controller
                     ->join('categories', 'elements.categorie_id', '=', 'categories.id')
                     ->join('acdetails', 'users.id', '=', 'acdetails.user_id')
                     ->where('elements.id', $id)
+                    ->where('users.etatu', 1)
+                    ->where('elements.etate', 1)
                     ->select('elements.*', 'elementypes.et_name', 'cat_name', 'acdetails.photo', 'users.name', 'users.username')
                     ->first();
 
@@ -147,6 +155,8 @@ class FindController extends Controller
                     ->join('categories', 'elements.categorie_id', '=', 'categories.id')
                     ->where('elements.user_id', $article->user_id)
                     ->where('elements.id', '!=', $article->id)
+                    ->where('users.etatu', 1)
+                    ->where('elements.etate', 1)
                     ->select('elements.*', 'elementypes.et_name', 'cat_name')
                     ->orderBy('elements.id', 'desc')
                     ->get()
