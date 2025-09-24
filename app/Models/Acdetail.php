@@ -13,6 +13,7 @@ class Acdetail extends Model
         'facebook',
         'instagram',
         'x',
+        'website',
         'user_id',
     ];
 
@@ -27,6 +28,7 @@ class Acdetail extends Model
             'user_id' => 'integer',
             'instagram' => 'string',
             'x' => 'string',
+            'website',
         ];
     }
 }

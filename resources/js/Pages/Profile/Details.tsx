@@ -26,6 +26,7 @@ const formSchema = z.object({
     x: z.string().nullable().optional(),
     instagram: z.string().nullable().optional(),
     facebook: z.string().nullable().optional(),
+    website: z.string().nullable().optional(),
     photo: z
         .any() // start with any type
         .optional()
@@ -50,6 +51,7 @@ interface Acdetail {
     x: string;
     instagram: string;
     facebook: string;
+    website: string;
 }
 interface FlashMessages {
     success?: string;
@@ -82,6 +84,7 @@ export default function Create() {
             x: acdetail.x || null,
             facebook: acdetail.facebook || null,
             instagram: acdetail.instagram || null,
+            website: acdetail.website || null,
         },
     });
 
@@ -92,6 +95,7 @@ export default function Create() {
         cover: File | null | undefined;
         instagram: number | null;
         linkedin: number | null;
+        website: number | null;
     }) {
         router.post(
             `/acdetail/${acdetail.id}/update`,
@@ -141,7 +145,7 @@ export default function Create() {
                                     name="x"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>X</FormLabel>
+                                            <FormLabel>X (optional)</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     placeholder="X link"
@@ -164,7 +168,9 @@ export default function Create() {
                                     name="instagram"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Instagram</FormLabel>
+                                            <FormLabel>
+                                                Instagram (optional)
+                                            </FormLabel>
                                             <FormControl>
                                                 <Input
                                                     placeholder="Instagram link"
@@ -187,7 +193,9 @@ export default function Create() {
                                     name="linkedin"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>LinkedIn</FormLabel>
+                                            <FormLabel>
+                                                LinkedIn (optional)
+                                            </FormLabel>
                                             <FormControl>
                                                 <Input
                                                     placeholder="linkedIn link"
@@ -222,6 +230,31 @@ export default function Create() {
                                             {errors.facebook && (
                                                 <p className="text-red-700">
                                                     {errors.facebook}
+                                                </p>
+                                            )}
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="website"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>
+                                                Website (optional)
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="website link"
+                                                    {...field}
+                                                    value={field.value ?? ''}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                            {errors.website && (
+                                                <p className="text-red-700">
+                                                    {errors.website}
                                                 </p>
                                             )}
                                         </FormItem>

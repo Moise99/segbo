@@ -296,6 +296,16 @@ export default function ReporterProfile() {
                             <p className="mb-4 text-xl text-gray-600">
                                 @{reporter.username}
                             </p>
+                            <p className="mb-4 text-xl text-gray-600">
+                                {reporter.categories.map((cat, index) => (
+                                    <span
+                                        key={index}
+                                        className="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 ring-1 ring-inset ring-indigo-600/20"
+                                    >
+                                        {cat.name} ({cat.pub_count})
+                                    </span>
+                                ))}
+                            </p>
 
                             {/* Bio */}
                             <div className="mb-6 mt-6">

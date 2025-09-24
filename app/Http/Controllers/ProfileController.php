@@ -79,6 +79,7 @@ class ProfileController extends Controller
             'x' => 'nullable|string|max:255',
             'facebook' => 'nullable|string|max:255',
             'instagram' => 'nullable|string|max:255',
+            'website' => 'nullable|string|max:255',
             'present' => 'nullable|string|max:500',
         ]);
         // Save data on database
@@ -99,6 +100,7 @@ class ProfileController extends Controller
                     'x' => $validatedData['x'],
                     'facebook' => $validatedData['facebook'],
                     'instagram' => $validatedData['instagram'],
+                    'website' => $validatedData['website'],
                     'present' => $validatedData['present'],
                 ]);
             }else{
@@ -110,6 +112,7 @@ class ProfileController extends Controller
                     'x' => $validatedData['x'],
                     'facebook' => $validatedData['facebook'],
                     'instagram' => $validatedData['instagram'],
+                    'website' => $validatedData['website'],
                     'present' => $validatedData['present'],
                 ]);
             }
