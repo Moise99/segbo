@@ -278,7 +278,7 @@ const columns: ColumnDef<Element>[] = [
                     <Button
                         variant="default"
                         className="bg-orange-600"
-                        onClick={() => router.get(`/segbo/${elements.title}`)}
+                        onClick={() => router.get(`/segbopub/${elements.id}`)}
                     >
                         See pub
                     </Button>

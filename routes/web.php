@@ -20,6 +20,7 @@ Route::get('/', function () {
     Route::get('/find/reporter', [FindController::class, 'findReporter'])->name('find.reporter');
     Route::get('/segbo/{username}', [FindController::class, 'findReporterDetails'])->name('find.more');
     Route::get('/find/article', [FindController::class, 'findArticle'])->name('find.article');
+    Route::get('/segbopub/{title}', [FindController::class, 'findArticleDetails'])->name('find.pubmore');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
