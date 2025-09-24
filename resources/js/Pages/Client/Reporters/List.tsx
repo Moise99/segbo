@@ -25,7 +25,7 @@ interface Props extends PageProps {
     reporters: Reporter[];
 }
 
-export default function ReportersDetails() {
+export default function Reporters() {
     const { reporters } = usePage<Props>().props;
     const total_reporters = reporters.length;
 

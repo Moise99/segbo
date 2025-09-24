@@ -121,16 +121,27 @@ class FindController extends Controller
     public function findArticleDetails($id)
     {
         //dd($id);
-        $elements = DB::table('elements')
+        $article = DB::table('elements')
                     ->join('elementypes', 'elements.elementype_id', '=', 'elementypes.id')
                     ->join('users', 'elements.user_id', '=', 'users.id')
                     ->join('categories', 'elements.categorie_id', '=', 'categories.id')
                     ->join('acdetails', 'users.id', '=', 'acdetails.user_id')
                     ->where('elements.id', $id)
                     ->select('elements.*', 'elementypes.et_name', 'cat_name', 'acdetails.photo', 'users.name', 'users.username')
+                    ->first();
+
+        $elements = DB::table('elements')
+                    ->join('elementypes', 'elements.elementype_id', '=', 'elementypes.id')
+                    ->join('users', 'elements.user_id', '=', 'users.id')
+                    ->join('categories', 'elements.categorie_id', '=', 'categories.id')
+                    ->where('elements.user_id', $article->user_id)
+                    ->where('elements.id', '!=', $article->id)
+                    ->select('elements.*', 'elementypes.et_name', 'cat_name')
+                    ->orderBy('elements.id', 'desc')
                     ->get();
         return Inertia::render('Client/Articles/Details', [
             'elements' => $elements,
+            'article' => $article,
         ]);
     }
 }

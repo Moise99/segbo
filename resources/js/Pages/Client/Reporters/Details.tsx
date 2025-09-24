@@ -45,7 +45,6 @@ import * as React from 'react';
 // Interface Element
 interface Element {
     id: number;
-    link: string;
     title: string;
     desc: string;
     updated_at: Date;
