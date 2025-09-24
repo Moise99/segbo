@@ -82,6 +82,7 @@ class FindController extends Controller
             'instagram' => $reporterDetails->instagram,
             'facebook' => $reporterDetails->facebook,
             'x' => $reporterDetails->x,
+            'website' => $reporterDetails->website,
             'categories' => $topCategories->toArray(), // Convert the collection to a simple array
         ];
 
