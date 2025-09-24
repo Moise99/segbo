@@ -13,7 +13,7 @@ export default function Guest({
         useState(false);
     const auth = usePage().props.auth;
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-gray-200">
             <nav className="border-b border-gray-100 bg-[#010336]">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">

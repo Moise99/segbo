@@ -272,11 +272,11 @@ export default function ReporterProfile() {
     return (
         <GuestLayout>
             <Head title={reporter.name} />
-            <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-6">
+            <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100 p-6">
                 <Link href={route('find.reporter')} className="mb-8">
                     <Button
-                        variant="outline"
-                        className="bg-orange-600 text-white hover:text-indigo-600"
+                        variant="default"
+                        className="bg-orange-600 text-white"
                     >
                         Back to Segbo list
                     </Button>
@@ -446,7 +446,7 @@ export default function ReporterProfile() {
                         </div>
                         <div className="mb-4 flex items-center justify-between gap-x-8">
                             <Input
-                                placeholder="Search by date, title ...."
+                                placeholder="Search by category, title ...."
                                 value={
                                     (table.getState().globalFilter as string) ??
                                     ''

@@ -1,44 +1,14 @@
+// src/Pages/Client/Reporters/Details.tsx
+
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input'; // Assurez-vous d'avoir un composant d'Input
 import GuestLayout from '@/Layouts/GuestLayout';
 import { PageProps } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
-import {
-    ColumnDef,
-    ColumnFiltersState,
-    SortingState,
-    VisibilityState,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-} from '@tanstack/react-table';
-import {
-    ArrowUpDown,
-    ChevronDown,
-    ChevronLeft,
-    ChevronRight,
-    ChevronsLeft,
-    ChevronsRight,
-} from 'lucide-react';
-import * as React from 'react';
+import { useMemo, useState } from 'react'; // Importez useState et useMemo
 
+// Type definitions for the data
 type Category = {
     name: string;
     count: number;
@@ -55,152 +25,44 @@ interface Props extends PageProps {
     reporters: Reporter[];
 }
 
-// Définition des colonnes pour le tableau
-const columnLabels: Record<string, string> = {
-    photo: 'Image',
-    name: 'Name',
-    username: 'Username',
-    category: 'Top category',
-};
-const columns: ColumnDef<Reporter>[] = [
-    {
-        accessorKey: 'photo',
-        header: () => (
-            <Button
-                variant="ghost"
-                // onClick={() =>
-                //     column.toggleSorting(column.getIsSorted() === 'asc')
-                // }
-            >
-                Image
-                {/* <ArrowUpDown className="ml-2" /> */}
-            </Button>
-        ),
-        cell: ({ row }) => {
-            const cover =
-                row.original.photo ?? 'becomesegbo_images/default.png';
-            return (
-                <div className="flex items-center">
-                    <img
-                        src={`/storage/${cover}`}
-                        alt="Cover"
-                        className="h-12 w-12 rounded-full object-cover"
-                    />
-                </div>
-            );
-        },
-        enableColumnFilter: true,
-    },
-
-    {
-        accessorKey: 'name',
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === 'asc')
-                }
-            >
-                Name <ArrowUpDown className="ml-2" />
-            </Button>
-        ),
-        cell: ({ row }) => <div>{row.original.name}</div>,
-        enableColumnFilter: true,
-    },
-
-    {
-        accessorKey: 'username',
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === 'asc')
-                }
-            >
-                Username <ArrowUpDown className="ml-2" />
-            </Button>
-        ),
-        cell: ({ row }) => <div>{row.original.username}</div>,
-        enableColumnFilter: true,
-    },
-
-    {
-        id: 'category',
-        // Use accessorFn to create a string for filtering
-        accessorFn: (row) => row.categories.map((cat) => cat.name).join(', '),
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === 'asc')
-                }
-            >
-                Top Category <ArrowUpDown className="ml-2" />
-            </Button>
-        ),
-        cell: ({ row }) => (
-            <div className="flex flex-wrap gap-2">
-                {row.original.categories.map((cat, index) => (
-                    <span
-                        key={index}
-                        className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs text-gray-700"
-                    >
-                        {cat.name} ({cat.count})
-                    </span>
-                ))}
-            </div>
-        ),
-    },
-
-    {
-        id: 'actions',
-        enableHiding: false,
-        header: () => <Button variant="ghost">Actions</Button>,
-        cell: ({ row }) => {
-            const reporters = row.original;
-
-            return (
-                <Button
-                    variant="default"
-                    className="bg-orange-600"
-                    onClick={() => router.get(`/segbo/${reporters.username}`)}
-                >
-                    See more
-                </Button>
-            );
-        },
-    },
-];
-
-export default function Reporters() {
+export default function ReportersDetails() {
     const { reporters } = usePage<Props>().props;
     const total_reporters = reporters.length;
-    const [sorting, setSorting] = React.useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] =
-        React.useState<ColumnFiltersState>([] as ColumnFiltersState);
-    const [columnVisibility, setColumnVisibility] =
-        React.useState<VisibilityState>({});
-    const [rowSelection, setRowSelection] = React.useState({});
 
-    // Configuration de la table
-    const table = useReactTable({
-        data: reporters,
-        columns,
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
-        state: {
-            sorting,
-            columnFilters,
-            columnVisibility,
-            rowSelection,
-        },
-    });
+    // 1. Search state
+    const [searchTerm, setSearchTerm] = useState('');
+
+    // 2. Filter logic with useMemo
+    const filteredReporters = useMemo(() => {
+        if (!searchTerm) {
+            return reporters; // no filter, return all reporter
+        }
+
+        const lowercasedSearchTerm = searchTerm.toLowerCase();
+
+        return reporters.filter((reporter) => {
+            // Search by name and username
+            const nameMatch = reporter.name
+                .toLowerCase()
+                .includes(lowercasedSearchTerm);
+            const usernameMatch = reporter.username
+                .toLowerCase()
+                .includes(lowercasedSearchTerm);
+
+            // Search in categories
+            const categoryMatch = reporter.categories.some((cat) =>
+                cat.name.toLowerCase().includes(lowercasedSearchTerm),
+            );
+
+            // Search by publication count (convert in string to search)
+            const countMatch = reporter.categories.some((cat) =>
+                String(cat.count).includes(lowercasedSearchTerm),
+            );
+
+            // Renvoyer true if one of these condition is true
+            return nameMatch || usernameMatch || categoryMatch || countMatch;
+        });
+    }, [reporters, searchTerm]);
 
     return (
         <GuestLayout>
@@ -215,168 +77,82 @@ export default function Reporters() {
                 </p>
             </div>
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg">
-                        <div className="mb-4 flex items-center justify-between gap-x-8">
-                            <Input
-                                placeholder="Search by name, categories ...."
-                                value={
-                                    (table.getState().globalFilter as string) ??
-                                    ''
-                                }
-                                onChange={(event) =>
-                                    table.setGlobalFilter(event.target.value)
-                                }
-                                className="max-w-sm"
-                            />
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        className="ml-auto"
-                                    >
-                                        Columns <ChevronDown />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                    {table
-                                        .getAllColumns()
-                                        .filter((column) => column.getCanHide())
-                                        .map((column) => {
-                                            return (
-                                                <DropdownMenuCheckboxItem
-                                                    key={column.id}
-                                                    className="capitalize"
-                                                    checked={column.getIsVisible()}
-                                                    onCheckedChange={(value) =>
-                                                        column.toggleVisibility(
-                                                            !!value,
-                                                        )
-                                                    }
-                                                >
-                                                    {columnLabels[column.id] ||
-                                                        column.id}
-                                                </DropdownMenuCheckboxItem>
-                                            );
-                                        })}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div>
+            {/* search bar */}
+            <div className="mx-auto my-8 max-w-lg px-2 sm:px-4">
+                <Input
+                    type="text"
+                    placeholder="Search for a reporter by name, username, or category..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full bg-white"
+                />
+            </div>
 
-                        {/* Table des villes */}
-                        <div className="rounded-md border">
-                            <Table>
-                                <TableHeader>
-                                    {table
-                                        .getHeaderGroups()
-                                        .map((headerGroup) => (
-                                            <TableRow key={headerGroup.id}>
-                                                {headerGroup.headers.map(
-                                                    (header) => (
-                                                        <TableHead
-                                                            key={header.id}
-                                                        >
-                                                            {header.isPlaceholder
-                                                                ? null
-                                                                : flexRender(
-                                                                      header
-                                                                          .column
-                                                                          .columnDef
-                                                                          .header,
-                                                                      header.getContext(),
-                                                                  )}
-                                                        </TableHead>
-                                                    ),
-                                                )}
-                                            </TableRow>
-                                        ))}
-                                </TableHeader>
-                                <TableBody>
-                                    {table.getRowModel().rows.length ? (
-                                        table.getRowModel().rows.map((row) => (
-                                            <TableRow
-                                                key={row.id}
-                                                data-state={
-                                                    row.getIsSelected() &&
-                                                    'selected'
-                                                }
-                                            >
-                                                {row
-                                                    .getVisibleCells()
-                                                    .map((cell) => (
-                                                        <TableCell
-                                                            key={cell.id}
-                                                        >
-                                                            {flexRender(
-                                                                cell.column
-                                                                    .columnDef
-                                                                    .cell,
-                                                                cell.getContext(),
-                                                            )}
-                                                        </TableCell>
-                                                    ))}
-                                            </TableRow>
-                                        ))
-                                    ) : (
-                                        <TableRow>
-                                            <TableCell
-                                                colSpan={columns.length}
-                                                className="h-24 text-center"
-                                            >
-                                                Aucun résultat trouvé.
-                                            </TableCell>
-                                        </TableRow>
-                                    )}
-                                </TableBody>
-                            </Table>
-                        </div>
-                        <div className="flex items-center justify-between py-4">
-                            <div className="text-sm text-muted-foreground">
-                                Page {table.getState().pagination.pageIndex + 1}{' '}
-                                / {table.getPageCount()}
-                            </div>
-                            <div className="space-x-2">
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => table.setPageIndex(0)}
-                                    disabled={!table.getCanPreviousPage()}
-                                >
-                                    <ChevronsLeft className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => table.previousPage()}
-                                    disabled={!table.getCanPreviousPage()}
-                                >
-                                    <ChevronLeft className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => table.nextPage()}
-                                    disabled={!table.getCanNextPage()}
-                                >
-                                    <ChevronRight className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() =>
-                                        table.setPageIndex(
-                                            table.getPageCount() - 1,
-                                        )
+            <div className="grid grid-cols-1 gap-12 px-24 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                {filteredReporters.length > 0 ? (
+                    filteredReporters.map((reporter, index) => (
+                        <Card
+                            key={index}
+                            className="overflow-hidden rounded-2xl bg-white shadow-md transition-shadow hover:shadow-xl"
+                        >
+                            {/* Reporter Photo */}
+                            <div className="relative h-48">
+                                <img
+                                    src={
+                                        reporter.photo
+                                            ? `/storage/${reporter.photo}`
+                                            : '/storage/becomesegbo_images/default.png'
                                     }
-                                    disabled={!table.getCanNextPage()}
-                                >
-                                    <ChevronsRight className="h-4 w-4" />
-                                </Button>
+                                    alt={reporter.name}
+                                    className="h-full w-full object-cover"
+                                />
                             </div>
-                        </div>
+
+                            {/* Reporter Infos */}
+                            <CardContent className="flex flex-col gap-3 p-4">
+                                <h2 className="text-lg font-semibold text-gray-800">
+                                    {reporter.name}
+                                </h2>
+                                <p className="text-sm text-gray-500">
+                                    @{reporter.username}
+                                </p>
+
+                                {/* Top 3 Categories */}
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                    {reporter.categories.map(
+                                        (cat, catIndex) => (
+                                            <span
+                                                key={catIndex}
+                                                className="rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700"
+                                            >
+                                                {cat.name} ({cat.count})
+                                            </span>
+                                        ),
+                                    )}
+                                </div>
+
+                                {/* Link to a specific reporter's page */}
+                                <div className="mt-4">
+                                    <Button
+                                        variant="default"
+                                        className="w-full rounded-xl bg-orange-600"
+                                        onClick={() =>
+                                            router.get(
+                                                `/segbo/${reporter.username}`,
+                                            )
+                                        }
+                                    >
+                                        See more
+                                    </Button>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))
+                ) : (
+                    <div className="col-span-full py-10 text-center text-gray-500">
+                        Not found
                     </div>
-                </div>
+                )}
             </div>
         </GuestLayout>
     );
