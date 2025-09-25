@@ -246,7 +246,7 @@ export default function Guest({
                 </header>
             )}
 
-            <main className="flex-grow">{children}</main>
+            <main className="mb-4 flex-grow">{children}</main>
 
             <footer className="bg-gradient-to-l from-blue-800 to-[#010336] py-8 text-white">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
