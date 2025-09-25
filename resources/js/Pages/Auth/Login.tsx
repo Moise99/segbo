@@ -2,7 +2,7 @@ import InputError from '@/components/InputError';
 import InputLabel from '@/components/InputLabel';
 import PrimaryButton from '@/components/PrimaryButton';
 import TextInput from '@/components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
+import AuthPagesLayout from '@/Layouts/AuthPagesLayout';
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import React, { useEffect, useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -94,9 +94,8 @@ export default function Login({
     }, [reset]);
 
     return (
-        <GuestLayout>
+        <AuthPagesLayout>
             <Head title="Log in" />
-
             <div className="mx-4 py-12">
                 <div className="mx-auto max-w-md rounded-lg bg-gradient-to-b from-blue-800 to-[#010336] py-12 sm:px-2 lg:px-4">
                     {status && (
@@ -117,7 +116,7 @@ export default function Login({
                                 type="email"
                                 name="email"
                                 value={data.email}
-                                className="mt-1 block w-full"
+                                className="mt-1 block w-full rounded-md border border-white bg-gray-400 p-3 text-white transition-all duration-300 hover:scale-[1.02] focus:border-orange-500 focus:ring-orange-500"
                                 autoComplete="username"
                                 isFocused={true}
                                 onChange={(e) =>
@@ -142,7 +141,7 @@ export default function Login({
                                 type="password"
                                 name="password"
                                 value={data.password}
-                                className="mt-1 block w-full"
+                                className="mt-1 block w-full rounded-md border border-white bg-gray-400 p-3 text-white transition-all duration-300 hover:scale-[1.02] focus:border-orange-500 focus:ring-orange-500"
                                 autoComplete="current-password"
                                 onChange={(e) =>
                                     setData('password', e.target.value)
@@ -171,7 +170,7 @@ export default function Login({
                                 </Link>
                             )}
                             <PrimaryButton
-                                className="bg-orange-600"
+                                className="bg-orange-600 transition-all duration-300 hover:scale-[1.02]"
                                 disabled={processing || isSubmitting}
                             >
                                 {isSubmitting ? 'Processing...' : 'Log in'}
@@ -182,7 +181,7 @@ export default function Login({
                     <div className="mx-2 mt-6 flex items-center">
                         <hr className="w-full border-gray-300" />
                         <span className="px-3 text-center text-sm text-white">
-                            or continue with
+                            or
                         </span>
                         <hr className="w-full border-gray-300" />
                     </div>
@@ -190,7 +189,7 @@ export default function Login({
                     <div className="mb-6 mt-5 flex justify-center">
                         <PrimaryButton
                             type="button"
-                            className="bg-orange-600 text-white hover:bg-gray-800"
+                            className="flex items-center space-x-3 rounded-full bg-orange-600 px-6 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-gray-800"
                             onClick={() =>
                                 (window.location.href =
                                     route('google.redirect'))
@@ -201,18 +200,16 @@ export default function Login({
                                 viewBox="0 0 24 24"
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="currentColor"
-                                className="h-10 w-10"
+                                className="h-8 w-8"
                             >
                                 <title>Google</title>
-                                <path d="M24 12.272c0-.82-.073-1.605-.209-2.364H12v4.48h6.765c-.293 1.494-1.18 2.757-2.52 3.61v3.004h4.065c2.38-2.19 3.69-5.418 3.69-8.73z" />
-                                <path d="M12 24c3.24 0 5.952-1.07 7.936-2.902l-4.065-3.004c-1.132.758-2.58 1.204-3.871 1.204-2.976 0-5.493-2.01-6.392-4.71H1.435v2.96A11.998 11.998 0 0012 24z" />
-                                <path d="M5.608 14.588a7.19 7.19 0 01-.375-2.271c0-.79.137-1.55.375-2.271v-2.96H1.435A11.998 11.998 0 000 12.317c0 1.986.482 3.864 1.435 5.504l4.173-3.233z" />
-                                <path d="M12 4.807c1.77 0 3.357.61 4.61 1.81l3.44-3.44C17.952 1.071 15.24 0 12 0 7.31 0 3.21 2.69 1.435 6.813l4.173 3.233C6.507 6.817 9.024 4.807 12 4.807z" />
+                                <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-8.667 0-.76-.053-1.467-.173-2.053H12.48z" />
                             </svg>
+                            <span>Continue with Google</span>
                         </PrimaryButton>
                     </div>
                 </div>
             </div>
-        </GuestLayout>
+        </AuthPagesLayout>
     );
 }
