@@ -33,7 +33,7 @@ class CustomResetPassword extends ResetPasswordNotification implements ShouldQue
     /**
      * Get the mail representation of the notification.
      */
-     public function toMail($notifiable): MailMessage
+    public function toMail($notifiable): MailMessage
     {
         $url = url(route('password.reset', [
             'token' => $this->token, // $this->token is herited from parent class
