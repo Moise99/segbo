@@ -314,12 +314,6 @@ export default function AuthPages({
                             >
                                 Publications
                             </NavLink>
-                            <Link
-                                href={route('register')}
-                                className="text-sm text-gray-300 transition-colors hover:text-orange-600"
-                            >
-                                Register
-                            </Link>
                         </div>
                         <div className="flex flex-col items-center md:items-start">
                             <h3 className="mb-4 text-lg font-semibold">

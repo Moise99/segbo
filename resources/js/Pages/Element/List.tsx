@@ -292,7 +292,7 @@ const columns: ColumnDef<Element>[] = [
                                             </Dialog.Title>
                                             <Dialog.Description className="mb-4 mt-2 text-sm text-gray-600">
                                                 Are you sure to disable this
-                                                element?
+                                                publication?
                                             </Dialog.Description>
                                             <div className="flex justify-end gap-4">
                                                 <Dialog.Close asChild>
@@ -346,7 +346,7 @@ const columns: ColumnDef<Element>[] = [
                                             </Dialog.Title>
                                             <Dialog.Description className="mb-4 mt-2 text-sm text-gray-600">
                                                 Are you sure to enable this
-                                                element?
+                                                publication?
                                             </Dialog.Description>
                                             <div className="flex justify-end gap-4">
                                                 <Dialog.Close asChild>
@@ -437,13 +437,13 @@ export default function List() {
 
     return (
         <AuthenticatedLayout>
-            <Head title="Elements list" />
+            <Head title="Publications list" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg">
                         <div className="mb-4 text-2xl text-blue-900">
-                            List of elements
+                            List of publications
                         </div>
                         <Toaster
                             position="top-center"
@@ -473,7 +473,7 @@ export default function List() {
                                 className="bg-orange-600"
                                 onClick={() => router.get('/element/create')}
                             >
-                                + New element
+                                + New publication
                             </Button>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>

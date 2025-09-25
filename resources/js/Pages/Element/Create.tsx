@@ -112,12 +112,12 @@ export default function Create() {
 
     return (
         <AuthenticatedLayout>
-            <Head title="New element" />
+            <Head title="New publication" />
             <div className="py-12">
                 <div className="mx-auto max-w-4xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg">
                         <div className="mb-4 text-2xl text-blue-900">
-                            Register new element
+                            New publication
                         </div>
                         <Toaster
                             position="top-center"
@@ -162,7 +162,7 @@ export default function Create() {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>
-                                                Element's link
+                                                Publication's link
                                             </FormLabel>
                                             <FormControl>
                                                 <Input
@@ -186,7 +186,7 @@ export default function Create() {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>
-                                                Element's cover
+                                                Publication's cover
                                             </FormLabel>
                                             <FormControl>
                                                 <Input
@@ -214,7 +214,7 @@ export default function Create() {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>
-                                                Element's type
+                                                Publication's type
                                             </FormLabel>
                                             <Select
                                                 onValueChange={(value) =>
