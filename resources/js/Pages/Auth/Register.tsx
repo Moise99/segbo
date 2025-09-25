@@ -48,9 +48,9 @@ export default function Register() {
         <GuestLayout>
             <Head title="Register" />
 
-            <div className="py-12">
+            <div className="mx-2 py-12">
                 <div className="mx-auto max-w-md content-center rounded-lg bg-gradient-to-b from-blue-800 to-[#010336] sm:px-2 lg:px-4">
-                    <form onSubmit={submit} className="py-12">
+                    <form onSubmit={submit} className="mx-2 py-12">
                         <div>
                             <InputLabel
                                 className="text-white"
@@ -207,7 +207,7 @@ export default function Register() {
                         </div>
                     </form>
 
-                    <div className="mt-2 flex items-center">
+                    <div className="mx-2 mt-2 flex items-center">
                         <hr className="w-full border-gray-300" />
                         <span className="px-3 text-center text-sm text-white">
                             or register with

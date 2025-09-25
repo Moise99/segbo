@@ -58,14 +58,14 @@ export default function Login({
     return (
         <GuestLayout>
             <Head title="Log in" />
-            {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    {status}
-                </div>
-            )}
-            <div className="py-12">
+            <div className="mx-4 py-12">
                 <div className="mx-auto max-w-md content-center rounded-lg bg-gradient-to-b from-blue-800 to-[#010336] sm:px-2 lg:px-4">
-                    <form onSubmit={submit} className="py-12">
+                    {status && (
+                        <div className="mt-6 text-center text-sm font-medium text-white">
+                            {status} Please, login!
+                        </div>
+                    )}
+                    <form onSubmit={submit} className="mx-2 py-12">
                         <div>
                             <InputLabel
                                 className="text-white"
@@ -116,7 +116,7 @@ export default function Login({
                             size="invisible"
                             sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
                         />
-                        <div className="mt-8 flex items-center justify-center">
+                        <div className="mx-2 mt-8 flex items-center justify-center">
                             {canResetPassword && (
                                 <Link
                                     href={route('password.request')}
@@ -133,7 +133,7 @@ export default function Login({
                             </PrimaryButton>
                         </div>
                     </form>
-                    <div className="mt-6 flex items-center">
+                    <div className="mx-2 mt-6 flex items-center">
                         <hr className="w-full border-gray-300" />
                         <span className="px-3 text-center text-sm text-white">
                             or continue with
