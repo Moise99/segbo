@@ -218,7 +218,10 @@ export default function Register() {
                         <PrimaryButton
                             type="button"
                             className="bg-orange-600 text-white hover:bg-gray-800"
-                            onClick={() => alert('Login with email!')}
+                            onClick={() =>
+                                (window.location.href =
+                                    route('google.redirect'))
+                            }
                         >
                             <svg
                                 role="img"
