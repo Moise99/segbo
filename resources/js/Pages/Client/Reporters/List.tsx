@@ -2,11 +2,11 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input'; // Assurez-vous d'avoir un composant d'Input
+import { Input } from '@/components/ui/input';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { PageProps } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
-import { useMemo, useState } from 'react'; // Importez useState et useMemo
+import { useMemo, useState } from 'react';
 
 // Type definitions for the data
 type Category = {

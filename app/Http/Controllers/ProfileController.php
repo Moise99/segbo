@@ -80,7 +80,7 @@ class ProfileController extends Controller
             'facebook' => 'nullable|string|max:255',
             'instagram' => 'nullable|string|max:255',
             'website' => 'nullable|string|max:255',
-            'present' => 'nullable|string|max:500',
+            'present' => 'nullable|string|max:3000',
         ]);
         // Save data on database
 

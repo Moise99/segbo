@@ -29,7 +29,7 @@ class ElementController extends Controller
             'link' => 'required|string|max:255',
             'cover' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'title' => 'required|string|max:255',
-            'desc' => 'required|string|max:255',
+            'desc' => 'required|string|max:500',
             'elementype' => 'required|integer',
             'category' => 'required|integer',
         ]);

@@ -425,21 +425,6 @@ export default function ReporterProfile() {
                                 )}
                             </div>
 
-                            {/* Bio */}
-                            <div className="mb-6 mt-6">
-                                <h2 className="mb-2 text-2xl font-semibold text-gray-800">
-                                    About me
-                                </h2>
-                                <p
-                                    className="whitespace-pre-wrap leading-relaxed text-gray-700"
-                                    dangerouslySetInnerHTML={{
-                                        __html: DOMPurify.sanitize(
-                                            reporter.present || '',
-                                        ),
-                                    }}
-                                ></p>
-                            </div>
-
                             {/* Categories/Expertise */}
                             <div className="mt-6">
                                 <h2 className="mb-3 text-2xl font-semibold text-gray-800">
@@ -455,6 +440,21 @@ export default function ReporterProfile() {
                                         </span>
                                     ))}
                                 </div>
+                            </div>
+
+                            {/* Bio */}
+                            <div className="mb-6 mt-6">
+                                <h2 className="mb-2 text-2xl font-semibold text-gray-800">
+                                    About me
+                                </h2>
+                                <p
+                                    className="whitespace-pre-wrap text-justify leading-relaxed text-gray-700"
+                                    dangerouslySetInnerHTML={{
+                                        __html: DOMPurify.sanitize(
+                                            reporter.present || '',
+                                        ),
+                                    }}
+                                ></p>
                             </div>
                         </div>
                     </CardContent>

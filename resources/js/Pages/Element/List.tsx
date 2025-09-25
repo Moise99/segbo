@@ -443,7 +443,7 @@ export default function List() {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg">
                         <div className="mb-4 text-2xl text-blue-900">
-                            List of publications
+                            List of your publications
                         </div>
                         <Toaster
                             position="top-center"

@@ -32,7 +32,7 @@ class FindController extends Controller
             ->orderByDesc('publications_count')
             ->get();
 
-// Regrouper par utilisateur et garder seulement le top 3
+        // Regrouper par utilisateur et garder seulement le top 3
         $reporters = $rawData->groupBy('user_id')->map(function ($userCategories) {
             $user = $userCategories->first();
 

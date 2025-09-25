@@ -41,7 +41,7 @@ export default function Authenticated({
                                         route().current('element.edit')
                                     }
                                 >
-                                    Publications
+                                    My Publications
                                 </NavLink>
                             </div>
                         </div>
@@ -160,7 +160,7 @@ export default function Authenticated({
                                 route().current('element.edit')
                             }
                         >
-                            Publications
+                            My Publications
                         </ResponsiveNavLink>
                     </div>
 

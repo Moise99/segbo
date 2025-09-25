@@ -1,9 +1,25 @@
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import AboutImage from '@/images/authimage.jpg';
 import Hero from '@/images/segbohero.png';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head } from '@inertiajs/react';
+import { PageProps } from '@/types';
+import { Head, Link, router, usePage } from '@inertiajs/react';
+
+type Reporter = {
+    name: string;
+    username: string;
+    pub: number;
+    photo: string | null;
+};
+
+interface Props extends PageProps {
+    topReporters: Reporter[];
+}
 
 export default function Welcome() {
+    const { topReporters } = usePage<Props>().props;
+
     return (
         <GuestLayout>
             <Head title="Home" />
@@ -64,6 +80,76 @@ export default function Welcome() {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div className="mb-8 text-center">
+                <h2 className="mt-6 text-xl font-bold text-gray-900 sm:text-4xl">
+                    Our Top Segbo
+                </h2>
+                <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
+                    <Link href={route('find.reporter')} className="mb-8">
+                        <Button
+                            variant="default"
+                            className="bg-orange-600 text-white"
+                        >
+                            Discover our talented journalists and their areas of
+                            expertise
+                        </Button>
+                    </Link>
+                </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-12 px-24 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                {topReporters.length > 0 ? (
+                    topReporters.map((reporter, index) => (
+                        <Card
+                            key={index}
+                            className="overflow-hidden rounded-2xl bg-white shadow-md transition-shadow hover:shadow-xl"
+                        >
+                            {/* Reporter Photo */}
+                            <div className="relative h-48">
+                                <img
+                                    src={
+                                        reporter.photo
+                                            ? `/storage/${reporter.photo}`
+                                            : '/storage/becomesegbo_images/default.png'
+                                    }
+                                    alt={reporter.name}
+                                    className="h-full w-full object-cover"
+                                />
+                            </div>
+
+                            {/* Reporter Infos */}
+                            <CardContent className="flex flex-col gap-3 p-4">
+                                <h2 className="text-lg font-semibold text-gray-800">
+                                    {reporter.name}
+                                </h2>
+                                <p className="text-sm text-gray-500">
+                                    @{reporter.username}
+                                </p>
+
+                                {/* Link to a specific reporter's page */}
+                                <div className="mt-4">
+                                    <Button
+                                        variant="default"
+                                        className="w-full rounded-xl bg-orange-600"
+                                        onClick={() =>
+                                            router.get(
+                                                `/segbo/${reporter.username}`,
+                                            )
+                                        }
+                                    >
+                                        See more
+                                    </Button>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))
+                ) : (
+                    <div className="col-span-full py-10 text-center text-gray-500">
+                        Not found
+                    </div>
+                )}
             </div>
         </GuestLayout>
     );
