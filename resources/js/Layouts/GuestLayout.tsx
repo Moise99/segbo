@@ -13,7 +13,7 @@ export default function Guest({
         useState(false);
     const auth = usePage().props.auth;
     return (
-        <div className="min-h-screen bg-gray-200">
+        <div className="flex min-h-screen flex-col bg-gray-200">
             <nav className="border-b border-gray-100 bg-gradient-to-l from-blue-800 to-[#010336]">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
@@ -47,7 +47,7 @@ export default function Guest({
                                 </NavLink>
                             </div>
                         </div>
-                        {/* Dropdown begin */}
+
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">
                             <div className="relative ms-3">
                                 {auth.user ? (
@@ -131,7 +131,7 @@ export default function Guest({
                                 )}
                             </div>
                         </div>
-                        {/* Dropdown end */}
+
                         <div className="-me-2 flex items-center sm:hidden">
                             <button
                                 onClick={() =>
@@ -175,7 +175,6 @@ export default function Guest({
                     </div>
                 </div>
 
-                {/* Responsive begin */}
                 <div
                     className={
                         (showingNavigationDropdown ? 'block' : 'hidden') +
@@ -190,7 +189,7 @@ export default function Guest({
                                 route().current('find.more')
                             }
                         >
-                            Find reporter
+                            Find Reporter
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             href={route('find.article')}
@@ -202,33 +201,21 @@ export default function Guest({
                             Publications
                         </ResponsiveNavLink>
                     </div>
-                </div>
 
-                {auth.user ? (
-                    <div
-                        className={
-                            (showingNavigationDropdown ? 'block' : 'hidden') +
-                            ' sm:hidden'
-                        }
-                    >
-                        <div className="space-y-1 pb-3 pt-2">
-                            <ResponsiveNavLink
-                                href={route('dashboard')}
-                                target="_blank"
-                                active={route().current('dashboard')}
-                            >
-                                admin
-                            </ResponsiveNavLink>
-                        </div>
-
+                    {auth.user ? (
                         <div className="border-t border-gray-200 pb-1 pt-4">
                             <div className="px-4">
                                 <div className="text-base font-medium text-orange-600">
                                     {auth.user.name}
                                 </div>
                             </div>
-
                             <div className="mt-3 space-y-1">
+                                <ResponsiveNavLink
+                                    href={route('dashboard')}
+                                    active={route().current('dashboard')}
+                                >
+                                    Admin
+                                </ResponsiveNavLink>
                                 <ResponsiveNavLink
                                     method="post"
                                     href={route('logout')}
@@ -238,25 +225,17 @@ export default function Guest({
                                 </ResponsiveNavLink>
                             </div>
                         </div>
-                    </div>
-                ) : (
-                    <div
-                        className={
-                            (showingNavigationDropdown ? 'block' : 'hidden') +
-                            ' sm:hidden'
-                        }
-                    >
+                    ) : (
                         <div className="space-y-1 pb-3 pt-2">
-                            <ResponsiveNavLink href={route('login')}>
-                                Login
-                            </ResponsiveNavLink>
                             <ResponsiveNavLink href={route('register')}>
                                 Register
                             </ResponsiveNavLink>
+                            <ResponsiveNavLink href={route('login')}>
+                                Login
+                            </ResponsiveNavLink>
                         </div>
-                    </div>
-                )}
-                {/* Responsive end */}
+                    )}
+                </div>
             </nav>
 
             {header && (
@@ -267,7 +246,71 @@ export default function Guest({
                 </header>
             )}
 
-            <main>{children}</main>
+            <main className="flex-grow">{children}</main>
+
+            <footer className="bg-gradient-to-l from-blue-800 to-[#010336] py-8 text-white">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+                        <div className="flex flex-col items-center md:items-start">
+                            <Link href="/" className="mb-4">
+                                <ApplicationLogo className="h-10 w-auto fill-current text-white transition-transform duration-300 hover:scale-105" />
+                            </Link>
+                            <p className="text-center text-sm text-gray-300 md:text-left">
+                                Connecting you with the best reporters and
+                                publications.
+                            </p>
+                        </div>
+                        <div className="flex flex-col items-center md:items-start">
+                            <h3 className="mb-4 text-lg font-semibold">
+                                Quick Links
+                            </h3>
+                            <NavLink
+                                href={route('find.reporter')}
+                                active={
+                                    route().current('find.reporter') ||
+                                    route().current('find.more')
+                                }
+                                className="mb-2 text-sm text-gray-300 transition-colors hover:text-orange-600"
+                            >
+                                Find Reporter
+                            </NavLink>
+                            <NavLink
+                                href={route('find.article')}
+                                active={
+                                    route().current('find.article') ||
+                                    route().current('find.pubmore')
+                                }
+                                className="mb-2 text-sm text-gray-300 transition-colors hover:text-orange-600"
+                            >
+                                Publications
+                            </NavLink>
+                            <Link
+                                href={route('register')}
+                                className="text-sm text-gray-300 transition-colors hover:text-orange-600"
+                            >
+                                Register
+                            </Link>
+                        </div>
+                        <div className="flex flex-col items-center md:items-start">
+                            <h3 className="mb-4 text-lg font-semibold">
+                                Contact Us
+                            </h3>
+                            <p className="mb-2 text-sm text-gray-300">
+                                Email: support@segbo.com
+                            </p>
+                            <p className="text-sm text-gray-300">
+                                Phone: +1 (123) 456-7890
+                            </p>
+                        </div>
+                    </div>
+                    <div className="mt-8 border-t border-gray-600 pt-4 text-center">
+                        <p className="text-sm text-gray-300">
+                            &copy; {new Date().getFullYear()} Segbo. All rights
+                            reserved.
+                        </p>
+                    </div>
+                </div>
+            </footer>
         </div>
     );
 }

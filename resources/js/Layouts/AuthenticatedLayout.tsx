@@ -15,7 +15,7 @@ export default function Authenticated({
         useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="flex min-h-screen flex-col bg-gray-100">
             <nav className="border-b border-gray-100 bg-gradient-to-l from-blue-800 to-[#010336]">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
@@ -195,7 +195,71 @@ export default function Authenticated({
                 </header>
             )}
 
-            <main>{children}</main>
+            <main className="flex-grow">{children}</main>
+
+            <footer className="bg-gradient-to-l from-blue-800 to-[#010336] py-8 text-white">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+                        <div className="flex flex-col items-center md:items-start">
+                            <Link href="/" className="mb-4">
+                                <ApplicationLogo className="h-10 w-auto fill-current text-white transition-transform duration-300 hover:scale-105" />
+                            </Link>
+                            <p className="text-center text-sm text-gray-300 md:text-left">
+                                Connecting you with the best reporters and
+                                publications.
+                            </p>
+                        </div>
+                        <div className="flex flex-col items-center md:items-start">
+                            <h3 className="mb-4 text-lg font-semibold">
+                                Quick Links
+                            </h3>
+                            <NavLink
+                                href={route('find.reporter')}
+                                active={
+                                    route().current('find.reporter') ||
+                                    route().current('find.more')
+                                }
+                                className="mb-2 text-sm text-gray-300 transition-colors hover:text-orange-600"
+                            >
+                                Find Reporter
+                            </NavLink>
+                            <NavLink
+                                href={route('find.article')}
+                                active={
+                                    route().current('find.article') ||
+                                    route().current('find.pubmore')
+                                }
+                                className="mb-2 text-sm text-gray-300 transition-colors hover:text-orange-600"
+                            >
+                                Publications
+                            </NavLink>
+                            <Link
+                                href={route('register')}
+                                className="text-sm text-gray-300 transition-colors hover:text-orange-600"
+                            >
+                                Register
+                            </Link>
+                        </div>
+                        <div className="flex flex-col items-center md:items-start">
+                            <h3 className="mb-4 text-lg font-semibold">
+                                Contact Us
+                            </h3>
+                            <p className="mb-2 text-sm text-gray-300">
+                                Email: support@segbo.com
+                            </p>
+                            <p className="text-sm text-gray-300">
+                                Phone: +1 (123) 456-7890
+                            </p>
+                        </div>
+                    </div>
+                    <div className="mt-8 border-t border-gray-600 pt-4 text-center">
+                        <p className="text-sm text-gray-300">
+                            &copy; {new Date().getFullYear()} Segbo. All rights
+                            reserved.
+                        </p>
+                    </div>
+                </div>
+            </footer>
         </div>
     );
 }
