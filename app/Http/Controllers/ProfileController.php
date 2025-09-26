@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Requests\AcdetailUpdateRequest;
 use App\Models\Acdetail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -71,51 +73,31 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function acdupdate(Request $request, $id): RedirectResponse
+    public function acdupdate(AcdetailUpdateRequest $request, $id): RedirectResponse
     {
-        $validatedData = $request->validate([
-            'linkedin' => 'nullable|string|max:255',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'x' => 'nullable|string|max:255',
-            'facebook' => 'nullable|string|max:255',
-            'instagram' => 'nullable|string|max:255',
-            'website' => 'nullable|string|max:255',
-            'present' => 'nullable|string|max:3000',
-        ]);
-        // Save data on database
-
         try {
-            if ($request->hasFile('photo')) {
-                // save in storage/app/public/element_images
+            $acdetail = Acdetail::findOrFail($id);
+
+            $data = $request->validated();
+
+            // if not photo -> remove line
+            if (!$request->hasFile('photo')) {
+                unset($data['photo']);
+                dd($data);
+            } else {
+                //(data);
+                if ($acdetail->photo && Storage::disk('public')->exists($acdetail->photo)) {
+                    Storage::disk('public')->delete($acdetail->photo);
+                }
+
                 $file = $request->file('photo');
                 $filename = Auth::user()->id.'_'.time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
                 $path = $file->storeAs('becomesegbo_images', $filename, 'public');
-
-                // save the path
-                $validatedData['photo'] = $path;
-
-                Acdetail::where('id', $id)->update([
-                    'linkedin' => $validatedData['linkedin'],
-                    'photo' => $validatedData['photo'],
-                    'x' => $validatedData['x'],
-                    'facebook' => $validatedData['facebook'],
-                    'instagram' => $validatedData['instagram'],
-                    'website' => $validatedData['website'],
-                    'present' => $validatedData['present'],
-                ]);
-            }else{
-                DB::table('acdetails')
-                ->where('id', $id)
-                ->where('user_id', Auth::user()->id)
-                ->update([
-                    'linkedin' => $validatedData['linkedin'],
-                    'x' => $validatedData['x'],
-                    'facebook' => $validatedData['facebook'],
-                    'instagram' => $validatedData['instagram'],
-                    'website' => $validatedData['website'],
-                    'present' => $validatedData['present'],
-                ]);
+                $data['photo'] = $path;
             }
+
+            $acdetail->update($data);
+
         } catch (\Exception $e) {
         return redirect()->back()->with('error', 'Error' . "-------- " . now() . $e->getMessage());
         }
