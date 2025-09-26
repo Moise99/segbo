@@ -145,7 +145,9 @@ export default function Create() {
                                     name="x"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>X (optional)</FormLabel>
+                                            <FormLabel>
+                                                X account (optional)
+                                            </FormLabel>
                                             <FormControl>
                                                 <Input
                                                     placeholder="X link"
@@ -169,7 +171,7 @@ export default function Create() {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>
-                                                Instagram (optional)
+                                                Instagram account (optional)
                                             </FormLabel>
                                             <FormControl>
                                                 <Input
@@ -194,7 +196,7 @@ export default function Create() {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>
-                                                LinkedIn (optional)
+                                                LinkedIn account (optional)
                                             </FormLabel>
                                             <FormControl>
                                                 <Input
@@ -218,7 +220,9 @@ export default function Create() {
                                     name="facebook"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Facebook</FormLabel>
+                                            <FormLabel>
+                                                Facebook account (optional)
+                                            </FormLabel>
                                             <FormControl>
                                                 <Input
                                                     placeholder="Facebook link"
