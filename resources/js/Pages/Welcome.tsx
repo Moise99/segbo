@@ -77,6 +77,21 @@ export default function Welcome() {
                                 global audience. Your voice matters, and we're
                                 here to help it resonate.
                             </p>
+                            <p className="my-2 text-lg text-gray-700">
+                                Follow these steps:
+                            </p>
+                            <ul className="list-inside list-disc text-lg text-gray-700">
+                                <li>
+                                    <a
+                                        href={route('register')}
+                                        className="inline-block rounded-lg bg-orange-600 px-6 py-3 font-semibold text-white transition duration-300 hover:bg-blue-900"
+                                    >
+                                        Create your Segbo account
+                                    </a>
+                                </li>
+                                <li>Fill out your profile</li>
+                                <li>And publish</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
