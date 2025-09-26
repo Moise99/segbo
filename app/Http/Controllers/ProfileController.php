@@ -99,7 +99,7 @@ class ProfileController extends Controller
             $acdetail->update($data);
 
         } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Error' . "-------- " . now() . $e->getMessage());
+        return redirect()->back()->with('error', 'Error' . "-------- " . now() /*. $e->getMessage()*/);
         }
 
         return redirect()->route('acdetail.edit')->with('success', 'Profile update with success.' . "---- " . now());

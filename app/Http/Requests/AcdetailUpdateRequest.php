@@ -36,7 +36,7 @@ class AcdetailUpdateRequest extends FormRequest
             'facebook'     => 'Enter valid Facebook (https://facebook.com/...).',
             'instagram'    => 'Enter valid Instagram (https://instagram.com/...).',
             'x'            => 'Enter valid X (https://x.com/...).',
-            'website'        => 'Enter valid website secure URL (https://....).',
+            'website'        => 'Enter valid secure website URL (https://....).',
         ];
     }
 }

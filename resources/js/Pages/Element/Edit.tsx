@@ -28,8 +28,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import { z } from 'zod';
 
 const formSchema = z.object({
-    desc: z.string().min(10, {
-        message: '10 character minimum.',
+    desc: z.string().min(20, {
+        message: '20 character minimum.',
     }),
     title: z.string().min(4, {
         message: '10 character minimum.',

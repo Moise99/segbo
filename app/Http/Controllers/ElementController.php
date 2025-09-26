@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Element;
 
 class ElementController extends Controller
@@ -26,12 +27,18 @@ class ElementController extends Controller
      {
 
         $validatedData = $request->validate([
-            'link' => 'required|url',
+            'link' => [
+                'nullable',
+                'string',
+                'regex:/^https:\/\/.+$/i',
+            ],
             'cover' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'title' => 'required|string|max:255',
             'desc' => 'required|string|max:500',
             'elementype' => 'required|integer',
             'category' => 'required|integer',
+        ], [
+            'link' => 'Enter valid secure URL link like (https://....)',
         ]);
 
         // Save data on database
@@ -90,53 +97,43 @@ class ElementController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         $validatedData = $request->validate([
-            'link' => 'required|string|max:255',
+            'link' => [
+                'nullable',
+                'string',
+                'regex:/^https:\/\/.+$/i',
+            ],
             'cover' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'title' => 'required|string|max:255',
-            'desc' => 'required|string|max:255',
+            'desc' => 'required|string|max:500',
             'elementype' => 'required|integer',
             'category' => 'required|integer',
+        ], [
+            'link' => 'Enter valid secure URL link like (https://....)',
         ]);
 
         // Save data on database
 
         try {
-            if ($request->hasFile('cover')) {
-                // save in storage/app/public/element_images
-                $file = $request->file('cover');
-                $filename = Auth::user()->id.'_'.time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
-                $path = $file->storeAs('element_images', $filename, 'public');
+             $element = Element::findOrFail($id);
+            // if not cover -> remove line
+            if (!$request->hasFile('cover')) {
+                unset($validatedData['cover']);
+            } else {
+                //(validatedData);
 
-                // save the path
-                $validatedData['cover'] = $path;
-
-                DB::table('elements')
-                ->where('id', $id)
-                ->where('user_id', Auth::user()->id)
-                ->update([
-                    'link' => $validatedData['link'],
-                    'cover' => $validatedData['cover'],
-                    'title' => $validatedData['title'],
-                    'desc' => $validatedData['desc'],
-                    'elementype_id' => $validatedData['elementype'],
-                    'categorie_id' => $validatedData['category'],
-                    'user_id' => Auth::user()->id,
-                ]);
-            }else{
-                DB::table('elements')
-                ->where('id', $id)
-                ->where('user_id', Auth::user()->id)
-                ->update([
-                    'link' => $validatedData['link'],
-                    'title' => $validatedData['title'],
-                    'desc' => $validatedData['desc'],
-                    'elementype_id' => $validatedData['elementype'],
-                    'categorie_id' => $validatedData['category'],
-                    'user_id' => Auth::user()->id,
-                ]);
+            if ($element->cover && Storage::disk('public')->exists($element->cover)) {
+                Storage::disk('public')->delete($element->cover);
             }
+
+            $file = $request->file('cover');
+            $filename = Auth::user()->id.'_'.time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
+            $path = $file->storeAs('element_images', $filename, 'public');
+            $validatedData['cover'] = $path;
+        }
+
+            $element->update($validatedData);
         } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Error' . "-------- " . now() . $e->getMessage());
+        return redirect()->back()->with('error', 'Error' . "-------- " . now() /*. $e->getMessage()*/);
         }
 
         return redirect()->route('element.list')->with('success', 'Element update with success.' . "---- " . now());
@@ -149,12 +146,12 @@ class ElementController extends Controller
             Element::where('id', $id)->update([
                 'etate' => 1,
             ]);
-            return redirect()->route('element.list')->with('success', 'Element enabled.' . "-------- " . now());
+            return redirect()->route('element.list')->with('success', 'Publication enabled.' . "-------- " . now());
         }else{
             Element::where('id', $id)->update([
                 'etate' => 0,
             ]);
-            return redirect()->route('element.list')->with('success', 'Element disabled.' . "-------- " . now());
+            return redirect()->route('element.list')->with('success', 'Publication disabled.' . "-------- " . now());
         }
     }
 }
