@@ -43,15 +43,14 @@ class ElementController extends Controller
 
         // Save data on database
         try {
-            if ($request->hasFile('cover')) {
-                // save in storage/app/public/element_images
-                $file = $request->file('cover');
-                $filename = Auth::user()->id.'_'.time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
-                $path = $file->storeAs('element_images', $filename, 'public');
 
-                // save the path
-                $validatedData['cover'] = $path;
-            }
+            $file = $request->file('cover');
+            $filename = Auth::user()->id.'_'.time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
+            $path = $path = $file->storeAs('segbo/element', $filename, 'noc_storage');
+
+            // save the path
+            $validatedData['cover'] = $path;
+
             Element::create([
                 'link' => $validatedData['link'],
                 'cover' => $validatedData['cover'],
@@ -75,7 +74,14 @@ class ElementController extends Controller
                     ->join('categories', 'elements.categorie_id', '=', 'categories.id')
                     ->where('elements.user_id', Auth::user()->id)
                     ->select('elements.*', 'elementypes.et_name', 'cat_name')
-                    ->get();
+                    ->get()
+                    ->map(function($element) {
+                        $element->cover = $element->cover
+                            ? Storage::disk('noc_storage')->url($element->cover)
+                            : asset('images/logo.png');
+                        return $element;
+                    });
+        //dd($elements);
 
         return Inertia::render('Element/List', [
             'elements' => $elements,
@@ -83,7 +89,16 @@ class ElementController extends Controller
     }
 
     public function edit($id) {
-        $element = DB::table('elements')->where('id', $id)->first();
+        $element = DB::table('elements')
+                    ->where('id', $id)
+                    ->get()
+                    ->map(function($element) {
+                        $element->cover = $element->cover
+                            ? Storage::disk('noc_storage')->url($element->cover)
+                            : asset('images/logo.png');
+                        return $element;
+                    })
+                    ->first();
         $elementypes = DB::table('elementypes')->get();
         $categories = DB::table('categories')->get();
 
@@ -121,13 +136,13 @@ class ElementController extends Controller
             } else {
                 //(validatedData);
 
-            if ($element->cover && Storage::disk('public')->exists($element->cover)) {
-                Storage::disk('public')->delete($element->cover);
+            if ($element->cover && Storage::disk('noc_storage')->exists($element->cover)) {
+                Storage::disk('noc_storage')->delete($element->cover);
             }
 
             $file = $request->file('cover');
             $filename = Auth::user()->id.'_'.time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
-            $path = $file->storeAs('element_images', $filename, 'public');
+            $path = $file->storeAs('segbo/element', $filename, 'noc_storage');
             $validatedData['cover'] = $path;
         }
 

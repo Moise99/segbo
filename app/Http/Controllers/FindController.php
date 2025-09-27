@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 
 class FindController extends Controller
 {
@@ -30,7 +31,13 @@ class FindController extends Controller
             ->groupBy('u.id', 'u.name', 'u.username', 'acd.photo', 'c.id', 'c.cat_name')
             ->orderBy('u.id')
             ->orderByDesc('publications_count')
-            ->get();
+            ->get()
+            ->map(function($reporter) {
+                $reporter->photo = $reporter->photo
+                    ? Storage::disk('noc_storage')->url($reporter->photo)
+                    : asset('images/logo.png');
+                return $reporter;
+            });
 
         // Regrouper par utilisateur et garder seulement le top 3
         $reporters = $rawData->groupBy('user_id')->map(function ($userCategories) {
@@ -63,7 +70,13 @@ class FindController extends Controller
             ->select('u.id', 'u.name', 'u.username', 'acd.*')
             ->where('u.etatu', 1)
             ->where('u.username', $username)
-            ->firstOrFail();
+            ->get()
+            ->map(function($reporter) {
+                $reporter->photo = $reporter->photo
+                    ? Storage::disk('noc_storage')->url($reporter->photo)
+                    : asset('images/logo.png');
+                return $reporter;
+            })->firstOrFail();
 
         // Now, get the top 3 categories for this specific reporter.
         $topCategories = DB::table('elements as e')
@@ -103,6 +116,9 @@ class FindController extends Controller
                     ->map(function ($element) {
                         // Encrypt the original ID and add it to the collection
                         $element->encrypted_id = Crypt::encryptString($element->id);
+                        $element->cover = $element->cover
+                        ? Storage::disk('noc_storage')->url($element->cover)
+                        : asset('images/logo.png');
                         return $element;
                     });
 
@@ -128,6 +144,12 @@ class FindController extends Controller
                     ->map(function ($element) {
                         // Encrypt the original ID and add it to the collection
                         $element->encrypted_id = Crypt::encryptString($element->id);
+                        $element->cover = $element->cover
+                        ? Storage::disk('noc_storage')->url($element->cover)
+                        : asset('images/logo.png');
+                        $element->photo = $element->photo
+                        ? Storage::disk('noc_storage')->url($element->photo)
+                        : asset('images/logo.png');
                         return $element;
                     });
         return Inertia::render('Client/Articles/List', [
@@ -147,7 +169,18 @@ class FindController extends Controller
                     ->where('users.etatu', 1)
                     ->where('elements.etate', 1)
                     ->select('elements.*', 'elementypes.et_name', 'cat_name', 'acdetails.photo', 'users.name', 'users.username')
-                    ->first();
+                    ->get()
+                    ->map(function ($element) {
+                        // Encrypt the original ID and add it to the collection
+                        $element->encrypted_id = Crypt::encryptString($element->id);
+                        $element->cover = $element->cover
+                        ? Storage::disk('noc_storage')->url($element->cover)
+                        : asset('images/logo.png');
+                        $element->photo = $element->photo
+                        ? Storage::disk('noc_storage')->url($element->photo)
+                        : asset('images/logo.png');
+                        return $element;
+                    })->first();
 
         $elements = DB::table('elements')
                     ->join('elementypes', 'elements.elementype_id', '=', 'elementypes.id')
@@ -163,6 +196,9 @@ class FindController extends Controller
                     ->map(function ($element) {
                         // Encrypt the original ID and add it to the collection
                         $element->encrypted_id = Crypt::encryptString($element->id);
+                        $element->cover = $element->cover
+                        ? Storage::disk('noc_storage')->url($element->cover)
+                        : asset('images/logo.png');
                         return $element;
                     });
         return Inertia::render('Client/Articles/Details', [

@@ -60,6 +60,13 @@ return [
             'report' => false,
         ],
 
+        'noc_storage' => [
+            'driver' => 'local',
+            'root' => env('NOC_STORAGE_PATH', storage_path('noc_storage')),
+            'url' => env('NOC_STORAGE_URL', env('APP_URL').'/storage/noc_storage'),
+            'visibility' => 'public',
+        ],
+
     ],
 
     /*

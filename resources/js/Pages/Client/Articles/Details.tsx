@@ -101,7 +101,7 @@ const columns: ColumnDef<Element>[] = [
             return (
                 <div className="flex items-center">
                     <img
-                        src={`/storage/${cover}`}
+                        src={cover}
                         alt="Cover"
                         className="h-10 w-10 rounded-full object-cover"
                     />
@@ -281,11 +281,6 @@ export default function ReporterProfile() {
         },
     });
 
-    // A fallback image path
-    const coverUrl = article.cover
-        ? `/storage/${article.cover}`
-        : '/storage/becomesegbo_images/default_cover.png';
-
     // Format the date to a more readable format
     const formattedDate = new Date(article.updated_at).toLocaleDateString(
         'en-EN',
@@ -333,7 +328,7 @@ export default function ReporterProfile() {
                         {/* Hero Image */}
                         <div className="mb-8 h-96 w-full overflow-hidden rounded-lg shadow-md">
                             <img
-                                src={coverUrl}
+                                src={article.cover}
                                 alt={article.title}
                                 className="h-full w-full object-cover"
                             />
@@ -362,11 +357,7 @@ export default function ReporterProfile() {
                                     </span>
                                     <div className="flex items-center">
                                         <img
-                                            src={
-                                                article.photo
-                                                    ? `/storage/${article.photo}`
-                                                    : '/storage/becomesegbo_images/default.png'
-                                            }
+                                            src={article.photo}
                                             alt="Cover"
                                             className="h-10 w-10 rounded-full object-cover"
                                         />

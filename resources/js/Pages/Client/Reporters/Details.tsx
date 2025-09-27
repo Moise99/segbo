@@ -63,7 +63,7 @@ type Reporter = {
     name: string;
     username: string;
     present: string; // Biography/About section
-    photo: string | null;
+    photo: string;
     x: string | null;
     instagram: string | null;
     linkedin: string | null;
@@ -106,7 +106,7 @@ const columns: ColumnDef<Element>[] = [
             return (
                 <div className="flex items-center">
                     <img
-                        src={`/storage/${cover}`}
+                        src={cover}
                         alt="Cover"
                         className="h-10 w-10 rounded-full object-cover"
                     />
@@ -286,11 +286,6 @@ export default function ReporterProfile() {
         },
     });
 
-    // A fallback image path
-    const photoUrl = reporter.photo
-        ? `/storage/${reporter.photo}`
-        : '/storage/becomesegbo_images/default.png';
-
     return (
         <GuestLayout>
             <Head title={reporter.name} />
@@ -308,7 +303,7 @@ export default function ReporterProfile() {
                         {/* Photo Section */}
                         <div className="flex-shrink-0">
                             <img
-                                src={photoUrl}
+                                src={reporter.photo}
                                 alt={`Photo de ${reporter.name}`}
                                 className="h-48 w-48 rounded-full border-4 border-white object-cover shadow-md sm:h-64 sm:w-64"
                             />

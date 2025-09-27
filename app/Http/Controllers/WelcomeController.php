@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
 
 class WelcomeController extends Controller
 {
@@ -18,12 +19,20 @@ class WelcomeController extends Controller
                 'u.name',
                 'u.username',
                 'acd.photo',
-                DB::raw('COUNT(e.id) as pub') 
+                DB::raw('COUNT(e.id) as pub')
             )
             ->groupBy('u.name', 'u.username', 'acd.photo')
             ->orderByDesc('pub')
             ->take(12)
-            ->get();
+            ->get()
+            ->map(function($reporter) {
+                // Préparer l'URL complète
+                $reporter->photo = $reporter->photo
+                    ? Storage::disk('noc_storage')->url($reporter->photo)
+                    : asset('images/logo.png');
+
+                return $reporter;
+            });
 
         return Inertia::render('Welcome', [
             'topReporters' => $topReporters,

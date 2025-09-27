@@ -67,7 +67,17 @@ class ProfileController extends Controller
 
     public function acdedit(){
 
-        $acdetail = DB::table('acdetails')->where('user_id', Auth::user()->id)->first();
+        $acdetail = DB::table('acdetails')
+                    ->where('user_id', Auth::user()->id)
+                    ->get() // récupère une Collection
+                    ->map(function($reporter) {
+                        $reporter->photo = $reporter->photo
+                            ? Storage::disk('noc_storage')->url($reporter->photo)
+                            : asset('images/logo.png');
+                        return $reporter;
+                    })
+                    ->first();
+
         return Inertia::render('Profile/Details', [
             'acdetail' => $acdetail,
         ]);
@@ -86,13 +96,13 @@ class ProfileController extends Controller
                 dd($data);
             } else {
                 //(data);
-                if ($acdetail->photo && Storage::disk('public')->exists($acdetail->photo)) {
-                    Storage::disk('public')->delete($acdetail->photo);
+                if ($acdetail->photo && Storage::disk('noc_storage')->exists($acdetail->photo)) {
+                    Storage::disk('noc_storage')->delete($acdetail->photo);
                 }
 
                 $file = $request->file('photo');
                 $filename = Auth::user()->id.'_'.time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
-                $path = $file->storeAs('becomesegbo_images', $filename, 'public');
+                $path = $file->storeAs('segbo/profile', $filename, 'noc_storage');
                 $data['photo'] = $path;
             }
 

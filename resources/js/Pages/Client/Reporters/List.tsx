@@ -17,7 +17,7 @@ type Category = {
 type Reporter = {
     name: string;
     username: string;
-    photo: string | null;
+    photo: string;
     categories: Category[];
 };
 
@@ -98,11 +98,7 @@ export default function Reporters() {
                             {/* Reporter Photo */}
                             <div className="relative h-48">
                                 <img
-                                    src={
-                                        reporter.photo
-                                            ? `/storage/${reporter.photo}`
-                                            : '/storage/becomesegbo_images/default.png'
-                                    }
+                                    src={reporter.photo}
                                     alt={reporter.name}
                                     className="h-full w-full object-cover"
                                 />

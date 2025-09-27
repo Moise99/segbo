@@ -73,7 +73,7 @@ interface Category {
 interface Element {
     id: number;
     link: string;
-    cover: File;
+    cover: string;
     title: string;
     desc: string;
     elementype_id: number;
@@ -113,7 +113,7 @@ export default function Create() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: element.title,
-            cover: undefined,
+            cover: element.cover,
             link: element.link,
             desc: element.desc,
             elementype: element.elementype_id,
@@ -222,7 +222,7 @@ export default function Create() {
                                             </FormLabel>
                                             {element.cover && (
                                                 <img
-                                                    src={`/storage/${element.cover}`}
+                                                    src={element.cover}
                                                     alt="current cover"
                                                     className="mb-2 h-24 w-24 rounded-md object-cover"
                                                 />

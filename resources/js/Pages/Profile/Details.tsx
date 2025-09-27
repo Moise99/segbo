@@ -47,7 +47,7 @@ interface Acdetail {
     id: number;
     present: string;
     linkedin: string;
-    photo: File;
+    photo: string;
     x: string;
     instagram: string;
     facebook: string;
@@ -79,7 +79,7 @@ export default function Create() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             present: acdetail.present || null,
-            photo: undefined,
+            photo: acdetail.photo,
             linkedin: acdetail.linkedin || null,
             x: acdetail.x || null,
             facebook: acdetail.facebook || null,
@@ -273,7 +273,7 @@ export default function Create() {
                                             <FormLabel>Profile image</FormLabel>
                                             {acdetail.photo && (
                                                 <img
-                                                    src={`/storage/${acdetail.photo}`}
+                                                    src={acdetail.photo}
                                                     alt="current cover"
                                                     className="mb-2 h-24 w-24 rounded-md object-cover"
                                                 />

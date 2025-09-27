@@ -96,7 +96,7 @@ const columns: ColumnDef<Element>[] = [
             return (
                 <div className="flex items-center">
                     <img
-                        src={`/storage/${cover}`}
+                        src={cover}
                         alt="Cover"
                         className="h-10 w-10 rounded-full object-cover"
                     />
@@ -178,11 +178,7 @@ const columns: ColumnDef<Element>[] = [
                         {name}
                         <div className="flex items-center">
                             <img
-                                src={
-                                    photo
-                                        ? `/storage/${photo}`
-                                        : '/storage/becomesegbo_images/default.png'
-                                }
+                                src={photo}
                                 alt="Cover"
                                 className="h-10 w-10 rounded-full object-cover"
                             />
