@@ -274,7 +274,7 @@ export default function Create() {
                                             {acdetail.photo && (
                                                 <img
                                                     src={acdetail.photo}
-                                                    alt="current cover"
+                                                    alt="current profil image"
                                                     className="mb-2 h-24 w-24 rounded-md object-cover"
                                                 />
                                             )}
@@ -305,7 +305,7 @@ export default function Create() {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>
-                                                Your Brief presentation
+                                                Your Brief biography
                                             </FormLabel>
                                             <FormControl>
                                                 <RichTextEditor

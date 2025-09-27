@@ -459,7 +459,8 @@ export default function ReporterProfile() {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg">
                         <div className="mb-4 text-2xl text-blue-900">
-                            List of publications
+                            Publications of this Segbo ( {reporter.name} @
+                            {reporter.username})
                         </div>
                         <div className="mb-4 flex items-center justify-between gap-x-8">
                             <Input
