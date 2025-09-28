@@ -38,8 +38,8 @@ const formSchema = z.object({
             'Only .jpeg, .jpg and .png formats are allowed.',
         )
         .refine(
-            (file) => !file || file.size <= 2 * 1024 * 1024,
-            'File must be less than 2MB',
+            (file) => !file || file.size <= 1 * 1024 * 1024,
+            'File must be less than 1MB',
         ),
 });
 

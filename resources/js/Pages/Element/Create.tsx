@@ -44,8 +44,8 @@ const formSchema = z.object({
             'Only .jpeg and .png formats are allowed.',
         )
         .refine(
-            (file) => file.size <= 2 * 1024 * 1024, // 2MB max
-            'File must be less than 2MB.',
+            (file) => file.size <= 1 * 1024 * 1024, // 2MB max
+            'File must be less than 1MB.',
         ),
     elementype: z.number().int().positive({
         message: 'Enter valid element type.',
