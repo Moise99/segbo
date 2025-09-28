@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Acdetail;
 use Illuminate\Auth\Events\Registered;
+use App\Notifications\CustomVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -50,8 +51,7 @@ class RegisteredUserController extends Controller
         ]);
 
 
-
-        event(new Registered($user));
+        $user->notify(new CustomVerifyEmail());
 
         Auth::login($user);
 

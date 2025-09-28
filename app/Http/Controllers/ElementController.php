@@ -34,7 +34,7 @@ class ElementController extends Controller
             ],
             'cover' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'title' => 'required|string|max:255',
-            'desc' => 'required|string|max:500',
+            'desc' => 'required|string|max:1000',
             'elementype' => 'required|integer',
             'category' => 'required|integer',
         ], [
@@ -46,7 +46,7 @@ class ElementController extends Controller
 
             $file = $request->file('cover');
             $filename = Auth::user()->id.'_'.time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
-            $path = $path = $file->storeAs('segbo/element', $filename, 'noc_storage');
+            $path = $file->storeAs('segbo/element', $filename, 'noc_storage');
 
             // save the path
             $validatedData['cover'] = $path;
@@ -119,7 +119,7 @@ class ElementController extends Controller
             ],
             'cover' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'title' => 'required|string|max:255',
-            'desc' => 'required|string|max:500',
+            'desc' => 'required|string|max:1000',
             'elementype' => 'required|integer',
             'category' => 'required|integer',
         ], [

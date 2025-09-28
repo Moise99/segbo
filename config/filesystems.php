@@ -60,12 +60,27 @@ return [
             'report' => false,
         ],
 
+        // n0c for local
         'noc_storage' => [
             'driver' => 'local',
             'root' => env('NOC_STORAGE_PATH', storage_path('noc_storage')),
             'url' => env('NOC_STORAGE_URL', env('APP_URL').'/storage/noc_storage'),
             'visibility' => 'public',
         ],
+
+        // for prod
+        // 'noc_storage' => [
+        //     'driver' => env('NOC_STORAGE_DRIVER'),
+        //     'key' => env('NOC_STORAGE_KEY'),
+        //     'secret' => env('NOC_STORAGE_SECRET'),
+        //     'region' => env('NOC_STORAGE_REGION', 'us-east-1'),
+        //     'bucket' => env('NOC_STORAGE_BUCKET'),
+        //     'url' => env('NOC_STORAGE_URL'),
+        //     'endpoint' => env('NOC_STORAGE_ENDPOINT'),
+        //     'use_path_style_endpoint' => true,
+        //     'prefix' => env('APP_STORAGE_PREFIX', null),
+        // ],
+
 
     ],
 

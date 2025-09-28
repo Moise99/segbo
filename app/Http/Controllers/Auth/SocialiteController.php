@@ -7,6 +7,7 @@ use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use App\Models\Acdetail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class SocialiteController extends Controller
@@ -31,9 +32,29 @@ class SocialiteController extends Controller
                     'email_verified_at' => now(),
                     'password' => bcrypt(Str::random(16)),
                 ]);
+
+                $googleAvatar = $googleUser->avatar; //Google link
+                if ($googleAvatar) {
+                    $contents = file_get_contents($googleAvatar);
+                    $imageInfo = getimagesizefromstring($contents);
+                    $mime = $imageInfo['mime'];
+
+                    $extension = match($mime) {
+                        'image/jpeg' => 'jpg',
+                        'image/png' => 'png',
+                        default => 'jpg',
+                    };
+
+                    $filename = $user->id . '_' . time() . '_' . uniqid() . '.' . $extension;
+                    $path = Storage::disk('noc_storage')->put('segbo/profile/' . $filename, $contents);
+                } else {
+                    $path = null;
+                }
+
+
                 Acdetail::create([
                     'user_id' => $user->id,
-                    'photo' => $googleUser->getAvatar(),
+                    'photo' => $path,
                 ]);
             }
 

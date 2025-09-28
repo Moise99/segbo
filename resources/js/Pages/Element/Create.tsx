@@ -29,7 +29,7 @@ import { z } from 'zod';
 
 const formSchema = z.object({
     desc: z.string().min(10, {
-        message: '10 character minimum.',
+        message: '20 character minimum.',
     }),
     title: z.string().min(4, {
         message: '10 character minimum.',
