@@ -15,7 +15,7 @@ class AcdetailUpdateRequest extends FormRequest
     {
         return [
             'present' => ['nullable', 'string', 'max:3000'],
-            'photo' => ['nullable', 'image', 'mimes:jpeg,jpg,png', 'max:2048'],
+            'photo' => ['nullable', 'image', 'mimes:jpeg,jpg,png', 'max:1024'],
             'linkedin' => ['nullable', 'string', 'regex:/^https:\/\/(www\.)?linkedin\.com\/.*$/i'],
             'facebook' => ['nullable', 'string', 'regex:/^https:\/\/(www\.)?facebook\.com\/.*$/i'],
             'instagram' => ['nullable', 'string', 'regex:/^https:\/\/(www\.)?instagram\.com\/.*$/i'],
