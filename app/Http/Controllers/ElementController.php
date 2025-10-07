@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Element;
+use Berkayk\OneSignal\OneSignalFacade as OneSignal;
 
 class ElementController extends Controller
 {
@@ -156,17 +157,54 @@ class ElementController extends Controller
 
     public function endesable($id): RedirectResponse
     {
-        $etate = DB::table('elements')->where('id', $id)->value('etate');
-        if($etate == 0){
+        $element = DB::table('elements')->where('id', $id)->first();
+
+        if ($element->etate == 0) {
+            // Activate publication
             Element::where('id', $id)->update([
                 'etate' => 1,
             ]);
-            return redirect()->route('element.list')->with('success', 'Publication enabled.' . "-------- " . now());
-        }else{
+
+            // subscribers Notification
+            $this->notifySubscribers($element);
+
+            return redirect()
+                ->route('element.list')
+                ->with('success', 'Publication enabled.' . " -------- " . now());
+        } else {
+            // desactivate publication
             Element::where('id', $id)->update([
                 'etate' => 0,
             ]);
-            return redirect()->route('element.list')->with('success', 'Publication disabled.' . "-------- " . now());
+
+            return redirect()
+                ->route('element.list')
+                ->with('success', 'Publication disabled.' . " -------- " . now());
         }
     }
+
+/**
+ * Envoie une notification aux abonnés d’un user
+ */
+    private function notifySubscribers(Element $element): void
+    {
+        $subscribers = $element->user->subscribers()
+            ->whereNotNull('onesignal_player_id')
+            ->pluck('onesignal_player_id')
+            ->toArray();
+
+        if (!empty($subscribers)) {
+            OneSignal::sendNotificationCustom([
+                'contents' => [
+                    'en' => "Nouvelle publication de {$element->user->username} : {$element->title}",
+                ],
+                'headings' => [
+                    'en' => "Nouvelle publication !",
+                ],
+                'include_player_ids' => $subscribers,
+                'url' => url("/elements/{$element->id}"),
+            ]);
+        }
+    }
+
 }

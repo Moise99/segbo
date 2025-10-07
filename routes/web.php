@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ElementController;
 use App\Http\Controllers\FindController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\SubscriberController;
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -23,6 +24,8 @@ use App\Http\Controllers\WelcomeController;
     Route::get('/segbo/{username}', [FindController::class, 'findReporterDetails'])->name('find.more');
     Route::get('/find/article', [FindController::class, 'findArticle'])->name('find.article');
     Route::get('/segbopub/{title}', [FindController::class, 'findArticleDetails'])->name('find.pubmore');
+    Route::post('/reporters/{username}/subscribe', [SubscriberController::class, 'store'])->name('subscriber.store');
+
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

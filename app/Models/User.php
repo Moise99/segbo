@@ -50,6 +50,12 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    public function subscribers()
+    {
+        return $this->hasMany(Subscriber::class);
+    }
+
+
     /**
      * Send the password reset notification.
      *

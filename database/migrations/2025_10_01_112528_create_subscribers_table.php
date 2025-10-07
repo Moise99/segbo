@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('subscribers', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->index();
+            $table->string('email', 191)->index();
             $table->unsignedBigInteger('user_id'); // suscribe to this ce user
-            $table->string('onesignal_player_id')->nullable(); // token device
+            $table->string('onesignal_player_id')->nullable(); // token device (if it's notification. but for instant, it's not used)
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

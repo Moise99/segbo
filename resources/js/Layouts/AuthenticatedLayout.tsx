@@ -2,8 +2,9 @@ import ApplicationLogo from '@/components/ApplicationLogo';
 import Dropdown from '@/components/Dropdown';
 import NavLink from '@/components/NavLink';
 import ResponsiveNavLink from '@/components/ResponsiveNavLink';
+import { useOneSignal } from '@/components/UseOneSignal';
 import { Link, usePage } from '@inertiajs/react';
-import { PropsWithChildren, ReactNode, useState } from 'react';
+import { PropsWithChildren, ReactNode, useEffect, useState } from 'react';
 
 export default function Authenticated({
     header,
@@ -13,6 +14,11 @@ export default function Authenticated({
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
+    useOneSignal(import.meta.env.VITE_ONESIGNAL_APP_ID);
+
+    useEffect(() => {
+        console.log('Layout mounted, OneSignal ready ✅');
+    }, []);
 
     return (
         <div className="flex min-h-screen flex-col bg-gray-100">

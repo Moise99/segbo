@@ -11,6 +11,7 @@ export default function Guest({
 }: PropsWithChildren<{ header?: ReactNode }>) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
+
     const auth = usePage().props.auth;
     return (
         <div className="flex min-h-screen flex-col bg-gray-200">

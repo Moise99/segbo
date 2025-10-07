@@ -15,3 +15,32 @@ declare global {
 declare module '@inertiajs/core' {
     interface PageProps extends InertiaPageProps, AppPageProps {}
 }
+
+interface OneSignalNotifyButtonOptions {
+    enable: boolean;
+}
+
+interface OneSignalInitOptions {
+    appId: string;
+    allowLocalhostAsSecureOrigin?: boolean;
+    notifyButton?: OneSignalNotifyButtonOptions;
+}
+
+interface OneSignalWindow {
+    init: (options: OneSignalInitOptions) => Promise<void>;
+    registerForPushNotifications: () => Promise<void>;
+    getUserId: () => Promise<string | null>;
+    push: (callback: () => void) => void;
+    on: (event: string, callback: (data: any) => void) => void;
+}
+
+interface OneSignalDeferred {
+    push: (callback: (OneSignal: OneSignalWindow) => void) => void;
+}
+
+declare global {
+    interface Window {
+        OneSignal?: OneSignalWindow;
+        OneSignalDeferred?: OneSignalDeferred;
+    }
+}

@@ -1,4 +1,5 @@
 // src/Pages/ReporterProfile.tsx
+import SubscribeForm from '@/components/SubscribeForm';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -435,6 +436,14 @@ export default function ReporterProfile() {
                                         </span>
                                     ))}
                                 </div>
+                            </div>
+                            {/* Subscription Form */}
+
+                            <div className="mt-6">
+                                <h3 className="mb-2 text-xl font-semibold text-gray-800">
+                                    Subscribe to {reporter.name}
+                                </h3>
+                                <SubscribeForm username={reporter.username} />
                             </div>
 
                             {/* Bio */}

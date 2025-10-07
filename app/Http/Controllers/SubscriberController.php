@@ -4,22 +4,34 @@ namespace App\Http\Controllers;
 
 use App\Models\Subscriber;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Http;
 
 class SubscriberController extends Controller
 {
-    public function store(Request $request, $userId)
+    public function store(Request $request, $username)
     {
+
         $data = $request->validate([
             'email' => 'required|email',
-            'player_id' => 'nullable|string',
         ]);
 
-        $subscriber = Subscriber::updateOrCreate(
-            ['email' => $data['email'], 'user_id' => $userId],
-            ['onesignal_player_id' => $data['player_id'] ?? null]
+        $user = User::where('username', $username)->firstOrFail();
+        //dd($request->all(), $user->id);
+
+        Subscriber::updateOrCreate(
+            [
+                'email' => $data['email'],
+                'user_id' => $user->id
+            ],
+            [
+                'is_active' => true
+            ]
         );
 
-        return response()->json(['ok' => true, 'subscriber' => $subscriber]);
+        return back()->with('success', 'You have been successfully subscribed!');
     }
+
+
 }
 
