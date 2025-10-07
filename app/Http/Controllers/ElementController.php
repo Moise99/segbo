@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Element;
-use Berkayk\OneSignal\OneSignalFacade as OneSignal;
 
 class ElementController extends Controller
 {
@@ -155,56 +154,53 @@ class ElementController extends Controller
         return redirect()->route('element.list')->with('success', 'Element update with success.' . "---- " . now());
     }
 
-    public function endesable($id): RedirectResponse
+    public function endesable($id)
     {
         $element = DB::table('elements')->where('id', $id)->first();
 
         if ($element->etate == 0) {
-            // Activate publication
-            Element::where('id', $id)->update([
-                'etate' => 1,
-            ]);
+            Element::where('id', $id)->update(['etate' => 1]);
 
-            // subscribers Notification
             $this->notifySubscribers($element);
 
             return redirect()
                 ->route('element.list')
-                ->with('success', 'Publication enabled.' . " -------- " . now());
+                ->with('success', 'Publication activated and notification sent.');
         } else {
-            // desactivate publication
-            Element::where('id', $id)->update([
-                'etate' => 0,
-            ]);
+            Element::where('id', $id)->update(['etate' => 0]);
 
             return redirect()
                 ->route('element.list')
-                ->with('success', 'Publication disabled.' . " -------- " . now());
+                ->with('success', 'Publication disabled.');
         }
     }
 
-/**
- * Envoie une notification aux abonnés d’un user
- */
-    private function notifySubscribers(Element $element): void
+    private function notifySubscribers($element)
     {
-        $subscribers = $element->user->subscribers()
-            ->whereNotNull('onesignal_player_id')
-            ->pluck('onesignal_player_id')
-            ->toArray();
+        $element = Element::with('user.subscribers')->find($element->id);
 
-        if (!empty($subscribers)) {
-            OneSignal::sendNotificationCustom([
-                'contents' => [
-                    'en' => "Nouvelle publication de {$element->user->username} : {$element->title}",
-                ],
-                'headings' => [
-                    'en' => "Nouvelle publication !",
-                ],
-                'include_player_ids' => $subscribers,
-                'url' => url("/elements/{$element->id}"),
-            ]);
-        }
+        $subscribers = $element->user->subscribers()
+            ->where('is_active', true)
+            ->pluck('email')
+            ->toArray();
+        if (empty($subscribers)) return;
+
+        $subject = "New publication of {$element->user->username}";
+        $url = url("/segbopub/{$element->title}");
+        $logo = asset('images/logo.png');
+
+
+        $body = "
+            <img src='{$logo}' alt='Logo' style='width:100px;height:auto;' />
+            <h2>{$element->user->username} just published :</h2>
+            <p><strong>{$element->title}</strong></p>
+            <p><a href='{$url}'>See the publication</a></p>
+            <p>Merci d’utiliser " . config('app.name') . " !</p>
+        ";
+
+        // sent grouped
+        sendEmailViaOneSignal($subscribers, $subject, $body, $url);
     }
+
 
 }
