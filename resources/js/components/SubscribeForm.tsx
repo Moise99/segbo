@@ -12,22 +12,19 @@ export default function SubscribeForm({
     initialEmail = '',
     isSubscribed = false,
 }: Props) {
-    const [email, setEmail] = useState(
-        initialEmail || localStorage.getItem(`subscriber_${username}`) || '',
-    );
+    const [email, setEmail] = useState(initialEmail);
     const [loading, setLoading] = useState(false);
     const [subscribed, setSubscribed] = useState(isSubscribed);
 
     const handleSubscribe = () => {
         if (!email) return;
-
         setLoading(true);
+
         router.post(
             `/reporters/${username}/subscribe`,
             { email },
             {
-                onSuccess: (page) => {
-                    alert(page.props.message);
+                onSuccess: () => {
                     setSubscribed(true);
                     localStorage.setItem(`subscriber_${username}`, email);
                 },
@@ -38,12 +35,12 @@ export default function SubscribeForm({
 
     const handleUnsubscribe = () => {
         setLoading(true);
+
         router.post(
             `/reporters/${username}/unsubscribe`,
             { email },
             {
-                onSuccess: (page) => {
-                    alert(page.props.message);
+                onSuccess: () => {
                     setSubscribed(false);
                     localStorage.removeItem(`subscriber_${username}`);
                     setEmail('');

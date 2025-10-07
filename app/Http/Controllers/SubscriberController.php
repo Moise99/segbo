@@ -16,8 +16,15 @@ class SubscriberController extends Controller
         ]);
 
         $user = User::where('username', $username)->firstOrFail();
+        $subscriber = Subscriber::where([
+            ['email', $data['email']],
+            ['user_id', $user->id]
+        ])->first();
+        if ($subscriber->is_active) {
+            return redirect()->back()->with('success', 'You are already subscribed!');
+        }
 
-        $subscriber = Subscriber::updateOrCreate(
+        Subscriber::updateOrCreate(
             [
                 'email' => $data['email'],
                 'user_id' => $user->id
@@ -29,9 +36,7 @@ class SubscriberController extends Controller
 
         Cookie::queue("subscriber_{$username}", $data['email'], 60 * 24 * 365);
 
-        if (!$subscriber->wasRecentlyCreated && $subscriber->is_active) {
-            return redirect()->back()->with('success', 'You are already subscribed!');
-        }
+
 
         return redirect()->back()->with('success', 'You have been successfully subscribed!');
     }
@@ -51,7 +56,7 @@ class SubscriberController extends Controller
 
         Cookie::queue(Cookie::forget("subscriber_{$username}"));
 
-        return back()->with('success', 'You have been unsubscribed.');
+        return redirect()->back()->with('success', 'You have been unsubscribed.');
     }
 
     // public function status(Request $request, $username)

@@ -23,14 +23,14 @@ import { Head, Link, router, usePage } from '@inertiajs/react';
 import {
     ColumnDef,
     ColumnFiltersState,
-    SortingState,
-    VisibilityState,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
+    SortingState,
     useReactTable,
+    VisibilityState,
 } from '@tanstack/react-table';
 import DOMPurify from 'dompurify';
 import {
@@ -42,6 +42,8 @@ import {
     ChevronsRight,
 } from 'lucide-react';
 import * as React from 'react';
+import { useEffect } from 'react';
+import { toast, Toaster } from 'react-hot-toast';
 
 // Interface Element
 interface Element {
@@ -73,10 +75,16 @@ type Reporter = {
     categories: Category[];
 };
 
+interface FlashMessages {
+    success?: string;
+    error?: string;
+}
 // Define the component's props, expecting a single reporter object
 interface Props extends PageProps {
     reporter: Reporter;
     elements: Element[];
+    flash: FlashMessages;
+    activeSubscribers: string[];
 }
 
 const columnLabels: Record<string, string> = {
@@ -258,7 +266,20 @@ const columns: ColumnDef<Element>[] = [
 ];
 
 export default function ReporterProfile() {
-    const { reporter, elements } = usePage<Props>().props;
+    const {
+        reporter,
+        elements,
+        activeSubscribers,
+        flash = {},
+    } = usePage<Props>().props;
+    const storedEmail = localStorage.getItem(`subscriber_${reporter.username}`);
+    const isSubscribedInitial = storedEmail
+        ? activeSubscribers.includes(storedEmail)
+        : false;
+    useEffect(() => {
+        if (flash.success) toast.success(flash.success);
+        if (flash.error) toast.error(flash.error);
+    }, [flash.success, flash.error]);
 
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] =
@@ -299,6 +320,17 @@ export default function ReporterProfile() {
                         Back to Segbo list
                     </Button>
                 </Link>
+                <Toaster
+                    position="top-center"
+                    reverseOrder={false}
+                    gutter={8}
+                    containerClassName=""
+                    containerStyle={{}}
+                    toastOptions={{
+                        // Définit la durée par défaut
+                        duration: 5000,
+                    }}
+                />
                 <Card className="w-full max-w-4xl rounded-xl bg-white p-6 shadow-lg">
                     <CardContent className="flex flex-col items-center gap-8 md:flex-row md:items-start">
                         {/* Photo Section */}

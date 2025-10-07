@@ -134,6 +134,11 @@ class FindController extends Controller
             $isSubscribed = $subscriber ? $subscriber->is_active : false;
         }
 
+         $activeSubscribers = Subscriber::where('user_id', $reporterDetails->id)
+        ->where('is_active', true)
+        ->pluck('email')
+        ->toArray();
+
 
 
         return Inertia::render('Client/Reporters/Details', [
@@ -141,6 +146,7 @@ class FindController extends Controller
             'elements' => $elements,
             'initialEmail' => $initialEmail,
             'isSubscribed' => $isSubscribed,
+            'activeSubscribers' => $activeSubscribers,
         ]);
     }
 
