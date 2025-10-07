@@ -58,23 +58,4 @@ class SubscriberController extends Controller
 
         return redirect()->back()->with('success', 'You have been unsubscribed.');
     }
-
-    // public function status(Request $request, $username)
-    // {
-    //     $request->validate([
-    //         'email' => 'required|email',
-    //     ]);
-    //     $email = $request->query('email');
-    //     $user = User::where('username', $username)->firstOrFail();
-
-    //     $subscriber = Subscriber::where('email', $email)
-    //                             ->where('user_id', $user->id)
-    //                             ->first();
-
-
-    //     return response()->json([
-    //         'isActive' => $subscriber ? $subscriber->is_active : false,
-    //     ]);
-    // }
-
 }

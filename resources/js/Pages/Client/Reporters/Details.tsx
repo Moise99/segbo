@@ -276,6 +276,7 @@ export default function ReporterProfile() {
     const isSubscribedInitial = storedEmail
         ? activeSubscribers.includes(storedEmail)
         : false;
+
     useEffect(() => {
         if (flash.success) toast.success(flash.success);
         if (flash.error) toast.error(flash.error);
@@ -475,7 +476,11 @@ export default function ReporterProfile() {
                                 <h3 className="mb-2 text-xl font-semibold text-gray-800">
                                     Subscribe to {reporter.name}
                                 </h3>
-                                <SubscribeForm username={reporter.username} />
+                                <SubscribeForm
+                                    username={reporter.username}
+                                    initialEmail={storedEmail || ''}
+                                    isSubscribed={isSubscribedInitial}
+                                />
                             </div>
 
                             {/* Bio */}
