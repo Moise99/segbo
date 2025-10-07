@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Subscriber;
+use Illuminate\Support\Facades\Cookie;
 
 class FindController extends Controller
 {
@@ -122,10 +124,23 @@ class FindController extends Controller
                         return $element;
                     });
 
+        $initialEmail = Cookie::get("subscriber_{$username}");
+        $isSubscribed = false;
+
+        if ($initialEmail) {
+            $subscriber = Subscriber::where('user_id', $reporter->id)
+                                    ->where('email', $initialEmail)
+                                    ->first();
+            $isSubscribed = $subscriber ? $subscriber->is_active : false;
+        }
+
+
 
         return Inertia::render('Client/Reporters/Details', [
             'reporter' => $reporter,
             'elements' => $elements,
+            'initialEmail' => $initialEmail,
+            'isSubscribed' => $isSubscribed,
         ]);
     }
 

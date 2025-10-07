@@ -24,7 +24,9 @@ use App\Http\Controllers\SubscriberController;
     Route::get('/segbo/{username}', [FindController::class, 'findReporterDetails'])->name('find.more');
     Route::get('/find/article', [FindController::class, 'findArticle'])->name('find.article');
     Route::get('/segbopub/{title}', [FindController::class, 'findArticleDetails'])->name('find.pubmore');
-    Route::post('/reporters/{username}/subscribe', [SubscriberController::class, 'store'])->name('subscriber.store');
+    Route::post('/reporters/{username}/subscribe', [SubscriberController::class, 'subscribe'])->name('reporters.subscribe');
+Route::post('/reporters/{username}/unsubscribe', [SubscriberController::class, 'unsubscribe'])->name('reporters.unsubscribe');
+Route::get('/reporters/{username}/subscription-status', [SubscriberController::class, 'status'])->name('reporters.subscription.status');
 
 
 Route::get('/dashboard', function () {

@@ -3,49 +3,89 @@ import { useState } from 'react';
 
 interface Props {
     username: string;
+    initialEmail?: string;
+    isSubscribed?: boolean;
 }
 
-export default function SubscribeForm({ username }: Props) {
-    const [email, setEmail] = useState('');
+export default function SubscribeForm({
+    username,
+    initialEmail = '',
+    isSubscribed = false,
+}: Props) {
+    const [email, setEmail] = useState(
+        initialEmail || localStorage.getItem(`subscriber_${username}`) || '',
+    );
     const [loading, setLoading] = useState(false);
+    const [subscribed, setSubscribed] = useState(isSubscribed);
 
-    async function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
+    const handleSubscribe = () => {
+        if (!email) return;
+
         setLoading(true);
-
         router.post(
             `/reporters/${username}/subscribe`,
             { email },
             {
+                onSuccess: (page) => {
+                    alert(page.props.message);
+                    setSubscribed(true);
+                    localStorage.setItem(`subscriber_${username}`, email);
+                },
                 onFinish: () => setLoading(false),
-                onSuccess: () =>
-                    alert('You have been successfully subscribed!'),
-                onError: () => alert('Error : Please try again'),
             },
         );
-    }
+    };
+
+    const handleUnsubscribe = () => {
+        setLoading(true);
+        router.post(
+            `/reporters/${username}/unsubscribe`,
+            { email },
+            {
+                onSuccess: (page) => {
+                    alert(page.props.message);
+                    setSubscribed(false);
+                    localStorage.removeItem(`subscriber_${username}`);
+                    setEmail('');
+                },
+                onFinish: () => setLoading(false),
+            },
+        );
+    };
 
     return (
-        <form
-            onSubmit={handleSubmit}
-            className="mt-4 flex flex-col gap-2 sm:flex-row"
-        >
-            <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Votre adresse email"
-                required
-                className="flex-grow rounded border border-gray-300 p-2"
-                disabled={loading}
-            />
-            <button
-                type="submit"
-                disabled={loading}
-                className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
-            >
-                {loading ? 'Abonnement...' : 'S’abonner'}
-            </button>
-        </form>
+        <div className="mt-4 flex flex-col items-center gap-2 sm:flex-row">
+            {!subscribed && (
+                <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Your email address"
+                    required
+                    className="flex-grow rounded border border-gray-300 p-2"
+                    disabled={loading}
+                />
+            )}
+
+            {!subscribed ? (
+                <button
+                    type="button"
+                    disabled={loading || !email}
+                    onClick={handleSubscribe}
+                    className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
+                >
+                    {loading ? 'Subscribing...' : 'Subscribe'}
+                </button>
+            ) : (
+                <button
+                    type="button"
+                    disabled={loading}
+                    onClick={handleUnsubscribe}
+                    className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:opacity-50"
+                >
+                    {loading ? 'Processing...' : 'Unsubscribe'}
+                </button>
+            )}
+        </div>
     );
 }

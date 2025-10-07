@@ -9,7 +9,8 @@ class Subscriber extends Model
     protected $fillable = [
         'email',
         'user_id',
-        'onesignal_player_id'
+        'onesignal_player_id',
+        'is_active',
     ];
 
     public function user() {
