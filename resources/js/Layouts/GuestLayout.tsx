@@ -33,7 +33,7 @@ export default function Guest({
                                         route().current('find.more')
                                     }
                                 >
-                                    Find Reporter
+                                    Find a Segbo
                                 </NavLink>
                             </div>
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -190,7 +190,7 @@ export default function Guest({
                                 route().current('find.more')
                             }
                         >
-                            Find Reporter
+                            Find a Segbo
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             href={route('find.article')}
@@ -257,8 +257,8 @@ export default function Guest({
                                 <ApplicationLogo className="h-10 w-auto fill-current text-white transition-transform duration-300 hover:scale-105" />
                             </Link>
                             <p className="text-center text-sm text-gray-300 md:text-left">
-                                Connecting you with the best reporters and
-                                publications.
+                                Connecting you with the best reporters /
+                                journalists and publications.
                             </p>
                         </div>
                         <div className="flex flex-col items-center md:items-start">
@@ -286,9 +286,6 @@ export default function Guest({
                             </h3>
                             <p className="mb-2 text-sm text-gray-300">
                                 Email: support@segbo.com
-                            </p>
-                            <p className="text-sm text-gray-300">
-                                Phone: +1 (123) 456-7890
                             </p>
                         </div>
                     </div>

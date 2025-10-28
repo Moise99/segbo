@@ -2,9 +2,9 @@ import ApplicationLogo from '@/components/ApplicationLogo';
 import Dropdown from '@/components/Dropdown';
 import NavLink from '@/components/NavLink';
 import ResponsiveNavLink from '@/components/ResponsiveNavLink';
-import { useOneSignal } from '@/components/UseOneSignal';
+//import { useOneSignal } from '@/components/UseOneSignal';
 import { Link, usePage } from '@inertiajs/react';
-import { PropsWithChildren, ReactNode, useEffect, useState } from 'react';
+import { PropsWithChildren, ReactNode, useState } from 'react';
 
 export default function Authenticated({
     header,
@@ -14,11 +14,6 @@ export default function Authenticated({
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
-    useOneSignal(import.meta.env.VITE_ONESIGNAL_APP_ID);
-
-    useEffect(() => {
-        console.log('Layout mounted, OneSignal ready ✅');
-    }, []);
 
     return (
         <div className="flex min-h-screen flex-col bg-gray-100">
@@ -220,24 +215,18 @@ export default function Authenticated({
                                 Quick Links
                             </h3>
                             <NavLink
-                                href={route('find.reporter')}
-                                active={
-                                    route().current('find.reporter') ||
-                                    route().current('find.more')
-                                }
+                                href={route('privacy.policy')}
+                                active={route().current('privacy.policy')}
                                 className="mb-2 text-sm text-gray-300 transition-colors hover:text-orange-600"
                             >
-                                Find Reporter
+                                Privacy policy
                             </NavLink>
                             <NavLink
-                                href={route('find.article')}
-                                active={
-                                    route().current('find.article') ||
-                                    route().current('find.pubmore')
-                                }
+                                href={route('terms.of.use')}
+                                active={route().current('terms.of.use')}
                                 className="mb-2 text-sm text-gray-300 transition-colors hover:text-orange-600"
                             >
-                                Publications
+                                Terms of use
                             </NavLink>
                         </div>
                         <div className="flex flex-col items-center md:items-start">
@@ -246,9 +235,6 @@ export default function Authenticated({
                             </h3>
                             <p className="mb-2 text-sm text-gray-300">
                                 Email: support@segbo.com
-                            </p>
-                            <p className="text-sm text-gray-300">
-                                Phone: +1 (123) 456-7890
                             </p>
                         </div>
                     </div>

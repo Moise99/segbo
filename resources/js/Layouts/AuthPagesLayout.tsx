@@ -41,7 +41,7 @@ export default function AuthPages({
                                         route().current('find.more')
                                     }
                                 >
-                                    Find Reporter
+                                    Find a Segbo
                                 </NavLink>
                             </div>
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -199,7 +199,7 @@ export default function AuthPages({
                                 route().current('find.more')
                             }
                         >
-                            Find reporter
+                            Find a Segbo
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             href={route('find.article')}
@@ -295,24 +295,18 @@ export default function AuthPages({
                                 Quick Links
                             </h3>
                             <NavLink
-                                href={route('find.reporter')}
-                                active={
-                                    route().current('find.reporter') ||
-                                    route().current('find.more')
-                                }
+                                href={route('privacy.policy')}
+                                active={route().current('privacy.policy')}
                                 className="mb-2 text-sm text-gray-300 transition-colors hover:text-orange-600"
                             >
-                                Find Reporter
+                                Privacy policy
                             </NavLink>
                             <NavLink
-                                href={route('find.article')}
-                                active={
-                                    route().current('find.article') ||
-                                    route().current('find.pubmore')
-                                }
+                                href={route('terms.of.use')}
+                                active={route().current('terms.of.use')}
                                 className="mb-2 text-sm text-gray-300 transition-colors hover:text-orange-600"
                             >
-                                Publications
+                                Terms of use
                             </NavLink>
                         </div>
                         <div className="flex flex-col items-center md:items-start">
@@ -321,9 +315,6 @@ export default function AuthPages({
                             </h3>
                             <p className="mb-2 text-sm text-gray-300">
                                 Email: support@segbo.com
-                            </p>
-                            <p className="text-sm text-gray-300">
-                                Phone: +1 (123) 456-7890
                             </p>
                         </div>
                     </div>
