@@ -36,8 +36,8 @@ export default function Welcome() {
                         Empower Your Stories, Amplify Your Voice
                     </h1>
                     <p className="mx-auto mb-8 max-w-2xl text-lg sm:text-xl">
-                        Join a community of journalists, reporters, and authors
-                        to share your work and inspire the world.
+                        Join a community of independent journalists, reporters,
+                        and authors to share your work and inspire the world.
                     </p>
                     <a
                         href={route('register')}
@@ -64,12 +64,13 @@ export default function Welcome() {
                                 About Segbo
                             </h2>
                             <p className="mb-4 text-lg text-gray-700">
-                                Our platform is dedicated to journalists,
-                                reporters, and authors who are passionate about
-                                storytelling. Whether you're uncovering breaking
-                                news, crafting in-depth investigative pieces, or
-                                writing compelling narratives, we provide the
-                                tools and community to elevate your work.
+                                Our platform is dedicated to independent
+                                journalists, reporters, and authors who are
+                                passionate about storytelling. Whether you're
+                                uncovering breaking news, crafting in-depth
+                                investigative pieces, or writing compelling
+                                narratives, we provide the tools and community
+                                to elevate your work.
                             </p>
                             <p className="text-lg text-gray-700">
                                 Join us to connect with like-minded

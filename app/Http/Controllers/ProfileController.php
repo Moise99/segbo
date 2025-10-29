@@ -97,7 +97,6 @@ class ProfileController extends Controller
             // if not photo -> remove line
             if (!$request->hasFile('photo')) {
                 unset($data['photo']);
-                dd($data);
             } else {
                 //(data);
                 if ($acdetail->photo && Storage::disk('noc_storage')->exists($acdetail->photo)) {

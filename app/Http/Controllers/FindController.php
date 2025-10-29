@@ -128,16 +128,16 @@ class FindController extends Controller
         $isSubscribed = false;
 
         if ($initialEmail) {
-            $subscriber = Subscriber::where('user_id', $reporter->id)
+            $subscriber = Subscriber::where('user_id', $reporterDetails->id)
                                     ->where('email', $initialEmail)
                                     ->first();
             $isSubscribed = $subscriber ? $subscriber->is_active : false;
         }
 
-         $activeSubscribers = Subscriber::where('user_id', $reporterDetails->id)
-        ->where('is_active', true)
-        ->pluck('email')
-        ->toArray();
+        $activeSubscribers = Subscriber::where('user_id', $reporterDetails->id)
+                                ->where('is_active', true)
+                                ->pluck('email')
+                                ->toArray();
 
 
 

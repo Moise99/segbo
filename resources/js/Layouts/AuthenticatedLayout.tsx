@@ -11,6 +11,8 @@ export default function Authenticated({
     children,
 }: PropsWithChildren<{ header?: ReactNode }>) {
     const user = usePage().props.auth.user;
+    const acdetails = usePage().props.auth.acDetails;
+    console.log('AC DETAILS:', acdetails?.present);
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
@@ -176,6 +178,9 @@ export default function Authenticated({
                             <ResponsiveNavLink href={route('profile.edit')}>
                                 Account
                             </ResponsiveNavLink>
+                            <ResponsiveNavLink href={route('acdetail.edit')}>
+                                Profile
+                            </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 method="post"
                                 href={route('logout')}
@@ -187,6 +192,30 @@ export default function Authenticated({
                     </div>
                 </div>
             </nav>
+            <div className="flex-grow">
+                {(acdetails?.present === null ||
+                    acdetails?.present === undefined) && (
+                    <div
+                        className="border border-yellow-400 bg-yellow-100 px-4 py-3 text-center text-yellow-700"
+                        role="alert"
+                    >
+                        <strong className="font-bold">
+                            Incomplete Profile!
+                        </strong>
+                        <span className="block sm:inline">
+                            {' '}
+                            Please complete your profile information to be
+                            visible on the plateform.
+                        </span>{' '}
+                        <Link
+                            href={route('acdetail.edit')}
+                            className="font-semibold underline"
+                        >
+                            Complete Profile
+                        </Link>
+                    </div>
+                )}
+            </div>
 
             {header && (
                 <header className="bg-white shadow">

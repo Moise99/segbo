@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -34,6 +35,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => Auth::check() ? Auth::user()->only('name', 'username', 'email') : null,
+                'acDetails' => DB::table('acdetails')->where('user_id', Auth::id())->select('id', 'user_id', 'present')->first(),
             ],
             'flash' => [
                 'success' => $request->session()->get('success'),

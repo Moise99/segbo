@@ -28,17 +28,20 @@ const formSchema = z.object({
     facebook: z.string().nullable().optional(),
     website: z.string().nullable().optional(),
     photo: z
-        .any() // start with any type
+        .custom<File | undefined | null>()
         .optional()
-        .refine((file) => !file || file instanceof File, 'Invalid file')
         .refine(
             (file) =>
                 !file ||
-                ['image/jpeg', 'image/jpg', 'image/png'].includes(file.type),
+                (file instanceof File &&
+                    ['image/jpeg', 'image/jpg', 'image/png'].includes(
+                        file.type,
+                    )),
             'Only .jpeg, .jpg and .png formats are allowed.',
         )
         .refine(
-            (file) => !file || file.size <= 1 * 1024 * 1024,
+            (file) =>
+                !file || (file instanceof File && file.size <= 1 * 1024 * 1024),
             'File must be less than 1MB',
         ),
 });
@@ -79,7 +82,7 @@ export default function Create() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             present: acdetail.present || null,
-            photo: acdetail.photo,
+            photo: undefined,
             linkedin: acdetail.linkedin || null,
             x: acdetail.x || null,
             facebook: acdetail.facebook || null,
