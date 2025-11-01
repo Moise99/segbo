@@ -185,21 +185,13 @@ class ElementController extends Controller
             ->toArray();
         if (empty($subscribers)) return;
 
-        $subject = "New publication of {$element->user->username}";
-        $url = url("/segbopub/{$element->title}");
+        $subject = "New publication by {$element->user->username}";
+        $unsuscribe = url("/sg/{$element->user->username}");
+        $url = url("/pub/{$element->title}");
         $logo = asset('images/logo.png');
 
-
-        $body = "
-            <img src='{$logo}' alt='Logo' style='width:100px;height:auto;' />
-            <h2>{$element->user->username} just published :</h2>
-            <p><strong>{$element->title}</strong></p>
-            <p><a href='{$url}'>See the publication</a></p>
-            <p>Merci d’utiliser " . config('app.name') . " !</p>
-        ";
-
         // sent grouped
-        sendEmailViaOneSignal($subscribers, $subject, $body, $url);
+        sendEmailViaOneSignal($subscribers, $subject, $logo, $url, $unsuscribe);
     }
 
 

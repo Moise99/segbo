@@ -329,7 +329,7 @@ const columns: ColumnDef<Element>[] = [
                                         <TooltipTrigger asChild>
                                             <Button
                                                 variant="ghost"
-                                                className="flex h-10 w-10 items-center justify-center rounded-full bg-red-700 hover:bg-gray-300"
+                                                className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-700 hover:bg-gray-300"
                                             >
                                                 <X className="h-5 w-5 text-white" />
                                             </Button>
