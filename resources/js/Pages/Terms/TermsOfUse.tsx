@@ -31,7 +31,7 @@ import {
 export default function TermsOfUse() {
     return (
         <GuestLayout>
-            <Head title="Terms of Use - Segbo" />
+            <Head title="Terms of Use - Segbon" />
 
             <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white px-4 py-12 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-4xl">
@@ -39,12 +39,12 @@ export default function TermsOfUse() {
                     <div className="mb-12 text-center">
                         <h1 className="flex items-center justify-center gap-3 text-4xl font-bold text-gray-900 md:text-5xl">
                             <FileText className="h-10 w-10 text-blue-600" />
-                            Terms of Use – Segbo
+                            Terms of Use – Segbon
                         </h1>
                         <p className="mt-4 text-lg text-gray-600">
                             Last updated:{' '}
                             <strong className="text-blue-700">
-                                October 8, 2025
+                                November 3, 2025
                             </strong>
                         </p>
                     </div>
@@ -53,7 +53,7 @@ export default function TermsOfUse() {
                         <CardHeader className="rounded-t-lg bg-blue-50">
                             <CardTitle className="flex items-center gap-2 text-2xl text-blue-900">
                                 <Globe className="h-6 w-6" />
-                                Website: segbo.mogiciel.com
+                                Website: segbon.com
                             </CardTitle>
                             <CardDescription className="text-blue-700">
                                 Operated by <strong>Mogiciel</strong>
@@ -72,17 +72,17 @@ export default function TermsOfUse() {
                                 <p>
                                     These Terms of Use (hereinafter referred to
                                     as “the Terms”) govern access to and use of
-                                    the Segbo web platform, available at{' '}
+                                    the Segbon web platform, available at{' '}
                                     <a
-                                        href="https://segbo.mogiciel.com"
+                                        href="https://segbon.com"
                                         className="text-blue-600 underline hover:text-blue-800"
                                     >
-                                        https://segbo.mogiciel.com
+                                        https://segbon.com
                                     </a>{' '}
                                     (hereinafter referred to as “the Service”).
                                 </p>
                                 <p className="mt-3">
-                                    Segbo allows journalists, reporters, and
+                                    Segbon allows journalists, reporters, and
                                     authors (“Authors”) to share external links
                                     redirecting to their publications hosted on
                                     third-party websites.
@@ -217,7 +217,7 @@ export default function TermsOfUse() {
                                                 third-party websites.
                                             </p>
                                             <p className="mt-2 font-medium text-gray-600">
-                                                Segbo does not host this
+                                                Segbon does not host this
                                                 content; it merely displays the
                                                 links and associated metadata.
                                             </p>
@@ -259,7 +259,7 @@ export default function TermsOfUse() {
                                                 </li>
                                             </ul>
                                             <p className="mt-3 rounded border border-red-300 bg-red-100 p-2 text-sm font-medium text-red-800">
-                                                Segbo reserves the right to
+                                                Segbon reserves the right to
                                                 remove any link or account found
                                                 to be in violation of these
                                                 rules.
@@ -282,7 +282,7 @@ export default function TermsOfUse() {
                                                 information they provide.
                                             </p>
                                             <p className="mt-2 italic text-gray-600">
-                                                Segbo has no control over
+                                                Segbon has no control over
                                                 external websites and cannot be
                                                 held responsible for their
                                                 content.
@@ -393,7 +393,7 @@ export default function TermsOfUse() {
                                         </AccordionTrigger>
                                         <AccordionContent>
                                             <p>
-                                                Segbo uses cookies exclusively
+                                                Segbon uses cookies exclusively
                                                 to allow a visitor (“User”) to
                                                 subscribe to an Author and
                                                 retain that subscription between
@@ -476,7 +476,7 @@ export default function TermsOfUse() {
                                                     browser settings;
                                                 </li>
                                                 <li>
-                                                    Contact Segbo to request
+                                                    Contact Segbon to request
                                                     deletion of any data
                                                     associated with a
                                                     subscription cookie.
@@ -513,7 +513,7 @@ export default function TermsOfUse() {
                                         </AccordionTrigger>
                                         <AccordionContent>
                                             <p>
-                                                Segbo collects only the
+                                                Segbon collects only the
                                                 information necessary for the
                                                 operation of the service:
                                             </p>
@@ -571,7 +571,7 @@ export default function TermsOfUse() {
                                                 with third parties.
                                             </p>
                                             <p className="mt-2 font-medium text-green-800">
-                                                Segbo takes all reasonable
+                                                Segbon takes all reasonable
                                                 measures to ensure data security
                                                 and confidentiality.
                                             </p>
@@ -592,7 +592,7 @@ export default function TermsOfUse() {
                                     Account Suspension and Deletion
                                 </h2>
                                 <p className="text-red-800">
-                                    Segbo reserves the right to suspend or
+                                    Segbon reserves the right to suspend or
                                     delete any account (Author or User) in the
                                     event of a breach of these Terms or abusive
                                     behavior.
@@ -611,7 +611,7 @@ export default function TermsOfUse() {
                                     Intellectual Property
                                 </h2>
                                 <p>
-                                    The Segbo name, logo, and design are the
+                                    The Segbon name, logo, and design are the
                                     exclusive property of{' '}
                                     <strong>Mogiciel</strong>.
                                 </p>
@@ -633,7 +633,7 @@ export default function TermsOfUse() {
                                     Limitation of Liability
                                 </h2>
                                 <p>
-                                    Segbo acts solely as a technical
+                                    Segbon acts solely as a technical
                                     intermediary facilitating connections
                                     between Authors and Users.
                                 </p>
@@ -643,7 +643,7 @@ export default function TermsOfUse() {
                                     of the information published by Authors.
                                 </p>
                                 <p className="mt-2 font-medium text-amber-800">
-                                    Segbo shall not be held liable for any
+                                    Segbon shall not be held liable for any
                                     direct or indirect damages resulting from
                                     the use of the Service.
                                 </p>
@@ -660,7 +660,9 @@ export default function TermsOfUse() {
                                     </span>
                                     Changes to the Terms
                                 </h2>
-                                <p>Segbo may modify these Terms at any time.</p>
+                                <p>
+                                    Segbon may modify these Terms at any time.
+                                </p>
                                 <p className="mt-2">
                                     Any modification takes effect upon
                                     publication, and Users will be notified
@@ -691,10 +693,10 @@ export default function TermsOfUse() {
                                 <p className="mt-2">
                                     Any dispute relating to the use of{' '}
                                     <a
-                                        href="https://segbo.mogiciel.com"
+                                        href="https://segbon.com"
                                         className="text-blue-600 underline"
                                     >
-                                        https://segbo.mogiciel.com
+                                        https://segbon.com
                                     </a>{' '}
                                     shall be submitted to the competent courts
                                     of Togo.
@@ -717,32 +719,27 @@ export default function TermsOfUse() {
                                     your data, please contact:
                                 </p>
                                 <div className="mt-4 space-y-2 font-medium">
-                                    <p>Mogiciel – Segbo</p>
+                                    <p>Segbon</p>
                                     <p>
                                         <a
-                                            href="mailto:support.segbo@mogiciel.com"
+                                            href="mailto:support@segbon.com"
                                             className="text-lg text-blue-600 underline"
                                         >
-                                            support.segbo@mogiciel.com
+                                            support@segbon.com
                                         </a>
                                     </p>
                                     <p>
                                         <a
-                                            href="https://segbo.mogiciel.com"
+                                            href="https://segbon.com"
                                             className="text-blue-600 underline"
                                         >
-                                            https://segbo.mogiciel.com
+                                            https://segbon.com
                                         </a>
                                     </p>
                                 </div>
                             </section>
                         </CardContent>
                     </Card>
-
-                    <footer className="mt-12 text-center text-xs text-gray-500">
-                        © {new Date().getFullYear()} Mogiciel. All rights
-                        reserved.
-                    </footer>
                 </div>
             </div>
         </GuestLayout>

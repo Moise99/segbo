@@ -173,7 +173,7 @@ const columns: ColumnDef<Element>[] = [
                     <Button
                         variant="secondary"
                         className="border-2 border-gray-200 bg-white text-black"
-                        onClick={() => router.get(`/segbo/${username}`)}
+                        onClick={() => router.get(`/sg/${username}`)}
                     >
                         {name}
                         <div className="flex items-center">
@@ -274,7 +274,7 @@ const columns: ColumnDef<Element>[] = [
                         variant="default"
                         className="bg-orange-600"
                         onClick={() =>
-                            router.get(`/segbopub/${elements.encrypted_id}`)
+                            router.get(`/pub/${elements.encrypted_id}`)
                         }
                     >
                         See pub
@@ -325,7 +325,7 @@ export default function List() {
             <Head title="Publications" />
             <div className="mb-8 text-center">
                 <h1 className="mt-6 text-3xl font-bold text-gray-900 sm:text-4xl">
-                    Our Segbo's publications
+                    Our Segbon's publications
                 </h1>
                 <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
                     <Link href={route('find.reporter')} className="mb-8">

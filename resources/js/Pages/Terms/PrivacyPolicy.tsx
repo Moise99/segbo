@@ -37,7 +37,7 @@ import {
 export default function PrivacyPolicy() {
     return (
         <GuestLayout>
-            <Head title="Privacy Policy - Segbo" />
+            <Head title="Privacy Policy - Segbon" />
 
             <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white px-4 py-12 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-4xl">
@@ -45,12 +45,12 @@ export default function PrivacyPolicy() {
                     <div className="mb-12 text-center">
                         <h1 className="flex items-center justify-center gap-3 text-4xl font-bold text-gray-900 md:text-5xl">
                             <Shield className="h-10 w-10 text-blue-600" />
-                            Privacy Policy – Segbo
+                            Privacy Policy – Segbon
                         </h1>
                         <p className="mt-4 text-lg text-gray-600">
                             Last updated:{' '}
                             <strong className="text-blue-700">
-                                October 8, 2025
+                                November 3, 2025
                             </strong>
                         </p>
                     </div>
@@ -59,7 +59,7 @@ export default function PrivacyPolicy() {
                         <CardHeader className="rounded-t-lg bg-blue-50">
                             <CardTitle className="flex items-center gap-2 text-2xl text-blue-900">
                                 <Globe className="h-6 w-6" />
-                                Website: segbo.mogiciel.com
+                                Website: segbon.com
                             </CardTitle>
                             <CardDescription className="text-blue-700">
                                 Operated by <strong>Mogiciel</strong>
@@ -76,29 +76,29 @@ export default function PrivacyPolicy() {
                                     Introduction
                                 </h2>
                                 <p>
-                                    This Privacy Policy explains how Segbo
+                                    This Privacy Policy explains how Segbon
                                     (operated by Mogiciel) collects, uses, and
                                     protects the personal information of users
                                     (hereinafter referred to as “you”) when
                                     using the website{' '}
                                     <a
-                                        href="https://segbo.mogiciel.com"
+                                        href="https://segbon.com"
                                         className="text-blue-600 underline hover:text-blue-800"
                                     >
-                                        https://segbo.mogiciel.com
+                                        https://segbon.com
                                     </a>{' '}
                                     (hereinafter referred to as “the
                                     Application” or “the Service”).
                                 </p>
                                 <p className="mt-3">
-                                    Segbo allows journalists, reporters, and
+                                    Segbon allows journalists, reporters, and
                                     authors to share their publications as
                                     external links, and enables users to
                                     subscribe to their accounts to receive email
                                     notifications about new publications.
                                 </p>
                                 <p className="mt-3 border-l-4 border-blue-500 pl-4 italic text-gray-600">
-                                    By using Segbo, you agree to this Privacy
+                                    By using Segbon, you agree to this Privacy
                                     Policy.
                                 </p>
                             </section>
@@ -120,27 +120,25 @@ export default function PrivacyPolicy() {
                                             collection and processing is:
                                         </strong>
                                     </p>
-                                    <p className="font-medium">
-                                        Mogiciel – Segbo
-                                    </p>
+                                    <p className="font-medium">Segbon</p>
                                     <p className="flex items-center gap-2">
                                         <Mail className="h-4 w-4 text-blue-600" />
                                         Email:{' '}
                                         <a
-                                            href="mailto:support.segbo@mogiciel.com"
+                                            href="mailto:support@segbon.com"
                                             className="text-blue-600 underline"
                                         >
-                                            support.segbo@mogiciel.com
+                                            support@segbon.com
                                         </a>
                                     </p>
                                     <p className="flex items-center gap-2">
                                         <Globe className="h-4 w-4 text-blue-600" />
                                         Website:{' '}
                                         <a
-                                            href="https://segbo.mogiciel.com"
+                                            href="https://segbon.com"
                                             className="text-blue-600 underline"
                                         >
-                                            https://segbo.mogiciel.com
+                                            https://segbon.com
                                         </a>
                                     </p>
                                 </div>
@@ -157,7 +155,7 @@ export default function PrivacyPolicy() {
                                     Data Collected
                                 </h2>
                                 <p className="mb-4 text-sm text-gray-600">
-                                    Segbo only collects data strictly necessary
+                                    Segbon only collects data strictly necessary
                                     for the operation of the Service.
                                 </p>
 
@@ -248,7 +246,7 @@ export default function PrivacyPolicy() {
                                             <div className="mt-4 rounded-lg border border-red-200 bg-red-50 p-4">
                                                 <p className="flex items-center gap-2 text-sm font-medium text-red-800">
                                                     <Ban className="h-4 w-4" />
-                                                    Segbo does not collect:
+                                                    Segbon does not collect:
                                                 </p>
                                                 <ul className="mt-2 list-disc pl-6 text-sm text-red-700">
                                                     <li>Geolocation data,</li>
@@ -334,7 +332,7 @@ export default function PrivacyPolicy() {
                                         </AccordionTrigger>
                                         <AccordionContent className="text-gray-700">
                                             <p>
-                                                Segbo uses a single cookie when
+                                                Segbon uses a single cookie when
                                                 you subscribe to an Author.
                                             </p>
                                             <p className="mt-2">
@@ -420,10 +418,10 @@ export default function PrivacyPolicy() {
                                                 <li>
                                                     Contact{' '}
                                                     <a
-                                                        href="mailto:support.segbo@mogiciel.com"
+                                                        href="mailto:support@segbon.com"
                                                         className="text-blue-600 underline"
                                                     >
-                                                        support.segbo@mogiciel.com
+                                                        support@segbon.com
                                                     </a>
                                                 </li>
                                                 <li className="pl-2">
@@ -462,7 +460,7 @@ export default function PrivacyPolicy() {
                                         </AccordionTrigger>
                                         <AccordionContent>
                                             <p>
-                                                Segbo sends emails only in the
+                                                Segbon sends emails only in the
                                                 following cases:
                                             </p>
                                             <ul className="mt-2 list-disc space-y-1 pl-6 text-gray-700">
@@ -517,10 +515,10 @@ export default function PrivacyPolicy() {
                                                 You may also request deletion of
                                                 your subscriptions by emailing{' '}
                                                 <a
-                                                    href="mailto:support.segbo@mogiciel.com"
+                                                    href="mailto:support@segbon.com"
                                                     className="text-blue-600 underline"
                                                 >
-                                                    support.segbo@mogiciel.com
+                                                    support@segbon.com
                                                 </a>
                                                 .
                                             </p>
@@ -626,7 +624,7 @@ export default function PrivacyPolicy() {
                                     Data Security
                                 </h2>
                                 <p>
-                                    Segbo applies reasonable technical and
+                                    Segbon applies reasonable technical and
                                     organizational measures to protect your
                                     data, including:
                                 </p>
@@ -650,8 +648,8 @@ export default function PrivacyPolicy() {
                                 </ul>
                                 <p className="mt-4 text-sm italic text-gray-600">
                                     Although no method is entirely foolproof,
-                                    Segbo commits to notifying users of any data
-                                    breach as soon as possible.
+                                    Segbon commits to notifying users of any
+                                    data breach as soon as possible.
                                 </p>
                             </section>
 
@@ -704,10 +702,10 @@ export default function PrivacyPolicy() {
                                 <p className="mt-4 text-sm">
                                     To exercise these rights, contact:{' '}
                                     <a
-                                        href="mailto:support.segbo@mogiciel.com"
+                                        href="mailto:support@segbon.com"
                                         className="font-bold text-blue-600 underline"
                                     >
-                                        support.segbo@mogiciel.com
+                                        support@segbon.com
                                     </a>
                                     .
                                 </p>
@@ -751,7 +749,7 @@ export default function PrivacyPolicy() {
                                     Policy Updates
                                 </h2>
                                 <p className="text-gray-700">
-                                    Segbo may update this Privacy Policy at any
+                                    Segbon may update this Privacy Policy at any
                                     time, especially to comply with new
                                     regulations.
                                 </p>
@@ -760,10 +758,10 @@ export default function PrivacyPolicy() {
                                     at:
                                     <br />
                                     <a
-                                        href="https://segbo.mogiciel.com/privacy-policy"
+                                        href="https://segbon.com/privacy-policy"
                                         className="font-medium text-blue-600 underline"
                                     >
-                                        https://segbo.mogiciel.com/privacy-policy
+                                        https://segbon.com/privacy-policy
                                     </a>
                                 </p>
                                 <p className="mt-2 text-sm italic text-gray-600">
@@ -788,32 +786,27 @@ export default function PrivacyPolicy() {
                                     Policy or your personal data:
                                 </p>
                                 <div className="mt-4 space-y-2 font-medium">
-                                    <p>Mogiciel – Segbo</p>
+                                    <p>Segbon</p>
                                     <p>
                                         <a
-                                            href="mailto:support.segbo@mogiciel.com"
+                                            href="mailto:support@segbon.com"
                                             className="text-lg text-blue-600 underline"
                                         >
-                                            support.segbo@mogiciel.com
+                                            support@segbon.com
                                         </a>
                                     </p>
                                     <p>
                                         <a
-                                            href="https://segbo.mogiciel.com"
+                                            href="https://segbon.com"
                                             className="text-blue-600 underline"
                                         >
-                                            https://segbo.mogiciel.com
+                                            https://segbon.com
                                         </a>
                                     </p>
                                 </div>
                             </section>
                         </CardContent>
                     </Card>
-
-                    <footer className="mt-12 text-center text-xs text-gray-500">
-                        © {new Date().getFullYear()} Mogiciel. All rights
-                        reserved.
-                    </footer>
                 </div>
             </div>
         </GuestLayout>

@@ -254,7 +254,7 @@ const columns: ColumnDef<Element>[] = [
                         variant="default"
                         className="bg-orange-600"
                         onClick={() =>
-                            router.get(`/segbopub/${elements.encrypted_id}`)
+                            router.get(`/pub/${elements.encrypted_id}`)
                         }
                     >
                         See pub
@@ -318,7 +318,7 @@ export default function ReporterProfile() {
                         variant="default"
                         className="bg-orange-600 text-white"
                     >
-                        Back to Segbo list
+                        Back to Segbon list
                     </Button>
                 </Link>
                 <Toaster
@@ -505,7 +505,7 @@ export default function ReporterProfile() {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg">
                         <div className="mb-4 text-2xl text-blue-900">
-                            Publications of this Segbo ( {reporter.name} @
+                            Publications of this Segbon ( {reporter.name} @
                             {reporter.username})
                         </div>
                         <div className="mb-4 flex items-center justify-between gap-x-8">

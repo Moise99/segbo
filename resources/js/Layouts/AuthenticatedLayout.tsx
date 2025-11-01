@@ -235,8 +235,8 @@ export default function Authenticated({
                                 <ApplicationLogo className="h-10 w-auto fill-current text-white transition-transform duration-300 hover:scale-105" />
                             </Link>
                             <p className="text-center text-sm text-gray-300 md:text-left">
-                                Connecting you with the best reporters and
-                                publications.
+                                Connecting you with the best reporters,
+                                journalists, authors and publications.
                             </p>
                         </div>
                         <div className="flex flex-col items-center md:items-start">
@@ -263,13 +263,13 @@ export default function Authenticated({
                                 Contact Us
                             </h3>
                             <p className="mb-2 text-sm text-gray-300">
-                                Email: support@segbo.com
+                                Email: support@segbon.com
                             </p>
                         </div>
                     </div>
                     <div className="mt-8 border-t border-gray-600 pt-4 text-center">
                         <p className="text-sm text-gray-300">
-                            &copy; {new Date().getFullYear()} Segbo. All rights
+                            &copy; {new Date().getFullYear()} Segbon. All rights
                             reserved.
                         </p>
                     </div>

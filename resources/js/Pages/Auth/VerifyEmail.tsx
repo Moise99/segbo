@@ -18,10 +18,10 @@ export default function VerifyEmail({ status }: { status?: string }) {
             <div className="mx-2 py-24">
                 <div className="mx-auto max-w-xl content-center rounded-lg bg-gradient-to-b from-blue-800 to-[#010336] sm:px-2 lg:px-4">
                     <div className="mx-2 my-4 text-sm text-white">
-                        Thanks for signing up! Before getting started, could you
-                        verify your email address by clicking on the link we
-                        just sent to you? If you didn't receive the email even
-                        in your spam, we will gladly send you another.
+                        Before continuing, please verify your email address by
+                        clicking on the link we just sent to you. If you didn't
+                        receive the email even in your spam, we will gladly send
+                        you another.
                         {status === 'verification-link-sent' && (
                             <div className="mx-2 my-4 bg-white text-sm font-medium text-green-600">
                                 A new verification link has been sent to the

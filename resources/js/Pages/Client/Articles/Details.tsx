@@ -240,7 +240,7 @@ const columns: ColumnDef<Element>[] = [
                         variant="default"
                         className="bg-orange-600"
                         onClick={() =>
-                            router.get(`/segbopub/${elements.encrypted_id}`)
+                            router.get(`/pub/${elements.encrypted_id}`)
                         }
                     >
                         See pub
@@ -349,7 +349,7 @@ export default function ReporterProfile() {
                                     variant="secondary"
                                     className="border-2 border-gray-200 bg-white text-black"
                                     onClick={() =>
-                                        router.get(`/segbo/${article.username}`)
+                                        router.get(`/sg/${article.username}`)
                                     }
                                 >
                                     <span className="text-lg font-semibold text-gray-600">
@@ -401,7 +401,7 @@ export default function ReporterProfile() {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg">
                         <div className="mb-4 text-2xl text-blue-900">
-                            Same publications of this Segbo ( {article.name} @
+                            Same publications of this Segbon ( {article.name} @
                             {article.username})
                         </div>
                         <div className="mb-4 flex items-center justify-between gap-x-8">

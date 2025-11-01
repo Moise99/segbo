@@ -29,9 +29,9 @@ Route::get('/terms-of-use', function () {
 
 Route::get('/', [WelcomeController::class, 'topReporter'])->name('top.reporter');
 Route::get('/find/reporter', [FindController::class, 'findReporter'])->name('find.reporter');
-Route::get('/segbo/{username}', [FindController::class, 'findReporterDetails'])->name('find.more');
+Route::get('/sg/{username}', [FindController::class, 'findReporterDetails'])->name('find.more');
 Route::get('/find/article', [FindController::class, 'findArticle'])->name('find.article');
-Route::get('/segbopub/{title}', [FindController::class, 'findArticleDetails'])->name('find.pubmore');
+Route::get('/pub/{title}', [FindController::class, 'findArticleDetails'])->name('find.pubmore');
 Route::post('/reporters/{username}/subscribe', [SubscriberController::class, 'subscribe'])->name('reporters.subscribe');
 Route::post('/reporters/{username}/unsubscribe', [SubscriberController::class, 'unsubscribe'])->name('reporters.unsubscribe');
 Route::get('/reporters/{username}/subscription-status', [SubscriberController::class, 'status'])->name('reporters.subscription.status');

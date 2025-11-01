@@ -41,7 +41,7 @@ export default function AuthPages({
                                         route().current('find.more')
                                     }
                                 >
-                                    Find a Segbo
+                                    Find a Segbon
                                 </NavLink>
                             </div>
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -107,7 +107,7 @@ export default function AuthPages({
                                                     type="button"
                                                     className="inline-flex items-center rounded-full border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-orange-600 transition duration-150 ease-in-out hover:text-orange-600 focus:outline-none"
                                                 >
-                                                    Become Segbo
+                                                    Become Segbon
                                                     <svg
                                                         className="-me-0.5 ms-2 h-4 w-4"
                                                         xmlns="http://www.w3.org/2000/svg"
@@ -199,7 +199,7 @@ export default function AuthPages({
                                 route().current('find.more')
                             }
                         >
-                            Find a Segbo
+                            Find a Segbon
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             href={route('find.article')}
@@ -260,7 +260,7 @@ export default function AuthPages({
                                 Login
                             </ResponsiveNavLink>
                             <ResponsiveNavLink href={route('register')}>
-                                Register
+                                Become Segbon
                             </ResponsiveNavLink>
                         </div>
                     </div>
@@ -286,8 +286,8 @@ export default function AuthPages({
                                 <ApplicationLogo className="h-10 w-auto fill-current text-white transition-transform duration-300 hover:scale-105" />
                             </Link>
                             <p className="text-center text-sm text-gray-300 md:text-left">
-                                Connecting you with the best reporters and
-                                publications.
+                                Connecting you with the best reporters,
+                                journalists, authors and publications.
                             </p>
                         </div>
                         <div className="flex flex-col items-center md:items-start">
@@ -314,13 +314,13 @@ export default function AuthPages({
                                 Contact Us
                             </h3>
                             <p className="mb-2 text-sm text-gray-300">
-                                Email: support@segbo.com
+                                Email: support@segbon.com
                             </p>
                         </div>
                     </div>
                     <div className="mt-8 border-t border-gray-600 pt-4 text-center">
                         <p className="text-sm text-gray-300">
-                            &copy; {new Date().getFullYear()} Segbo. All rights
+                            &copy; {new Date().getFullYear()} Segbon. All rights
                             reserved.
                         </p>
                     </div>

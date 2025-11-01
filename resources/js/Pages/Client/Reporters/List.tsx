@@ -69,7 +69,7 @@ export default function Reporters() {
             <Head title="Reporters" />
             <div className="mb-8 text-center">
                 <h1 className="mt-6 text-3xl font-bold text-gray-900 sm:text-4xl">
-                    Our {total_reporters} Segbo
+                    Our {total_reporters} Segbon
                 </h1>
                 <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
                     Discover our talented journalists and their areas of
@@ -134,7 +134,7 @@ export default function Reporters() {
                                         className="w-full rounded-xl bg-orange-600"
                                         onClick={() =>
                                             router.get(
-                                                `/segbo/${reporter.username}`,
+                                                `/sg/${reporter.username}`,
                                             )
                                         }
                                     >
