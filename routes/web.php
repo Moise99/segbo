@@ -27,7 +27,12 @@ Route::get('/terms-of-use', function () {
     return Inertia::render('Terms/TermsOfUse');
 })->name('terms.of.use');
 
+Route::get('/about', function () {
+    return Inertia::render('about');
+})->name('about');
+
 Route::get('/', [WelcomeController::class, 'topReporter'])->name('top.reporter');
+
 Route::get('/find/reporter', [FindController::class, 'findReporter'])->name('find.reporter');
 Route::get('/sg/{username}', [FindController::class, 'findReporterDetails'])->name('find.more');
 Route::get('/find/article', [FindController::class, 'findArticle'])->name('find.article');
