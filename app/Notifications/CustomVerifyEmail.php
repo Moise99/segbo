@@ -39,13 +39,13 @@ class CustomVerifyEmail extends VerifyEmailNotification implements ShouldQueue
         $verificationUrl = $this->verificationUrl($notifiable);
 
         return (new MailMessage)
-                    ->subject('Welcome to Segbo! Please verify your email address.') // Personnalisation du sujet
-                    ->line('Thank you for registering on Segbo. Please click the button below to verify your email address and activate your account.')
+                    ->subject('Please verify your email address.') // Personnalisation du sujet
+                    ->line('Please click the button below to verify your email address and activate your account.')
 
                     ->action('Verify your email address', $verificationUrl)
 
                     ->line('If you have not created an account, no further action is required. This message can be ignored.')
-                    ->line('Thanks for using Segbo !');
+                    ->line('Thanks for using Segbon !');
     }
 
     /**

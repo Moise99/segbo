@@ -41,8 +41,8 @@ class CustomResetPassword extends ResetPasswordNotification implements ShouldQue
         ], false));
 
         return (new MailMessage)
-            ->subject('Segbo password reset link')
-            ->line('You are receiving this email because we have received a password reset request for your Segbo account.')
+            ->subject('Segbon password reset link')
+            ->line('You are receiving this email because we have received a password reset request for your Segbon account.')
 
             ->action('Reset Password', $url)
 
