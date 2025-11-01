@@ -471,10 +471,11 @@ export default function ReporterProfile() {
                                 </div>
                             </div>
                             {/* Subscription Form */}
-
                             <div className="mt-6">
                                 <h3 className="mb-2 text-xl font-semibold text-gray-800">
-                                    Subscribe to {reporter.name}
+                                    {isSubscribedInitial
+                                        ? `Unsubscribe from ${reporter.name}`
+                                        : `Subscribe to ${reporter.name}`}
                                 </h3>
                                 <SubscribeForm
                                     username={reporter.username}

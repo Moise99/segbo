@@ -28,21 +28,21 @@ if (!function_exists('sendEmailViaOneSignal')) {
             'email_subject' => $subject,
             'email_body' => $bodyHtml,
             'email_from_name' => config('app.name'),
-            'email_from_address' => 'no-reply@' . parse_url(config('app.url'), PHP_URL_HOST),
+            'email_from_address' => 'noreply@' . parse_url(config('app.url'), PHP_URL_HOST),
             'email_reply_to_address' => 'support@' . parse_url(config('app.url'), PHP_URL_HOST),
             'email_click_tracking_enabled' => true,
         ]);
 
         // Vérification et logs
         if ($response->failed()) {
-            Log::error('❌ OneSignal Email API failed', [
+            Log::error('OneSignal Email API failed', [
                 'emails' => $emailList,
                 'error' => $response->body(),
             ]);
             return false;
         }
 
-        Log::info('✅ OneSignal Email sent', [
+        Log::info('OneSignal Email sent', [
             'emails' => $emailList,
             'subject' => $subject,
         ]);

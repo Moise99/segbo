@@ -104,7 +104,7 @@ export default function SubscribeForm({
                         <p className="mb-5 text-gray-600">
                             By subscribing, you agree that we may use a{' '}
                             <strong>cookie</strong> to remember your
-                            subscription to this Segbo.
+                            subscription to this Segbon.
                             <br />
                             This cookie is used only for this purpose and
                             expires after 1 year.
