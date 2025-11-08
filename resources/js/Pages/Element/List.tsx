@@ -282,16 +282,16 @@ const columns: ColumnDef<Element>[] = [
                                         </TooltipTrigger>
                                     </Dialog.Trigger>
                                     <TooltipContent side="top">
-                                        Disable
+                                        Unpublish
                                     </TooltipContent>
                                     <Dialog.Portal>
                                         <Dialog.Overlay className="fixed inset-0 bg-black/50" />
                                         <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform rounded-lg bg-white p-6 shadow-lg">
                                             <Dialog.Title className="text-lg font-semibold">
-                                                Disable confimation
+                                                Unpublish Confirmation
                                             </Dialog.Title>
                                             <Dialog.Description className="mb-4 mt-2 text-sm text-gray-600">
-                                                Are you sure to disable this
+                                                Are you sure to Unpublish this
                                                 publication?
                                             </Dialog.Description>
                                             <div className="flex justify-end gap-4">
@@ -336,16 +336,16 @@ const columns: ColumnDef<Element>[] = [
                                         </TooltipTrigger>
                                     </Dialog.Trigger>
                                     <TooltipContent side="top">
-                                        Enable
+                                        Publish
                                     </TooltipContent>
                                     <Dialog.Portal>
                                         <Dialog.Overlay className="fixed inset-0 bg-black/50" />
                                         <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform rounded-lg bg-white p-6 shadow-lg">
                                             <Dialog.Title className="text-lg font-semibold">
-                                                Enable Confirmation
+                                                Publish Confirmation
                                             </Dialog.Title>
                                             <Dialog.Description className="mb-4 mt-2 text-sm text-gray-600">
-                                                Are you sure to enable this
+                                                Are you sure to publish this
                                                 publication?
                                             </Dialog.Description>
                                             <div className="flex justify-end gap-4">

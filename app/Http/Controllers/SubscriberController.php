@@ -20,7 +20,7 @@ class SubscriberController extends Controller
             ['email', $data['email']],
             ['user_id', $user->id]
         ])->first();
-        if ($subscriber->is_active) {
+        if ($subscriber != null && $subscriber->is_active) {
             return redirect()->back()->with('success', 'You are already subscribed!');
         }
 

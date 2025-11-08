@@ -61,7 +61,7 @@ export default function Welcome() {
                         {/* About Text Section */}
                         <div className="p-6 lg:w-1/2">
                             <h2 className="mb-4 text-3xl font-bold text-gray-900">
-                                About Segbo
+                                About Segbon
                             </h2>
                             <p className="mb-4 text-lg text-gray-700">
                                 Our platform is dedicated to independent
@@ -87,7 +87,7 @@ export default function Welcome() {
                                         href={route('register')}
                                         className="inline-block rounded-lg bg-orange-600 px-6 py-3 font-semibold text-white transition duration-300 hover:bg-blue-900"
                                     >
-                                        Create your Segbo account
+                                        Create your Segbon account
                                     </a>
                                 </li>
                                 <li>Fill out your profile</li>
@@ -100,7 +100,7 @@ export default function Welcome() {
 
             <div className="mb-8 text-center">
                 <h2 className="mt-6 text-xl font-bold text-gray-900 sm:text-4xl">
-                    Our Top Segbo
+                    Our Top Segbon
                 </h2>
                 <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
                     <Link href={route('find.reporter')} className="mb-8">
@@ -147,7 +147,7 @@ export default function Welcome() {
                                         className="w-full rounded-xl bg-orange-600"
                                         onClick={() =>
                                             router.get(
-                                                `/segbo/${reporter.username}`,
+                                                `/sg/${reporter.username}`,
                                             )
                                         }
                                     >

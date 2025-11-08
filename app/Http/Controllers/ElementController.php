@@ -4,14 +4,23 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use App\Services\ResendService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Crypt;
 use App\Models\Element;
 
 class ElementController extends Controller
 {
+    protected $resendService;
+
+    public function __construct(ResendService $resendService)
+    {
+        $this->resendService = $resendService;
+    }
+
     public function create() {
 
         $elementypes = DB::table('elementypes')->get();
@@ -165,13 +174,13 @@ class ElementController extends Controller
 
             return redirect()
                 ->route('element.list')
-                ->with('success', 'Publication activated and notification sent.');
+                ->with('success', 'Publication done and notification sent.');
         } else {
             Element::where('id', $id)->update(['etate' => 0]);
 
             return redirect()
                 ->route('element.list')
-                ->with('success', 'Publication disabled.');
+                ->with('success', 'Publication unpublish.');
         }
     }
 
@@ -179,20 +188,35 @@ class ElementController extends Controller
     {
         $element = Element::with('user.subscribers')->find($element->id);
 
+
         $subscribers = $element->user->subscribers()
             ->where('is_active', true)
             ->pluck('email')
             ->toArray();
-        if (empty($subscribers)) return;
 
-        $subject = "New publication by {$element->user->username}";
-        $unsuscribe = url("/sg/{$element->user->username}");
-        $url = url("/pub/{$element->title}");
-        $logo = asset('images/logo.png');
+        if (empty($subscribers)){
+            return;
+        }
 
-        // sent grouped
-        sendEmailViaOneSignal($subscribers, $subject, $logo, $url, $unsuscribe);
+        $templateData = $this->prepareTemplateData($element);
+
+        // Envoi groupé optimisé
+        $this->resendService->sendBulkPublicationNotifications(
+            $subscribers,
+            $templateData,
+        );
     }
 
-
+    private function prepareTemplateData($element)
+    {
+        $article = Crypt::encryptString($element->id);
+        return [
+            'subject' => "New publication by {$element->user->username}",
+            'author_name' => $element->user->username,
+            'publication_title' => $element->title,
+            'publication_url' => url("/pub/{$article}"),
+            'unsubscribe_url' => url("/sg/{$element->user->username}"),
+            'preview_text' => $element->description ?? substr($element->content, 0, 150) . '...',
+        ];
+    }
 }
