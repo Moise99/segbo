@@ -1,5 +1,9 @@
 import { router } from '@inertiajs/react';
+import { CheckCheck, Mail } from 'lucide-react';
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
 
 interface Props {
     username: string;
@@ -59,74 +63,87 @@ export default function SubscribeForm({
     };
 
     return (
-        <div className="mt-4 flex flex-col items-center gap-2 sm:flex-row">
+        <div className="space-y-2">
             {/* email */}
             {!subscribed && (
-                <input
+                <Input
                     type="email"
+                    placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Votre adresse e-mail"
-                    required
-                    className="flex-grow rounded border border-gray-300 p-2"
-                    disabled={loading}
+                    className="rounded-xl border-2"
+                    disabled={isSubscribed}
                 />
             )}
 
             {/* Buttons */}
             {!subscribed ? (
-                <button
+                <Button
                     type="button"
                     disabled={loading || !email}
                     onClick={handleSubscribe}
-                    className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
+                    className={`w-full rounded-xl ${
+                        isSubscribed
+                            ? 'bg-gray-600 hover:bg-gray-700'
+                            : 'bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600'
+                    } text-white`}
                 >
+                    <Mail className="mr-2 h-4 w-4" />
                     {loading ? 'Subscription...' : 'Subscribe'}
-                </button>
+                </Button>
             ) : (
-                <button
+                <Button
                     type="button"
                     disabled={loading}
                     onClick={handleUnsubscribe}
-                    className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:opacity-50"
+                    className={`w-full rounded-xl ${
+                        isSubscribed
+                            ? 'bg-gray-600 hover:bg-gray-700'
+                            : 'bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600'
+                    } text-white`}
                 >
+                    <CheckCheck className="mr-2 h-4 w-4" />
+
                     {loading ? 'Processing...' : 'Unsubscribe'}
-                </button>
+                </Button>
             )}
 
             {/* confirmation modal */}
-            {showConfirm && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                    <div className="w-[90%] max-w-md rounded-lg bg-white p-6 shadow-lg">
-                        <h2 className="mb-3 text-lg font-semibold text-gray-800">
-                            Subscription confirmation
-                        </h2>
-                        <p className="mb-5 text-gray-600">
-                            By subscribing, you agree that we may use a{' '}
-                            <strong>cookie</strong> to remember your
-                            subscription to this Segbon.
-                            <br />
-                            This cookie is used only for this purpose and
-                            expires after 1 year.
-                        </p>
-                        <div className="flex justify-end gap-3">
-                            <button
-                                onClick={() => setShowConfirm(false)}
-                                className="rounded border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-100"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={confirmSubscribe}
-                                disabled={loading}
-                                className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-                            >
-                                {loading ? 'Subscription...' : 'Confirm'}
-                            </button>
+            {showConfirm &&
+                createPortal(
+                    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50">
+                        <div className="w-[90%] max-w-md rounded-lg bg-white p-6 shadow-lg">
+                            <h2 className="mb-3 text-lg font-semibold text-gray-800">
+                                Subscription confirmation
+                            </h2>
+                            <p className="mb-5 text-gray-600">
+                                By subscribing, you agree that we may use a{' '}
+                                <strong>cookie</strong> to remember your
+                                subscription to this Segbon.
+                                <br />
+                                This cookie is used only for this purpose and
+                                expires after 1 year.
+                            </p>
+                            <div className="flex justify-end gap-3">
+                                <button
+                                    onClick={() => setShowConfirm(false)}
+                                    className="rounded border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={confirmSubscribe}
+                                    disabled={loading}
+                                    className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                                >
+                                    {loading ? 'Subscription...' : 'Confirm'}
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            )}
+                    </div>,
+                    // Rendre le contenu de la modale directement dans le body du document
+                    document.body,
+                )}
         </div>
     );
 }

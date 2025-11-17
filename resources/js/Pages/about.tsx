@@ -223,7 +223,7 @@ export default function About() {
                                     className="bg-orange-600 hover:bg-orange-700"
                                 >
                                     <Newspaper className="mr-2 h-5 w-5" />
-                                    Discover Segbon
+                                    Discover our Segbon
                                 </Button>
                             </Link>
                         </div>
