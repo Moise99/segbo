@@ -44,7 +44,8 @@ import {
     ChevronRight,
     ChevronsLeft,
     ChevronsRight,
-    Eye,
+    Check,
+    CheckCheck,
     Pencil,
     X,
 } from 'lucide-react';
@@ -277,7 +278,7 @@ const columns: ColumnDef<Element>[] = [
                                                 variant="ghost"
                                                 className="flex h-10 w-10 items-center justify-center rounded-full bg-green-700 hover:bg-gray-300"
                                             >
-                                                <Eye className="h-5 w-5 text-white" />
+                                                <CheckCheck className="h-5 w-5 text-white" />
                                             </Button>
                                         </TooltipTrigger>
                                     </Dialog.Trigger>
@@ -331,7 +332,7 @@ const columns: ColumnDef<Element>[] = [
                                                 variant="ghost"
                                                 className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-700 hover:bg-gray-300"
                                             >
-                                                <X className="h-5 w-5 text-white" />
+                                                <Check className="h-5 w-5 text-white" />
                                             </Button>
                                         </TooltipTrigger>
                                     </Dialog.Trigger>

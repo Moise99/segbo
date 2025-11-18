@@ -89,7 +89,7 @@ export default function ReporterProfile() {
         setShowShareMenu(false);
     };
 
-    const itemsPerPage = 2;
+    const itemsPerPage = 3;
     const totalPages = Math.ceil(elements.length / itemsPerPage);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -102,6 +102,13 @@ export default function ReporterProfile() {
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const truncateText = (text: string, maxLength: number) => {
+        const stripped = text.replace(/<[^>]+>/g, '');
+        return stripped.length > maxLength
+            ? stripped.substring(0, maxLength) + '...'
+            : stripped;
     };
 
     return (
@@ -275,18 +282,13 @@ export default function ReporterProfile() {
                     {/* Category Badge */}
                     <div className="absolute left-8 top-8">
                         <span className="inline-flex items-center gap-2 rounded-full bg-orange-600 px-4 py-2 text-sm font-bold text-white">
-                            {article.cat_name}
+                            {article.cat_name} - {article.et_name} format
                         </span>
                     </div>
 
                     {/* Title Overlay */}
                     <div className="absolute bottom-0 left-0 right-0 p-8 lg:p-16">
                         <div className="max-w-4xl">
-                            <div className="mb-4 flex items-center gap-2 text-orange-400">
-                                <span className="text-sm font-medium uppercase tracking-wider">
-                                    {article.et_name}
-                                </span>
-                            </div>
                             <h1 className="mb-6 text-4xl font-bold leading-tight text-white md:text-5xl lg:text-6xl">
                                 {article.title}
                             </h1>
@@ -350,7 +352,9 @@ export default function ReporterProfile() {
                                 className="inline-block"
                             >
                                 <Button className="rounded-full bg-gradient-to-r from-orange-600 to-orange-500 px-8 py-6 text-base font-semibold text-white shadow-lg transition-all hover:from-orange-700 hover:to-orange-600 hover:shadow-xl">
-                                    Read Full Article
+                                    {article.et_name === 'Article'
+                                        ? 'Read Full Article'
+                                        : 'Watch Full Video'}
                                     <ChevronRight className="ml-2 h-5 w-5" />
                                 </Button>
                             </a>
@@ -422,33 +426,43 @@ export default function ReporterProfile() {
 
                         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
                             {paginatedElements.map((related) => (
-                                <Card
-                                    key={related.encrypted_id}
-                                    className="group transform cursor-pointer overflow-hidden rounded-3xl border-0 bg-white shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+                                <a
+                                    href={route('find.pubmore', {
+                                        title: related.encrypted_id,
+                                    })}
                                 >
-                                    <div className="relative h-48 overflow-hidden">
-                                        <img
-                                            src={related.cover}
-                                            alt={related.title}
-                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                                        <div className="absolute left-4 top-4">
-                                            <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-gray-900 backdrop-blur-sm">
-                                                {related.cat_name}
-                                            </span>
+                                    {' '}
+                                    <Card
+                                        key={related.encrypted_id}
+                                        className="group transform cursor-pointer overflow-hidden rounded-3xl border-0 bg-white shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+                                    >
+                                        <div className="relative h-48 overflow-hidden">
+                                            <img
+                                                src={related.cover}
+                                                alt={related.title}
+                                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                            <div className="absolute left-4 top-4">
+                                                <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-gray-900 backdrop-blur-sm">
+                                                    {related.cat_name}
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <CardContent className="p-6">
-                                        <h3 className="mb-3 line-clamp-2 text-xl font-bold text-gray-900 transition-colors group-hover:text-orange-600">
-                                            {related.title}
-                                        </h3>
-                                        <div className="flex items-center text-sm text-gray-500">
-                                            <Calendar className="mr-2 h-4 w-4" />
-                                            {formatDate(related.updated_at)}
-                                        </div>
-                                    </CardContent>
-                                </Card>
+                                        <CardContent className="p-6">
+                                            <h3 className="mb-3 line-clamp-2 text-xl font-bold text-gray-900 transition-colors group-hover:text-orange-600">
+                                                {truncateText(
+                                                    related.title,
+                                                    20,
+                                                )}
+                                            </h3>
+                                            <div className="flex items-center text-sm text-gray-500">
+                                                <Calendar className="mr-2 h-4 w-4" />
+                                                {formatDate(related.updated_at)}
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                </a>
                             ))}
                         </div>
 

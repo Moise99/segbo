@@ -98,7 +98,10 @@ export default function ArtilcleList() {
                 const authorMatch = element.name
                     .toLowerCase()
                     .includes(lowercased);
-                return titleMatch || descMatch || categoryMatch || authorMatch;
+                const usernameMatch = element.username
+                    .toLowerCase()
+                    .includes(lowercased);
+                return titleMatch || descMatch || categoryMatch || authorMatch || usernameMatch;
             });
         }
 
@@ -372,14 +375,19 @@ export default function ArtilcleList() {
 
                                                 {/* Author & Date */}
                                                 <div className="mb-4 flex items-center gap-3 border-b border-gray-100 pb-4">
-                                                    <img
-                                                        src={element.photo}
-                                                        alt={element.name}
-                                                        className="h-8 w-8 rounded-full object-cover"
-                                                    />
+                                                    <a href={route('find.more', { username: element.username })} className="flex items-center gap-3">
+                                                        <img
+                                                            src={element.photo}
+                                                            alt={element.name}
+                                                            className="h-8 w-8 rounded-full object-cover"
+                                                        />
+                                                    </a>
                                                     <div className="min-w-0 flex-1">
                                                         <p className="truncate text-sm font-medium text-gray-900">
                                                             {element.name}
+                                                        </p>
+                                                        <p className="truncate text-sm font-medium text-gray-600">
+                                                            {element.username}
                                                         </p>
                                                         <p className="text-xs text-gray-500">
                                                             {formatDate(

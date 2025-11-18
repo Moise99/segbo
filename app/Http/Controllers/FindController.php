@@ -114,6 +114,7 @@ class FindController extends Controller
                     ->where('elements.etate', 1)
                     ->select('elements.*', 'elementypes.et_name', 'cat_name')
                     ->orderBy('elements.id', 'desc')
+                    ->take(2)
                     ->get()
                     ->map(function ($element) {
                         // Encrypt the original ID and add it to the collection

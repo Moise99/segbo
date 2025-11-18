@@ -377,7 +377,7 @@ export default function ReporterProfile() {
                                                     Publications
                                                 </h2>
                                                 <p className="text-sm text-gray-600">
-                                                    {filteredElements.length}{' '}
+                                                    Latest {' '}{filteredElements.length}{' '}
                                                     articles
                                                 </p>
                                             </div>
@@ -449,23 +449,25 @@ export default function ReporterProfile() {
                                                                 __html: article.desc,
                                                             }}
                                                         />
-                                                    <a
-                                                        href={route(
-                                                            'find.pubmore',
-                                                            {
-                                                                title: article.encrypted_id,
-                                                            },
-                                                        )}
-                                                    >
+
                                                         <Button
                                                             variant="ghost"
                                                             size="sm"
                                                             className="h-auto p-0 font-medium text-orange-600 hover:bg-orange-50 hover:text-orange-700"
                                                         >
-                                                            Read article
-                                                            <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                                            <a
+                                                                href={route(
+                                                                    'find.pubmore',
+                                                                    {
+                                                                        title: article.encrypted_id,
+                                                                    },
+                                                                )}
+                                                                className="flex items-center gap-2"
+                                                            >
+                                                                Read article
+                                                                <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                                            </a>
                                                         </Button>
-                                                    </a>
                                                     </div>
                                                 </div>
                                             ))
