@@ -351,7 +351,7 @@ export default function ReporterProfile() {
                                 rel="noopener noreferrer"
                                 className="inline-block"
                             >
-                                <Button className="rounded-full bg-gradient-to-r from-orange-600 to-orange-500 px-8 py-6 text-base font-semibold text-white shadow-lg transition-all hover:from-orange-700 hover:to-orange-600 hover:shadow-xl">
+                                <Button className="rounded-full bg-gradient-to-r from-blue-600 to-blue-500 px-8 py-6 text-base font-semibold text-white shadow-lg transition-all hover:from-blue-700 hover:to-blue-600 hover:shadow-xl">
                                     {article.et_name === 'Article'
                                         ? 'Read Full Article'
                                         : 'Watch Full Video'}
@@ -427,15 +427,13 @@ export default function ReporterProfile() {
                         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
                             {paginatedElements.map((related) => (
                                 <a
+                                    key={related.encrypted_id}
                                     href={route('find.pubmore', {
                                         title: related.encrypted_id,
                                     })}
                                 >
                                     {' '}
-                                    <Card
-                                        key={related.encrypted_id}
-                                        className="group transform cursor-pointer overflow-hidden rounded-3xl border-0 bg-white shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
-                                    >
+                                    <Card className="group transform cursor-pointer overflow-hidden rounded-3xl border-0 bg-white shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
                                         <div className="relative h-48 overflow-hidden">
                                             <img
                                                 src={related.cover}

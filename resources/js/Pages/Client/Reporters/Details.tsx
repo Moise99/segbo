@@ -377,7 +377,8 @@ export default function ReporterProfile() {
                                                     Publications
                                                 </h2>
                                                 <p className="text-sm text-gray-600">
-                                                    Latest {' '}{filteredElements.length}{' '}
+                                                    Latest{' '}
+                                                    {filteredElements.length}{' '}
                                                     articles
                                                 </p>
                                             </div>
@@ -453,7 +454,7 @@ export default function ReporterProfile() {
                                                         <Button
                                                             variant="ghost"
                                                             size="sm"
-                                                            className="h-auto p-0 font-medium text-orange-600 hover:bg-orange-50 hover:text-orange-700"
+                                                            className="h-auto p-0 font-medium text-blue-600 hover:bg-blue-50 hover:text-blue-700"
                                                         >
                                                             <a
                                                                 href={route(
@@ -464,7 +465,10 @@ export default function ReporterProfile() {
                                                                 )}
                                                                 className="flex items-center gap-2"
                                                             >
-                                                                Read article
+                                                                {article.et_name ===
+                                                                'Article'
+                                                                    ? 'Read Article'
+                                                                    : 'Watch Video'}
                                                                 <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                                             </a>
                                                         </Button>

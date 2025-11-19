@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import AboutImage from '@/images/about.jpg';
 import Bg from '@/images/segbohero.png';
 import GuestLayout from '@/Layouts/GuestLayout';
@@ -59,7 +58,7 @@ export default function Welcome() {
 
     useEffect(() => {
         const handleScroll = () => setScrollY(window.scrollY);
-        const handleMouseMove = (e) => {
+        const handleMouseMove = (e: { clientX: any; clientY: any }) => {
             setMousePosition({ x: e.clientX, y: e.clientY });
         };
 
@@ -336,43 +335,50 @@ export default function Welcome() {
                             </Button>
                         </div>
 
+                        {/* NEW DESIGN GRID (from your first snippet) */}
                         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
                             {topReporters.map((reporter, idx) => (
-                                <Card
+                                <div
                                     key={idx}
-                                    className="group transform overflow-hidden rounded-3xl border-0 bg-white shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+                                    className="group relative overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
                                 >
-                                    {/* Photo with overlay */}
-                                    <div className="relative h-64 overflow-hidden">
-                                        <img
-                                            src={reporter.photo}
-                                            alt={reporter.name}
-                                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                                    {/* Content */}
+                                    <div className="p-8 text-center">
+                                        {/* Photo */}
+                                        <div className="relative mx-auto mb-6 h-32 w-32">
+                                            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-400 to-rose-500 opacity-20 blur-xl transition-opacity group-hover:opacity-30"></div>
 
-                                        {/* Floating badge */}
-                                        <div className="absolute right-4 top-4 flex items-center gap-1 rounded-full bg-white px-3 py-1 shadow-lg">
-                                            <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />
-                                            <span className="text-sm font-bold text-gray-900">
-                                                {reporter.pub}
-                                            </span>
+                                            <img
+                                                src={reporter.photo}
+                                                alt={reporter.name}
+                                                className="relative h-full w-full rounded-full object-cover shadow-xl ring-4 ring-white transition-transform duration-500 group-hover:scale-110 group-hover:ring-orange-400"
+                                            />
+
+                                            {/* Floating Badge = number of pubs */}
+                                            <div className="absolute -bottom-2 -right-2 rounded-full bg-gradient-to-br from-orange-500 to-rose-500 p-2.5 shadow-lg">
+                                                <div className="flex items-center gap-1 text-white">
+                                                    <Star className="h-3.5 w-3.5" />
+                                                    <span className="text-xs font-bold">
+                                                        {reporter.pub}
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <CardContent className="p-6">
-                                        <h3 className="mb-2 text-xl font-bold text-gray-900 transition-colors group-hover:text-orange-600">
+                                        {/* Name */}
+                                        <h3 className="mb-1 text-xl font-bold text-gray-900 transition-colors group-hover:text-orange-600">
                                             {reporter.name}
                                         </h3>
-                                        <p className="mb-4 text-gray-500">
+                                        <p className="mb-6 text-sm font-medium text-gray-500">
                                             @{reporter.username}
                                         </p>
-                                        <Button className="group/btn w-full rounded-full bg-gradient-to-r from-orange-600 to-orange-500 text-white hover:from-orange-700 hover:to-orange-600">
+
+                                        {/* Button */}
+                                        <button className="w-full rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/30 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-orange-500/40">
                                             View Profile
-                                            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                                        </Button>
-                                    </CardContent>
-                                </Card>
+                                        </button>
+                                    </div>
+                                </div>
                             ))}
                         </div>
                     </div>

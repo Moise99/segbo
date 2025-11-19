@@ -101,7 +101,13 @@ export default function ArtilcleList() {
                 const usernameMatch = element.username
                     .toLowerCase()
                     .includes(lowercased);
-                return titleMatch || descMatch || categoryMatch || authorMatch || usernameMatch;
+                return (
+                    titleMatch ||
+                    descMatch ||
+                    categoryMatch ||
+                    authorMatch ||
+                    usernameMatch
+                );
             });
         }
 
@@ -375,7 +381,16 @@ export default function ArtilcleList() {
 
                                                 {/* Author & Date */}
                                                 <div className="mb-4 flex items-center gap-3 border-b border-gray-100 pb-4">
-                                                    <a href={route('find.more', { username: element.username })} className="flex items-center gap-3">
+                                                    <a
+                                                        href={route(
+                                                            'find.more',
+                                                            {
+                                                                username:
+                                                                    element.username,
+                                                            },
+                                                        )}
+                                                        className="flex items-center gap-3"
+                                                    >
                                                         <img
                                                             src={element.photo}
                                                             alt={element.name}
@@ -398,7 +413,7 @@ export default function ArtilcleList() {
                                                 </div>
 
                                                 {/* Action Button */}
-                                                <Button className="group/btn w-full rounded-2xl bg-gradient-to-r from-orange-600 to-orange-500 text-white hover:from-orange-700 hover:to-orange-600">
+                                                <Button className="group/btn w-full rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:from-blue-700 hover:to-blue-600">
                                                     <a
                                                         href={route(
                                                             'find.pubmore',

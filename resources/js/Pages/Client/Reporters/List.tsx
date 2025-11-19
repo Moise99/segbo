@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { PageProps } from '@/types';
@@ -37,7 +36,7 @@ export default function Reporters() {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-    const itemsPerPage = 8;
+    const itemsPerPage = 4;
 
     // Filter logic
     const filteredReporters = useMemo(() => {
@@ -66,11 +65,6 @@ export default function Reporters() {
     const handleSearch = (value: string) => {
         setSearchTerm(value);
         setCurrentPage(1);
-    };
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     // Get total publications count
@@ -184,52 +178,50 @@ export default function Reporters() {
                 </div>
 
                 {/* Reporters Grid/List */}
-                <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
                     {currentReporters.length > 0 ? (
                         <>
                             {viewMode === 'grid' ? (
-                                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                                <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                                     {currentReporters.map((reporter, index) => (
-                                        <Card
+                                        <div
                                             key={index}
-                                            className="group transform overflow-hidden rounded-3xl border-0 bg-white shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+                                            className="group relative overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
                                         >
-                                            {/* Photo with gradient overlay */}
-                                            <div className="relative h-56 overflow-hidden">
-                                                <img
-                                                    src={reporter.photo}
-                                                    alt={reporter.name}
-                                                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                                />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                                            {/* Card Content */}
+                                            <div className="p-8 text-center">
+                                                {/* Photo - Now Rounded */}
+                                                <div className="relative mx-auto mb-6 h-32 w-32">
+                                                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-400 to-rose-500 opacity-20 blur-xl transition-opacity group-hover:opacity-30"></div>
+                                                    <img
+                                                        src={reporter.photo}
+                                                        alt={reporter.name}
+                                                        className="relative h-full w-full rounded-full object-cover shadow-xl ring-4 ring-white transition-transform duration-500 group-hover:scale-110 group-hover:ring-orange-400"
+                                                    />
 
-                                                {/* Floating stats badge */}
-                                                <div className="absolute right-4 top-4 rounded-full bg-white/95 px-3 py-1.5 shadow-lg backdrop-blur-sm">
-                                                    <div className="flex items-center gap-1">
-                                                        <TrendingUp className="h-3.5 w-3.5 text-orange-600" />
-                                                        <span className="text-xs font-bold text-gray-900">
-                                                            {getTotalPubs(
-                                                                reporter,
-                                                            )}
-                                                        </span>
+                                                    {/* Floating Badge */}
+                                                    <div className="absolute -bottom-2 -right-2 rounded-full bg-gradient-to-br from-orange-500 to-rose-500 p-2.5 shadow-lg">
+                                                        <div className="flex items-center gap-1 text-white">
+                                                            <TrendingUp className="h-3.5 w-3.5" />
+                                                            <span className="text-xs font-bold">
+                                                                {getTotalPubs(
+                                                                    reporter,
+                                                                )}
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
 
-                                                {/* Name overlay on image */}
-                                                <div className="absolute bottom-4 left-4 right-4">
-                                                    <h3 className="mb-1 text-lg font-bold text-white">
-                                                        {reporter.name}
-                                                    </h3>
-                                                    <p className="text-sm text-orange-200">
-                                                        @{reporter.username}
-                                                    </p>
-                                                </div>
-                                            </div>
+                                                {/* Name & Username */}
+                                                <h3 className="mb-1 text-xl font-bold text-gray-900 transition-colors group-hover:text-orange-600">
+                                                    {reporter.name}
+                                                </h3>
+                                                <p className="mb-6 text-sm font-medium text-gray-500">
+                                                    @{reporter.username}
+                                                </p>
 
-                                            {/* Content */}
-                                            <CardContent className="p-5">
                                                 {/* Categories */}
-                                                <div className="mb-4 flex flex-wrap gap-2">
+                                                <div className="mb-6 flex flex-wrap justify-center gap-2">
                                                     {reporter.categories
                                                         .slice(0, 3)
                                                         .map(
@@ -238,7 +230,7 @@ export default function Reporters() {
                                                                     key={
                                                                         catIndex
                                                                     }
-                                                                    className="rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-xs font-medium text-orange-700"
+                                                                    className="rounded-full border border-orange-100 bg-orange-50 px-4 py-1.5 text-xs font-semibold text-orange-700"
                                                                 >
                                                                     {cat.name}
                                                                 </span>
@@ -247,139 +239,100 @@ export default function Reporters() {
                                                 </div>
 
                                                 {/* Action Button */}
-                                                <Button className="group/btn w-full rounded-2xl bg-gradient-to-r from-orange-600 to-orange-500 text-white shadow-lg hover:from-orange-700 hover:to-orange-600">
-                                                    <a
-                                                        href={route(
-                                                            'find.more',
-                                                            {
-                                                                username:
-                                                                    reporter.username,
-                                                            },
-                                                        )}
-                                                        className="flex items-center gap-2"
-                                                    >
-                                                        View Profile
-                                                        <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                                                    </a>
-                                                </Button>
-                                            </CardContent>
-                                        </Card>
+                                                <button className="w-full rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/30 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-orange-500/40">
+                                                    View Profile
+                                                </button>
+                                            </div>
+                                        </div>
                                     ))}
                                 </div>
                             ) : (
-                                <div className="space-y-4">
+                                <div className="space-y-6">
                                     {currentReporters.map((reporter, index) => (
-                                        <Card
+                                        <div
                                             key={index}
-                                            className="group overflow-hidden rounded-3xl border-0 bg-white shadow-lg transition-all duration-300 hover:shadow-2xl"
+                                            className="group overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-lg transition-all duration-300 hover:shadow-2xl"
                                         >
-                                            <CardContent className="p-0">
-                                                <div className="flex flex-col sm:flex-row">
-                                                    {/* Photo */}
-                                                    <div className="relative h-48 w-full flex-shrink-0 overflow-hidden sm:h-auto sm:w-48">
-                                                        <img
-                                                            src={reporter.photo}
-                                                            alt={reporter.name}
-                                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                                        />
-                                                        <div className="absolute right-4 top-4 rounded-full bg-white/95 px-3 py-1.5 shadow-lg backdrop-blur-sm">
-                                                            <div className="flex items-center gap-1">
-                                                                <TrendingUp className="h-3.5 w-3.5 text-orange-600" />
-                                                                <span className="text-xs font-bold text-gray-900">
-                                                                    {getTotalPubs(
-                                                                        reporter,
-                                                                    )}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    {/* Content */}
-                                                    <div className="flex flex-1 flex-col justify-between p-6">
-                                                        <div>
-                                                            <h3 className="mb-2 text-2xl font-bold text-gray-900 transition-colors group-hover:text-orange-600">
-                                                                {reporter.name}
-                                                            </h3>
-                                                            <p className="mb-4 text-gray-500">
-                                                                @
-                                                                {
-                                                                    reporter.username
-                                                                }
-                                                            </p>
-
-                                                            {/* Categories with counts */}
-                                                            <div className="mb-4 flex flex-wrap gap-2">
-                                                                {reporter.categories.map(
-                                                                    (
-                                                                        cat,
-                                                                        catIndex,
-                                                                    ) => (
-                                                                        <span
-                                                                            key={
-                                                                                catIndex
-                                                                            }
-                                                                            className="rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-medium text-orange-700"
-                                                                        >
-                                                                            {
-                                                                                cat.name
-                                                                            }{' '}
-                                                                            (
-                                                                            {
-                                                                                cat.count
-                                                                            }
-                                                                            )
-                                                                        </span>
-                                                                    ),
+                                            <div className="flex flex-col items-center gap-8 p-8 sm:flex-row">
+                                                {/* Photo */}
+                                                <div className="relative flex-shrink-0">
+                                                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-400 to-rose-500 opacity-20 blur-xl"></div>
+                                                    <img
+                                                        src={reporter.photo}
+                                                        alt={reporter.name}
+                                                        className="relative h-28 w-28 rounded-full object-cover shadow-xl ring-4 ring-white transition-transform duration-500 group-hover:scale-110 group-hover:ring-orange-400"
+                                                    />
+                                                    <div className="absolute -bottom-2 -right-2 rounded-full bg-gradient-to-br from-orange-500 to-rose-500 p-2.5 shadow-lg">
+                                                        <div className="flex items-center gap-1 text-white">
+                                                            <TrendingUp className="h-3.5 w-3.5" />
+                                                            <span className="text-xs font-bold">
+                                                                {getTotalPubs(
+                                                                    reporter,
                                                                 )}
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="flex gap-3">
-                                                            <Button className="group/btn flex-1 rounded-2xl bg-gradient-to-r from-orange-600 to-orange-500 text-white shadow-lg hover:from-orange-700 hover:to-orange-600">
-                                                                View Profile
-                                                                <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                                                            </Button>
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </CardContent>
-                                        </Card>
+
+                                                {/* Content */}
+                                                <div className="flex-1 text-center sm:text-left">
+                                                    <h3 className="mb-2 text-2xl font-bold text-gray-900 transition-colors group-hover:text-orange-600">
+                                                        {reporter.name}
+                                                    </h3>
+                                                    <p className="mb-4 font-medium text-gray-500">
+                                                        @{reporter.username}
+                                                    </p>
+
+                                                    <div className="flex flex-wrap justify-center gap-2 sm:justify-start">
+                                                        {reporter.categories.map(
+                                                            (cat, catIndex) => (
+                                                                <span
+                                                                    key={
+                                                                        catIndex
+                                                                    }
+                                                                    className="rounded-full border border-orange-100 bg-orange-50 px-4 py-2 text-sm font-semibold text-orange-700"
+                                                                >
+                                                                    {cat.name} (
+                                                                    {cat.count})
+                                                                </span>
+                                                            ),
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                {/* Button */}
+                                                <button className="flex-shrink-0 rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/30 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-orange-500/40">
+                                                    View Profile
+                                                </button>
+                                            </div>
+                                        </div>
                                     ))}
                                 </div>
                             )}
 
                             {/* Pagination */}
                             {totalPages > 1 && (
-                                <div className="mt-12 flex flex-col items-center justify-between gap-4 sm:flex-row">
-                                    {/* Page info */}
-                                    <div className="text-sm text-gray-600">
+                                <div className="mt-16 flex flex-col items-center justify-between gap-6 sm:flex-row">
+                                    <div className="text-sm font-medium text-gray-600">
                                         Page {currentPage} of {totalPages}
                                     </div>
 
-                                    {/* Pagination buttons */}
-                                    <div className="flex items-center gap-2">
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
+                                    <div className="flex items-center gap-3">
+                                        <button
                                             onClick={() =>
-                                                handlePageChange(
-                                                    currentPage - 1,
-                                                )
+                                                setCurrentPage(currentPage - 1)
                                             }
                                             disabled={currentPage === 1}
-                                            className="rounded-xl border-2 disabled:opacity-50"
+                                            className="rounded-xl border-2 border-gray-200 px-5 py-2.5 text-sm font-medium text-gray-700 transition-all hover:border-orange-500 hover:text-orange-600 disabled:cursor-not-allowed disabled:opacity-40"
                                         >
                                             <ChevronLeft className="h-4 w-4" />
-                                            Previous
-                                        </Button>
+                                        </button>
 
-                                        {/* Page numbers */}
-                                        <div className="flex gap-1">
+                                        <div className="flex gap-2">
                                             {Array.from(
                                                 { length: totalPages },
                                                 (_, i) => i + 1,
                                             ).map((page) => {
-                                                // Show first, last, current, and adjacent pages
                                                 if (
                                                     page === 1 ||
                                                     page === totalPages ||
@@ -387,29 +340,22 @@ export default function Reporters() {
                                                         page <= currentPage + 1)
                                                 ) {
                                                     return (
-                                                        <Button
+                                                        <button
                                                             key={page}
-                                                            variant={
-                                                                page ===
-                                                                currentPage
-                                                                    ? 'default'
-                                                                    : 'outline'
-                                                            }
-                                                            size="sm"
                                                             onClick={() =>
-                                                                handlePageChange(
+                                                                setCurrentPage(
                                                                     page,
                                                                 )
                                                             }
-                                                            className={`h-10 w-10 rounded-xl border-2 ${
+                                                            className={`h-11 w-11 rounded-xl text-sm font-semibold transition-all ${
                                                                 page ===
                                                                 currentPage
-                                                                    ? 'border-orange-600 bg-orange-600 text-white'
-                                                                    : 'border-gray-200 hover:border-orange-500'
+                                                                    ? 'bg-gradient-to-br from-orange-500 to-rose-500 text-white shadow-lg shadow-orange-500/30'
+                                                                    : 'border-2 border-gray-200 text-gray-700 hover:border-orange-500 hover:text-orange-600'
                                                             }`}
                                                         >
                                                             {page}
-                                                        </Button>
+                                                        </button>
                                                     );
                                                 } else if (
                                                     page === currentPage - 2 ||
@@ -428,43 +374,38 @@ export default function Reporters() {
                                             })}
                                         </div>
 
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
+                                        <button
                                             onClick={() =>
-                                                handlePageChange(
-                                                    currentPage + 1,
-                                                )
+                                                setCurrentPage(currentPage + 1)
                                             }
                                             disabled={
                                                 currentPage === totalPages
                                             }
-                                            className="rounded-xl border-2 disabled:opacity-50"
+                                            className="rounded-xl border-2 border-gray-200 px-5 py-2.5 text-sm font-medium text-gray-700 transition-all hover:border-orange-500 hover:text-orange-600 disabled:cursor-not-allowed disabled:opacity-40"
                                         >
-                                            Next
                                             <ChevronRight className="h-4 w-4" />
-                                        </Button>
+                                        </button>
                                     </div>
                                 </div>
                             )}
                         </>
                     ) : (
                         <div className="py-20 text-center">
-                            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100">
-                                <Search className="h-10 w-10 text-gray-400" />
+                            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-orange-100 to-rose-100">
+                                <Search className="h-12 w-12 text-orange-500" />
                             </div>
-                            <h3 className="mb-2 text-2xl font-bold text-gray-900">
+                            <h3 className="mb-3 text-3xl font-bold text-gray-900">
                                 No reporters found
                             </h3>
-                            <p className="mb-6 text-gray-600">
+                            <p className="mb-8 text-lg text-gray-600">
                                 Try adjusting your search terms
                             </p>
-                            <Button
+                            <button
                                 onClick={() => handleSearch('')}
-                                className="rounded-full bg-orange-600 px-8 text-white hover:bg-orange-700"
+                                className="rounded-full bg-gradient-to-r from-orange-500 to-rose-500 px-8 py-3 font-semibold text-white shadow-lg shadow-orange-500/30 transition-all hover:scale-105 hover:shadow-xl hover:shadow-orange-500/40"
                             >
                                 Clear search
-                            </Button>
+                            </button>
                         </div>
                     )}
                 </div>
