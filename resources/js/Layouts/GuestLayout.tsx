@@ -15,7 +15,7 @@ export default function Guest({
     const auth = usePage().props.auth;
     return (
         <div className="flex min-h-screen flex-col bg-gray-200">
-            <nav className="border-b border-gray-100 bg-gradient-to-l from-blue-800 to-[#010336]">
+            <nav className="z-[999] border-b border-gray-100 bg-gradient-to-l from-blue-800 to-[#010336]">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
                         <div className="flex">
