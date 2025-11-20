@@ -172,7 +172,7 @@ export default function ArtilcleList() {
             <Head title="Publications" />
             <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100">
                 {/* Hero Header */}
-                <div className="relative overflow-hidden bg-gradient-to-r from-orange-600 via-orange-500 to-orange-600">
+                <div className="relative overflow-hidden bg-gradient-to-r from-blue-800 via-blue-700 to-blue-800">
                     <div className="absolute inset-0 opacity-10">
                         <div
                             className="absolute inset-0"
