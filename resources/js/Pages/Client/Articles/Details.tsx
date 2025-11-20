@@ -427,7 +427,7 @@ export default function ReporterProfile() {
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="mb-12">
                             <h2 className="mb-2 text-3xl font-bold text-gray-900">
-                                More from {article.name}
+                                More from {article.name} ({article.username})
                             </h2>
                             <p className="text-gray-600">
                                 Continue exploring related stories

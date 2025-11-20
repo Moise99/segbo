@@ -175,7 +175,7 @@ class FindController extends Controller
         return Inertia::render('Client/Reporters/Details', [
             'reporter' => $reporter,
             'elements' => $elements,
-            'initialEmail' => $cookieEmail ?? '',
+            'initialEmail' => $cookieEmail ?? '', 
             'isSubscribed' => $isSubscribed,
         ]);
     }
