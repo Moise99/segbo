@@ -32,8 +32,8 @@ class ElementController extends Controller
         ]);
     }
 
-     public function store(Request $request): RedirectResponse
-     {
+    public function store(Request $request): RedirectResponse
+    {
 
         $validatedData = $request->validate([
             'link' => [
@@ -60,7 +60,7 @@ class ElementController extends Controller
             // save the path
             $validatedData['cover'] = $path;
 
-            Element::create([
+            $element = Element::create([
                 'link' => $validatedData['link'],
                 'cover' => $validatedData['cover'],
                 'title' => $validatedData['title'],
@@ -69,8 +69,15 @@ class ElementController extends Controller
                 'categorie_id' => $validatedData['category'],
                 'user_id' => Auth::user()->id,
             ]);
+
+            // create element view counter
+            DB::table('velements')->insert([
+                'element_id' => $element->id,
+                'viewers' => 0,
+            ]);
+
         } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Error' . "-------- " . now() /*. $e->getMessage()*/);
+            return redirect()->back()->with('error', 'Error' . "-------- " . now() /*. $e->getMessage()*/);
         }
 
         return redirect()->route('element.list')->with('success', 'Element save with success.' . "---- " . now());

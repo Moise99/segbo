@@ -46,6 +46,9 @@ type Reporter = {
     linkedin: string | null;
     facebook: string | null;
     website: string | null;
+    total_subs: number;
+    total_viewers: number;
+    total_publi: number;
     categories: Category[];
 };
 
@@ -69,14 +72,6 @@ export default function ReporterProfile() {
         : false;
 
     const [searchTerm, setSearchTerm] = useState('');
-
-    // Calculate stats
-    const totalPublications = reporter.categories.reduce(
-        (sum, cat) => sum + cat.pub_count,
-        0,
-    );
-    const totalViews = '2.4M';
-    const followers = '12.5K';
 
     // Filter publications
     const filteredElements = useMemo(() => {
@@ -165,7 +160,7 @@ export default function ReporterProfile() {
                                         <div className="mb-6 grid grid-cols-3 gap-4 rounded-2xl bg-gradient-to-br from-orange-50 to-orange-100/50 p-4">
                                             <div className="text-center">
                                                 <div className="text-2xl font-bold text-gray-900">
-                                                    {totalPublications}
+                                                    {reporter.total_publi}
                                                 </div>
                                                 <div className="text-xs text-gray-600">
                                                     Articles
@@ -173,7 +168,7 @@ export default function ReporterProfile() {
                                             </div>
                                             <div className="border-x border-orange-200 text-center">
                                                 <div className="text-2xl font-bold text-gray-900">
-                                                    {totalViews}
+                                                    {reporter.total_viewers}
                                                 </div>
                                                 <div className="text-xs text-gray-600">
                                                     Views
@@ -181,7 +176,7 @@ export default function ReporterProfile() {
                                             </div>
                                             <div className="text-center">
                                                 <div className="text-2xl font-bold text-gray-900">
-                                                    {followers}
+                                                    {reporter.total_subs}
                                                 </div>
                                                 <div className="text-xs text-gray-600">
                                                     Followers

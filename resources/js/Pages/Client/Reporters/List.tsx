@@ -25,6 +25,7 @@ type Reporter = {
     username: string;
     photo: string;
     categories: Category[];
+    total_publi: number;
 };
 
 interface Props extends PageProps {
@@ -65,11 +66,6 @@ export default function Reporters() {
     const handleSearch = (value: string) => {
         setSearchTerm(value);
         setCurrentPage(1);
-    };
-
-    // Get total publications count
-    const getTotalPubs = (reporter: (typeof reporters)[0]) => {
-        return reporter.categories.reduce((sum, cat) => sum + cat.count, 0);
     };
 
     return (
@@ -204,9 +200,9 @@ export default function Reporters() {
                                                         <div className="flex items-center gap-1 text-white">
                                                             <TrendingUp className="h-3.5 w-3.5" />
                                                             <span className="text-xs font-bold">
-                                                                {getTotalPubs(
-                                                                    reporter,
-                                                                )}
+                                                                {
+                                                                    reporter.total_publi
+                                                                }
                                                             </span>
                                                         </div>
                                                     </div>
@@ -240,7 +236,17 @@ export default function Reporters() {
 
                                                 {/* Action Button */}
                                                 <button className="w-full rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/30 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-orange-500/40">
-                                                    View Profile
+                                                    <a
+                                                        href={route(
+                                                            'find.more',
+                                                            {
+                                                                username:
+                                                                    reporter.username,
+                                                            },
+                                                        )}
+                                                    >
+                                                        View Profile
+                                                    </a>
                                                 </button>
                                             </div>
                                         </div>
@@ -266,9 +272,9 @@ export default function Reporters() {
                                                         <div className="flex items-center gap-1 text-white">
                                                             <TrendingUp className="h-3.5 w-3.5" />
                                                             <span className="text-xs font-bold">
-                                                                {getTotalPubs(
-                                                                    reporter,
-                                                                )}
+                                                                {
+                                                                    reporter.total_publi
+                                                                }
                                                             </span>
                                                         </div>
                                                     </div>

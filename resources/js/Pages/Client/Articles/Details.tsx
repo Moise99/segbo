@@ -10,6 +10,7 @@ import {
     Eye,
     Link2,
     Share2,
+    TrendingUp,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -24,6 +25,7 @@ interface Element {
     et_name: string;
     cover: string;
     name: string;
+    username: string;
 }
 
 type Article = {
@@ -37,6 +39,9 @@ type Article = {
     username: string;
     photo: string;
     cover: string;
+    viewers: number;
+    totalViewers: number;
+    totalArticles: number;
 };
 
 // Define the component's props, expecting a single reporter object
@@ -328,7 +333,7 @@ export default function ReporterProfile() {
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Eye className="h-4 w-4" />
-                                    <span>2.4K views</span>
+                                    <span>{article.viewers} views</span>
                                 </div>
                             </div>
                         </div>
@@ -395,16 +400,21 @@ export default function ReporterProfile() {
                                                 </a>
                                             </Button>
                                         </div>
-                                        {/* <div className="flex items-center gap-6 text-sm text-gray-600">
+                                        <div className="flex items-center gap-6 text-sm text-gray-600">
                                             <div className="flex items-center gap-2">
                                                 <TrendingUp className="h-4 w-4" />
-                                                <span>156 articles</span>
+                                                <span>
+                                                    {article.totalArticles}{' '}
+                                                    articles
+                                                </span>
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <Eye className="h-4 w-4" />
-                                                <span>2.4M views</span>
+                                                <span>
+                                                    {article.totalViewers} views
+                                                </span>
                                             </div>
-                                        </div> */}
+                                        </div>
                                     </div>
                                 </div>
                             </CardContent>

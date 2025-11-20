@@ -39,6 +39,7 @@ interface Element {
     username: string;
     name: string;
     photo: string;
+    viewers: number;
 }
 
 interface FlashMessages {
@@ -349,7 +350,8 @@ export default function ArtilcleList() {
 
                                                 {/* Type Badge */}
                                                 <div className="absolute left-4 top-4 rounded-full bg-orange-600 px-3 py-1 text-xs font-bold text-white">
-                                                    {element.et_name}
+                                                    {element.et_name} -{' '}
+                                                    {element.viewers} views
                                                 </div>
                                             </div>
 

@@ -49,10 +49,10 @@ class FindController extends Controller
                 'name' => $user->name,
                 'username' => $user->username,
                 'photo' => $user->photo,
+                'total_publi' => $userCategories->sum('publications_count'),
                 'categories' => $userCategories->take(3)->map(function($cat) {
                     return [
                         'name' => $cat->cat_name,
-                        'count' => $cat->publications_count
                     ];
                 })->toArray()
             ];
@@ -91,6 +91,30 @@ class FindController extends Controller
             ->take(3)
             ->get();
 
+        // total publications
+        $totalPublications = DB::table('elements')
+                            ->where('user_id', $reporterDetails->id)
+                            ->where('etate', 1)
+                            ->count();
+        // Total viewers of all articles by the reporter
+        $totalViewers = DB::table('elements')
+                            ->join('velements', 'elements.id', '=', 'velements.element_id')
+                            ->where('elements.user_id', $reporterDetails->id)
+                            ->where('elements.etate', 1)
+                            ->sum('velements.viewers');
+        // total subscribers
+        $totalSubscribers = DB::table('subscribers')
+                            ->where('user_id', $reporterDetails->id)
+                            ->where('is_active', true)
+                            ->count();
+
+        // add total subscribers to reporter details
+        $reporterDetails->total_subs = $totalSubscribers;
+        // add total viewers to reporter details
+        $reporterDetails->total_viewers = $totalViewers;
+        // add total publications to reporter details
+        $reporterDetails->total_publi = $totalPublications;
+
         // Combine the details and the categories into a single, clean object.
         $reporter = (object) [
             'name' => $reporterDetails->name,
@@ -102,6 +126,9 @@ class FindController extends Controller
             'facebook' => $reporterDetails->facebook,
             'x' => $reporterDetails->x,
             'website' => $reporterDetails->website,
+            'total_subs' => $reporterDetails->total_subs,
+            'total_viewers' => $reporterDetails->total_viewers,
+            'total_publi' => $reporterDetails->total_publi,
             'categories' => $topCategories->toArray(), // Convert the collection to a simple array
         ];
 
@@ -125,6 +152,8 @@ class FindController extends Controller
                         return $element;
                     });
 
+
+        // For subscription status
         $initialEmail = Cookie::get("subscriber_{$username}");
         $isSubscribed = false;
 
@@ -140,7 +169,11 @@ class FindController extends Controller
                                 ->pluck('email')
                                 ->toArray();
 
-
+        // register viewer
+        DB::table('vusers')->updateOrInsert(
+            ['user_id' => $reporterDetails->id],
+            ['viewers' => DB::raw('viewers + 1')]
+        );
 
         return Inertia::render('Client/Reporters/Details', [
             'reporter' => $reporter,
@@ -158,9 +191,10 @@ class FindController extends Controller
                     ->join('users', 'elements.user_id', '=', 'users.id')
                     ->join('categories', 'elements.categorie_id', '=', 'categories.id')
                     ->join('acdetails', 'users.id', '=', 'acdetails.user_id')
+                    ->join('velements', 'elements.id', '=', 'velements.element_id')
                     ->where('users.etatu', 1)
                     ->where('elements.etate', 1)
-                    ->select('elements.*', 'elementypes.et_name', 'cat_name', 'acdetails.photo', 'users.name', 'users.username')
+                    ->select('elements.*', 'elementypes.et_name', 'cat_name', 'acdetails.photo', 'users.name', 'users.username', 'velements.viewers')
                     ->orderBy('elements.id', 'desc')
                     ->get()
                     ->map(function ($element) {
@@ -187,10 +221,11 @@ class FindController extends Controller
                     ->join('users', 'elements.user_id', '=', 'users.id')
                     ->join('categories', 'elements.categorie_id', '=', 'categories.id')
                     ->join('acdetails', 'users.id', '=', 'acdetails.user_id')
+                    ->join('velements', 'elements.id', '=', 'velements.element_id')
                     ->where('elements.id', $id)
                     ->where('users.etatu', 1)
                     ->where('elements.etate', 1)
-                    ->select('elements.*', 'elementypes.et_name', 'cat_name', 'acdetails.photo', 'users.name', 'users.username')
+                    ->select('elements.*', 'elementypes.et_name', 'cat_name', 'acdetails.photo', 'users.name', 'users.username', 'velements.viewers')
                     ->get()
                     ->map(function ($element) {
                         // Encrypt the original ID and add it to the collection
@@ -212,7 +247,7 @@ class FindController extends Controller
                     ->where('elements.id', '!=', $article->id)
                     ->where('users.etatu', 1)
                     ->where('elements.etate', 1)
-                    ->select('elements.*', 'elementypes.et_name', 'cat_name')
+                    ->select('elements.*', 'elementypes.et_name', 'cat_name','users.username')
                     ->orderBy('elements.id', 'desc')
                     ->get()
                     ->map(function ($element) {
@@ -223,6 +258,26 @@ class FindController extends Controller
                         : asset('images/logo.png');
                         return $element;
                     });
+        // to register viewer
+        DB::table('velements')->updateOrInsert(
+            ['element_id' => $article->id],
+            ['viewers' => DB::raw('viewers + 1')]
+        );
+
+        // total article of the reporter
+        $totalArticles = DB::table('elements')
+                        ->where('user_id', $article->user_id)
+                        ->where('etate', 1)
+                        ->count();
+        // total viewer of the all article of the reporter
+        $totalViewers = DB::table('elements')
+                        ->join('velements', 'elements.id', '=', 'velements.element_id')
+                        ->where('elements.user_id', $article->user_id)
+                        ->where('elements.etate', 1)
+                        ->sum('velements.viewers');
+        // add to article object
+        $article->totalViewers = $totalViewers;
+        $article->totalArticles = $totalArticles;
         return Inertia::render('Client/Articles/Details', [
             'elements' => $elements,
             'article' => $article,

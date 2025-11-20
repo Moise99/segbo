@@ -375,7 +375,14 @@ export default function Welcome() {
 
                                         {/* Button */}
                                         <button className="w-full rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/30 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-orange-500/40">
-                                            View Profile
+                                            <a
+                                                href={route('find.more', {
+                                                    username: reporter.username,
+                                                })}
+                                                className="flex items-center gap-3"
+                                            >
+                                                View Profile
+                                            </a>
                                         </button>
                                     </div>
                                 </div>
