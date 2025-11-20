@@ -8,6 +8,7 @@ use App\Http\Controllers\ElementController;
 use App\Http\Controllers\FindController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\SubscriberController;
+use App\Http\Controllers\DashboardController;
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -42,9 +43,7 @@ Route::post('/reporters/{username}/unsubscribe', [SubscriberController::class, '
 Route::get('/reporters/{username}/subscription-status', [SubscriberController::class, 'status'])->name('reporters.subscription.status');
 
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'stats'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth', 'verified')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

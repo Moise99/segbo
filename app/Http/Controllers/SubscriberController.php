@@ -34,11 +34,16 @@ class SubscriberController extends Controller
             ]
         );
 
-        Cookie::queue("subscriber_{$username}", $data['email'], 60 * 24 * 365);
+        // Paramètres : nom, valeur, minutes
+        $cookie = Cookie::make(
+            "subscriber_{$username}",
+            $data['email'],
+            60 * 24 * 365 // 1 an
+        );
 
 
 
-        return redirect()->back()->with('success', 'You have been successfully subscribed!');
+        return redirect()->back()->with('success', 'You have been successfully subscribed!')->withCookie($cookie);
     }
 
     public function unsubscribe(Request $request, $username)
@@ -54,8 +59,10 @@ class SubscriberController extends Controller
             ['user_id', $user->id]
         ])->update(['is_active' => false]);
 
-        Cookie::queue(Cookie::forget("subscriber_{$username}"));
+        $cookie = Cookie::forget("subscriber_{$username}");
 
-        return redirect()->back()->with('success', 'You have been unsubscribed.');
+        return redirect()->back()
+            ->with('success', 'Unsubscribed.')
+            ->withCookie($cookie);
     }
 }

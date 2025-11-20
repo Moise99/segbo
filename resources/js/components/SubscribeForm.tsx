@@ -37,7 +37,7 @@ export default function SubscribeForm({
                 onSuccess: () => {
                     setSubscribed(true);
                     // Cookie creation to remember subscription
-                    document.cookie = `subscriber_${username}=${encodeURIComponent(email)}; max-age=${60 * 60 * 24 * 365}; path=/`;
+                    //document.cookie = `subscriber_${username}=${encodeURIComponent(email)}; max-age=${60 * 60 * 24 * 365}; path=/`;
                 },
                 onFinish: () => setLoading(false),
             },
@@ -54,7 +54,7 @@ export default function SubscribeForm({
                 onSuccess: () => {
                     setSubscribed(false);
                     // delete the subscription cookie
-                    document.cookie = `subscriber_${username}=; max-age=0; path=/`;
+                    //document.cookie = `subscriber_${username}=; max-age=0; path=/`;
                     setEmail('');
                 },
                 onFinish: () => setLoading(false),

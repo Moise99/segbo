@@ -17,7 +17,8 @@ import {
     Search,
     Star,
 } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 // Interface Element
 interface Element {
@@ -61,16 +62,27 @@ interface Props extends PageProps {
     reporter: Reporter;
     elements: Element[];
     flash: FlashMessages;
-    activeSubscribers: string[];
+    initialEmail: string;
+    isSubscribed: boolean;
 }
 
 export default function ReporterProfile() {
-    const { reporter, elements, activeSubscribers } = usePage<Props>().props;
-    const storedEmail = localStorage.getItem(`subscriber_${reporter.username}`);
-    const isSubscribedInitial = storedEmail
-        ? activeSubscribers.includes(storedEmail)
-        : false;
+    const {
+        reporter,
+        elements,
+        initialEmail,
+        isSubscribed,
+        flash = {},
+    } = usePage<Props>().props;
 
+    useEffect(() => {
+        if (flash.error) {
+            toast.error(flash.error);
+        }
+        if (flash.success) {
+            toast.success(flash.success);
+        }
+    }, [flash.error, flash.success]);
     const [searchTerm, setSearchTerm] = useState('');
 
     // Filter publications
@@ -97,6 +109,16 @@ export default function ReporterProfile() {
         <GuestLayout>
             <Head title={reporter.name} />
             <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50/20 to-slate-100">
+                <Toaster
+                    position="top-center"
+                    reverseOrder={false}
+                    gutter={8}
+                    containerClassName=""
+                    containerStyle={{}}
+                    toastOptions={{
+                        duration: 5000,
+                    }}
+                />
                 {/* Hero Section with Cover */}
                 <div className="relative h-80 overflow-hidden bg-gradient-to-br from-orange-600 via-orange-500 to-orange-600">
                     <div className="absolute inset-0 opacity-20">
@@ -311,12 +333,12 @@ export default function ReporterProfile() {
                                         {/* Subscribe Section */}
                                         <div className="border-t border-gray-200 pt-6">
                                             <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-900">
-                                                {isSubscribedInitial ? (
+                                                {isSubscribed ? (
                                                     <BellOff className="h-4 w-4" />
                                                 ) : (
                                                     <Bell className="h-4 w-4" />
                                                 )}
-                                                {isSubscribedInitial
+                                                {isSubscribed
                                                     ? 'Subscribed'
                                                     : 'Get Updates'}
                                             </h3>
@@ -324,11 +346,9 @@ export default function ReporterProfile() {
                                                 <SubscribeForm
                                                     username={reporter.username}
                                                     initialEmail={
-                                                        storedEmail || ''
+                                                        initialEmail || ''
                                                     }
-                                                    isSubscribed={
-                                                        isSubscribedInitial
-                                                    }
+                                                    isSubscribed={isSubscribed}
                                                 />
                                             </div>
                                         </div>

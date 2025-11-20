@@ -63,7 +63,7 @@ class FindController extends Controller
         ]);
     }
 
-    public function findReporterDetails($username)
+    public function findReporterDetails($username, Request $request)
     {
         // Find the single reporter's basic details first.
         // Use firstOrFail() to automatically handle cases where the user doesn't exist.
@@ -154,20 +154,17 @@ class FindController extends Controller
 
 
         // For subscription status
-        $initialEmail = Cookie::get("subscriber_{$username}");
+        $cookieEmail = $request->cookie("subscriber_{$username}");
         $isSubscribed = false;
 
-        if ($initialEmail) {
-            $subscriber = Subscriber::where('user_id', $reporterDetails->id)
-                                    ->where('email', $initialEmail)
-                                    ->first();
-            $isSubscribed = $subscriber ? $subscriber->is_active : false;
+        if ($cookieEmail) {
+            // verify if email is active in bd
+            $isSubscribed = DB::table('subscribers')
+                ->where('user_id', $reporterDetails->id)
+                ->where('email', $cookieEmail)
+                ->where('is_active', true)
+                ->exists();
         }
-
-        $activeSubscribers = Subscriber::where('user_id', $reporterDetails->id)
-                                ->where('is_active', true)
-                                ->pluck('email')
-                                ->toArray();
 
         // register viewer
         DB::table('vusers')->updateOrInsert(
@@ -178,9 +175,8 @@ class FindController extends Controller
         return Inertia::render('Client/Reporters/Details', [
             'reporter' => $reporter,
             'elements' => $elements,
-            'initialEmail' => $initialEmail,
+            'initialEmail' => $cookieEmail ?? '',
             'isSubscribed' => $isSubscribed,
-            'activeSubscribers' => $activeSubscribers,
         ]);
     }
 
