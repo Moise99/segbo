@@ -16,6 +16,7 @@ import GuestLayout from '@/Layouts/GuestLayout';
 import { cn } from '@/lib/utils'; // Assurez-vous d'avoir l'utilitaire cn (clsx + tailwind-merge)
 import { PageProps } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
+import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import {
     Calendar,
     ChevronLeft,
@@ -128,11 +129,15 @@ const ArticleCard = ({ element }: ArticleCardProps) => (
                     href={route('find.more', { username: element.username })}
                     className="flex items-center gap-2"
                 >
-                    <img
-                        src={element.photo}
-                        alt={element.name}
-                        className="h-7 w-7 rounded-full object-cover"
-                    />
+                    <Avatar className="h-7 w-7 rounded-full">
+                        <AvatarImage
+                            src={element.photo}
+                            className="object-cover"
+                        />
+                        <AvatarFallback>
+                            {element.name.charAt(0)}
+                        </AvatarFallback>
+                    </Avatar>
                     <div className="min-w-0">
                         <p className="truncate text-sm font-medium text-gray-900">
                             {element.name}
@@ -222,11 +227,15 @@ const ArticleListItem = ({ element }: ArticleCardProps) => (
                             })}
                             className="flex items-center gap-3 transition-opacity hover:opacity-80"
                         >
-                            <img
-                                src={element.photo}
-                                alt={element.name}
-                                className="h-10 w-10 rounded-full object-cover"
-                            />
+                            <Avatar className="h-7 w-7 rounded-full">
+                                <AvatarImage
+                                    src={element.photo}
+                                    className="object-cover"
+                                />
+                                <AvatarFallback>
+                                    {element.name.charAt(0)}
+                                </AvatarFallback>
+                            </Avatar>
                             <div>
                                 <p className="text-sm font-medium text-gray-900">
                                     {element.name}
