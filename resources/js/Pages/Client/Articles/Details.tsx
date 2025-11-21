@@ -1,3 +1,4 @@
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import GuestLayout from '@/Layouts/GuestLayout';
@@ -308,11 +309,15 @@ export default function ReporterProfile() {
                         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                             {/* Author Info */}
                             <div className="flex items-center gap-4">
-                                <img
-                                    src={article.photo}
-                                    alt={article.name}
-                                    className="h-14 w-14 rounded-full object-cover ring-4 ring-orange-50"
-                                />
+                                <Avatar className="h-24 w-24 flex-shrink-0 rounded-2xl">
+                                    <AvatarImage
+                                        src={article.photo}
+                                        className="object-cover"
+                                    />
+                                    <AvatarFallback className="bg-orange-100 text-3xl font-bold text-orange-600">
+                                        {article.name.charAt(0).toUpperCase()}
+                                    </AvatarFallback>
+                                </Avatar>
                                 <div>
                                     <h3 className="text-lg font-bold text-gray-900">
                                         {article.name}
@@ -371,11 +376,17 @@ export default function ReporterProfile() {
                         <Card className="overflow-hidden rounded-3xl border-2 border-gray-200">
                             <CardContent className="p-8">
                                 <div className="flex items-start gap-6">
-                                    <img
-                                        src={article.photo}
-                                        alt={article.name}
-                                        className="h-24 w-24 flex-shrink-0 rounded-2xl object-cover"
-                                    />
+                                    <Avatar className="h-24 w-24 flex-shrink-0 rounded-2xl">
+                                        <AvatarImage
+                                            src={article.photo}
+                                            className="object-cover"
+                                        />
+                                        <AvatarFallback className="bg-orange-100 text-3xl font-bold text-orange-600">
+                                            {article.name
+                                                .charAt(0)
+                                                .toUpperCase()}
+                                        </AvatarFallback>
+                                    </Avatar>
                                     <div className="flex-1">
                                         <div className="mb-4 flex items-start justify-between">
                                             <div>
