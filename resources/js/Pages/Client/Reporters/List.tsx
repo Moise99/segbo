@@ -1,20 +1,23 @@
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from '@/components/ui/pagination';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { PageProps } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
-import {
-    Award,
-    ChevronLeft,
-    ChevronRight,
-    Grid3x3,
-    List,
-    Search,
-    TrendingUp,
-} from 'lucide-react';
+import { Award, Grid3x3, List, Search, TrendingUp } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
-// Type definitions for the data
+// --- TYPES ---
 type Category = {
     name: string;
     count: number;
@@ -39,32 +42,26 @@ export default function Reporters() {
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     const itemsPerPage = 4;
 
-    // Filter logic
+    // --- LOGIC: FILTER & PAGINATION ---
     const filteredReporters = useMemo(() => {
         if (!searchTerm) return reporters;
-
-        const lowercased = searchTerm.toLowerCase();
-        return reporters.filter((reporter) => {
-            const nameMatch = reporter.name.toLowerCase().includes(lowercased);
-            const usernameMatch = reporter.username
-                .toLowerCase()
-                .includes(lowercased);
-            const categoryMatch = reporter.categories.some((cat) =>
-                cat.name.toLowerCase().includes(lowercased),
-            );
-            return nameMatch || usernameMatch || categoryMatch;
-        });
+        const lower = searchTerm.toLowerCase();
+        return reporters.filter(
+            (r) =>
+                r.name.toLowerCase().includes(lower) ||
+                r.username.toLowerCase().includes(lower) ||
+                r.categories.some((c) => c.name.toLowerCase().includes(lower)),
+        );
     }, [reporters, searchTerm]);
 
-    // Pagination logic
     const totalPages = Math.ceil(filteredReporters.length / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentReporters = filteredReporters.slice(startIndex, endIndex);
+    const currentReporters = filteredReporters.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage,
+    );
 
-    // Reset to page 1 when search changes
-    const handleSearch = (value: string) => {
-        setSearchTerm(value);
+    const handleSearch = (val: string) => {
+        setSearchTerm(val);
         setCurrentPage(1);
     };
 
@@ -72,350 +69,350 @@ export default function Reporters() {
         <GuestLayout>
             <Head title="Reporters" />
             <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50/30 to-slate-100">
-                {/* Hero Header */}
+                {/* 1. HERO HEADER */}
                 <div className="relative overflow-hidden bg-gradient-to-r from-orange-600 via-orange-500 to-orange-600">
-                    <div className="absolute inset-0 opacity-10">
-                        <div
-                            className="absolute inset-0"
-                            style={{
-                                backgroundImage:
-                                    'radial-gradient(circle, #fff 1px, transparent 1px)',
-                                backgroundSize: '40px 40px',
-                            }}
-                        />
-                    </div>
+                    <div
+                        className="absolute inset-0 opacity-10"
+                        style={{
+                            backgroundImage:
+                                'radial-gradient(circle, #fff 1px, transparent 1px)',
+                            backgroundSize: '40px 40px',
+                        }}
+                    />
 
-                    <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-                        <div className="text-center">
-                            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 backdrop-blur-sm">
-                                <Award className="h-4 w-4 text-white" />
-                                <span className="text-sm font-medium text-white">
-                                    {reporters.length} Expert Journalists
-                                </span>
-                            </div>
+                    <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 text-center sm:px-6 lg:px-8">
+                        <Badge
+                            variant="secondary"
+                            className="mb-6 bg-white/20 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm hover:bg-white/30"
+                        >
+                            <Award className="mr-2 h-4 w-4" />
+                            {reporters.length} Expert Journalists
+                        </Badge>
 
-                            <h1 className="mb-4 text-4xl font-bold text-white sm:text-5xl lg:text-6xl">
-                                Meet Our Segbons
-                            </h1>
-                            <p className="mx-auto max-w-2xl text-xl text-orange-100">
-                                Discover talented storytellers and their areas
-                                of expertise
-                            </p>
-                        </div>
+                        <h1 className="mb-4 text-4xl font-bold text-white sm:text-5xl lg:text-6xl">
+                            Meet Our Segbons
+                        </h1>
+                        <p className="mx-auto max-w-2xl text-xl text-orange-100">
+                            Discover talented storytellers and their areas of
+                            expertise.
+                        </p>
                     </div>
                 </div>
 
-                {/* Search and Filter Section */}
+                {/* 2. SEARCH BAR SECTION */}
                 <div className="relative z-20 mx-auto -mt-8 max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-2xl">
-                        <div className="flex flex-col items-center gap-4 lg:flex-row">
-                            {/* Search Bar */}
-                            <div className="relative w-full flex-1">
-                                <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-                                <Input
-                                    type="text"
-                                    placeholder="Search by name, username, or expertise..."
-                                    value={searchTerm}
-                                    onChange={(e) =>
-                                        handleSearch(e.target.value)
-                                    }
-                                    className="rounded-2xl border-2 border-gray-200 py-6 pl-12 pr-4 text-lg transition-colors focus:border-orange-500"
-                                />
+                    <Card className="rounded-3xl border-gray-100 shadow-2xl">
+                        <CardContent className="p-6">
+                            <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
+                                <div className="relative flex-1">
+                                    <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                                    <Input
+                                        type="text"
+                                        placeholder="Search by name, username, or expertise..."
+                                        value={searchTerm}
+                                        onChange={(e) =>
+                                            handleSearch(e.target.value)
+                                        }
+                                        className="h-auto rounded-2xl border-2 border-gray-200 py-4 pl-12 pr-4 text-lg transition-colors focus-visible:border-orange-500 focus-visible:ring-0"
+                                    />
+                                </div>
+                                <div className="flex items-center gap-2 rounded-2xl bg-gray-100 p-1">
+                                    <Button
+                                        variant={
+                                            viewMode === 'grid'
+                                                ? 'default'
+                                                : 'ghost'
+                                        }
+                                        size="sm"
+                                        onClick={() => setViewMode('grid')}
+                                        className={`rounded-xl ${viewMode === 'grid' ? 'bg-orange-600 hover:bg-orange-700' : 'text-gray-600 hover:text-gray-900'}`}
+                                    >
+                                        <Grid3x3 className="h-4 w-4" />
+                                    </Button>
+                                    <Button
+                                        variant={
+                                            viewMode === 'list'
+                                                ? 'default'
+                                                : 'ghost'
+                                        }
+                                        size="sm"
+                                        onClick={() => setViewMode('list')}
+                                        className={`rounded-xl ${viewMode === 'list' ? 'bg-orange-600 hover:bg-orange-700' : 'text-gray-600 hover:text-gray-900'}`}
+                                    >
+                                        <List className="h-4 w-4" />
+                                    </Button>
+                                </div>
                             </div>
-
-                            {/* View Toggle */}
-                            <div className="flex items-center gap-2 rounded-2xl bg-gray-100 p-1">
-                                <Button
-                                    variant={
-                                        viewMode === 'grid'
-                                            ? 'default'
-                                            : 'ghost'
-                                    }
-                                    size="sm"
-                                    onClick={() => setViewMode('grid')}
-                                    className={`rounded-xl ${viewMode === 'grid' ? 'bg-orange-600 text-white' : 'text-gray-600'}`}
-                                >
-                                    <Grid3x3 className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                    variant={
-                                        viewMode === 'list'
-                                            ? 'default'
-                                            : 'ghost'
-                                    }
-                                    size="sm"
-                                    onClick={() => setViewMode('list')}
-                                    className={`rounded-xl ${viewMode === 'list' ? 'bg-orange-600 text-white' : 'text-gray-600'}`}
-                                >
-                                    <List className="h-4 w-4" />
-                                </Button>
+                            <div className="mt-4 flex items-center justify-between px-1 text-sm text-gray-500">
+                                <span>
+                                    Showing{' '}
+                                    {currentReporters.length > 0
+                                        ? (currentPage - 1) * itemsPerPage + 1
+                                        : 0}
+                                    -
+                                    {Math.min(
+                                        currentPage * itemsPerPage,
+                                        filteredReporters.length,
+                                    )}{' '}
+                                    of {filteredReporters.length} journalists
+                                </span>
+                                {searchTerm && (
+                                    <button
+                                        onClick={() => handleSearch('')}
+                                        className="text-orange-600 hover:underline"
+                                    >
+                                        Clear search
+                                    </button>
+                                )}
                             </div>
-                        </div>
-
-                        {/* Results count */}
-                        <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
-                            <span>
-                                Showing {startIndex + 1}-
-                                {Math.min(endIndex, filteredReporters.length)}{' '}
-                                of {filteredReporters.length} journalists
-                            </span>
-                            {searchTerm && (
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => handleSearch('')}
-                                    className="text-orange-600 hover:text-orange-700"
-                                >
-                                    Clear search
-                                </Button>
-                            )}
-                        </div>
-                    </div>
+                        </CardContent>
+                    </Card>
                 </div>
 
-                {/* Reporters Grid/List */}
+                {/* 3. REPORTERS GRID */}
                 <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
                     {currentReporters.length > 0 ? (
                         <>
                             {viewMode === 'grid' ? (
+                                // GRILLE EXACTE DEMANDÉE : lg:grid-cols-3
                                 <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                                    {currentReporters.map((reporter, index) => (
-                                        <div
-                                            key={index}
-                                            className="group relative overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
-                                        >
-                                            {/* Card Content */}
-                                            <div className="p-8 text-center">
-                                                {/* Photo - Now Rounded */}
-                                                <div className="relative mx-auto mb-6 h-32 w-32">
-                                                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-400 to-rose-500 opacity-20 blur-xl transition-opacity group-hover:opacity-30"></div>
-                                                    <img
-                                                        src={reporter.photo}
-                                                        alt={reporter.name}
-                                                        className="relative h-full w-full rounded-full object-cover shadow-xl ring-4 ring-white transition-transform duration-500 group-hover:scale-110 group-hover:ring-orange-400"
-                                                    />
-
-                                                    {/* Floating Badge */}
-                                                    <div className="absolute -bottom-2 -right-2 rounded-full bg-gradient-to-br from-orange-500 to-rose-500 p-2.5 shadow-lg">
-                                                        <div className="flex items-center gap-1 text-white">
-                                                            <TrendingUp className="h-3.5 w-3.5" />
-                                                            <span className="text-xs font-bold">
-                                                                {
-                                                                    reporter.total_publi
-                                                                }
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {/* Name & Username */}
-                                                <h3 className="mb-1 text-xl font-bold text-gray-900 transition-colors group-hover:text-orange-600">
-                                                    {reporter.name}
-                                                </h3>
-                                                <p className="mb-6 text-sm font-medium text-gray-500">
-                                                    @{reporter.username}
-                                                </p>
-
-                                                {/* Categories */}
-                                                <div className="mb-6 flex flex-wrap justify-center gap-2">
-                                                    {reporter.categories
-                                                        .slice(0, 3)
-                                                        .map(
-                                                            (cat, catIndex) => (
-                                                                <span
-                                                                    key={
-                                                                        catIndex
-                                                                    }
-                                                                    className="rounded-full border border-orange-100 bg-orange-50 px-4 py-1.5 text-xs font-semibold text-orange-700"
-                                                                >
-                                                                    {cat.name}
-                                                                </span>
-                                                            ),
-                                                        )}
-                                                </div>
-
-                                                {/* Action Button */}
-                                                <button className="w-full rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/30 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-orange-500/40">
-                                                    <a
-                                                        href={route(
-                                                            'find.more',
-                                                            {
-                                                                username:
-                                                                    reporter.username,
-                                                            },
-                                                        )}
-                                                    >
-                                                        View Profile
-                                                    </a>
-                                                </button>
-                                            </div>
-                                        </div>
+                                    {currentReporters.map((reporter, idx) => (
+                                        <ReporterCard
+                                            key={idx}
+                                            reporter={reporter}
+                                        />
                                     ))}
                                 </div>
                             ) : (
                                 <div className="space-y-6">
-                                    {currentReporters.map((reporter, index) => (
-                                        <div
-                                            key={index}
-                                            className="group overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-lg transition-all duration-300 hover:shadow-2xl"
-                                        >
-                                            <div className="flex flex-col items-center gap-8 p-8 sm:flex-row">
-                                                {/* Photo */}
-                                                <div className="relative flex-shrink-0">
-                                                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-400 to-rose-500 opacity-20 blur-xl"></div>
-                                                    <img
-                                                        src={reporter.photo}
-                                                        alt={reporter.name}
-                                                        className="relative h-28 w-28 rounded-full object-cover shadow-xl ring-4 ring-white transition-transform duration-500 group-hover:scale-110 group-hover:ring-orange-400"
-                                                    />
-                                                    <div className="absolute -bottom-2 -right-2 rounded-full bg-gradient-to-br from-orange-500 to-rose-500 p-2.5 shadow-lg">
-                                                        <div className="flex items-center gap-1 text-white">
-                                                            <TrendingUp className="h-3.5 w-3.5" />
-                                                            <span className="text-xs font-bold">
-                                                                {
-                                                                    reporter.total_publi
-                                                                }
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {/* Content */}
-                                                <div className="flex-1 text-center sm:text-left">
-                                                    <h3 className="mb-2 text-2xl font-bold text-gray-900 transition-colors group-hover:text-orange-600">
-                                                        {reporter.name}
-                                                    </h3>
-                                                    <p className="mb-4 font-medium text-gray-500">
-                                                        @{reporter.username}
-                                                    </p>
-
-                                                    <div className="flex flex-wrap justify-center gap-2 sm:justify-start">
-                                                        {reporter.categories.map(
-                                                            (cat, catIndex) => (
-                                                                <span
-                                                                    key={
-                                                                        catIndex
-                                                                    }
-                                                                    className="rounded-full border border-orange-100 bg-orange-50 px-4 py-2 text-sm font-semibold text-orange-700"
-                                                                >
-                                                                    {cat.name} (
-                                                                    {cat.count})
-                                                                </span>
-                                                            ),
-                                                        )}
-                                                    </div>
-                                                </div>
-
-                                                {/* Button */}
-                                                <button className="flex-shrink-0 rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/30 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-orange-500/40">
-                                                    View Profile
-                                                </button>
-                                            </div>
-                                        </div>
+                                    {currentReporters.map((reporter, idx) => (
+                                        <ReporterListItem
+                                            key={idx}
+                                            reporter={reporter}
+                                        />
                                     ))}
                                 </div>
                             )}
 
-                            {/* Pagination */}
+                            {/* 4. PAGINATION SHADCN */}
                             {totalPages > 1 && (
-                                <div className="mt-16 flex flex-col items-center justify-between gap-6 sm:flex-row">
-                                    <div className="text-sm font-medium text-gray-600">
-                                        Page {currentPage} of {totalPages}
-                                    </div>
+                                <div className="mt-16">
+                                    <Pagination>
+                                        <PaginationContent>
+                                            <PaginationItem>
+                                                <PaginationPrevious
+                                                    onClick={() =>
+                                                        setCurrentPage((p) =>
+                                                            Math.max(1, p - 1),
+                                                        )
+                                                    }
+                                                    className={
+                                                        currentPage === 1
+                                                            ? 'pointer-events-none opacity-50'
+                                                            : 'cursor-pointer hover:text-orange-600'
+                                                    }
+                                                />
+                                            </PaginationItem>
 
-                                    <div className="flex items-center gap-3">
-                                        <button
-                                            onClick={() =>
-                                                setCurrentPage(currentPage - 1)
-                                            }
-                                            disabled={currentPage === 1}
-                                            className="rounded-xl border-2 border-gray-200 px-5 py-2.5 text-sm font-medium text-gray-700 transition-all hover:border-orange-500 hover:text-orange-600 disabled:cursor-not-allowed disabled:opacity-40"
-                                        >
-                                            <ChevronLeft className="h-4 w-4" />
-                                        </button>
-
-                                        <div className="flex gap-2">
                                             {Array.from(
                                                 { length: totalPages },
                                                 (_, i) => i + 1,
-                                            ).map((page) => {
-                                                if (
-                                                    page === 1 ||
-                                                    page === totalPages ||
-                                                    (page >= currentPage - 1 &&
-                                                        page <= currentPage + 1)
-                                                ) {
-                                                    return (
-                                                        <button
-                                                            key={page}
-                                                            onClick={() =>
-                                                                setCurrentPage(
-                                                                    page,
-                                                                )
-                                                            }
-                                                            className={`h-11 w-11 rounded-xl text-sm font-semibold transition-all ${
-                                                                page ===
-                                                                currentPage
-                                                                    ? 'bg-gradient-to-br from-orange-500 to-rose-500 text-white shadow-lg shadow-orange-500/30'
-                                                                    : 'border-2 border-gray-200 text-gray-700 hover:border-orange-500 hover:text-orange-600'
-                                                            }`}
-                                                        >
-                                                            {page}
-                                                        </button>
-                                                    );
-                                                } else if (
-                                                    page === currentPage - 2 ||
-                                                    page === currentPage + 2
-                                                ) {
-                                                    return (
-                                                        <span
-                                                            key={page}
-                                                            className="flex items-center px-2 text-gray-400"
-                                                        >
-                                                            ...
-                                                        </span>
-                                                    );
-                                                }
-                                                return null;
-                                            })}
-                                        </div>
+                                            ).map((page) => (
+                                                <PaginationItem key={page}>
+                                                    <PaginationLink
+                                                        isActive={
+                                                            page === currentPage
+                                                        }
+                                                        onClick={() =>
+                                                            setCurrentPage(page)
+                                                        }
+                                                        className={
+                                                            page === currentPage
+                                                                ? 'border-none bg-gradient-to-br from-orange-500 to-rose-500 text-white shadow-lg shadow-orange-500/30 hover:text-white'
+                                                                : 'cursor-pointer hover:border-orange-500 hover:text-orange-600'
+                                                        }
+                                                    >
+                                                        {page}
+                                                    </PaginationLink>
+                                                </PaginationItem>
+                                            ))}
 
-                                        <button
-                                            onClick={() =>
-                                                setCurrentPage(currentPage + 1)
-                                            }
-                                            disabled={
-                                                currentPage === totalPages
-                                            }
-                                            className="rounded-xl border-2 border-gray-200 px-5 py-2.5 text-sm font-medium text-gray-700 transition-all hover:border-orange-500 hover:text-orange-600 disabled:cursor-not-allowed disabled:opacity-40"
-                                        >
-                                            <ChevronRight className="h-4 w-4" />
-                                        </button>
-                                    </div>
+                                            <PaginationItem>
+                                                <PaginationNext
+                                                    onClick={() =>
+                                                        setCurrentPage((p) =>
+                                                            Math.min(
+                                                                totalPages,
+                                                                p + 1,
+                                                            ),
+                                                        )
+                                                    }
+                                                    className={
+                                                        currentPage ===
+                                                        totalPages
+                                                            ? 'pointer-events-none opacity-50'
+                                                            : 'cursor-pointer hover:text-orange-600'
+                                                    }
+                                                />
+                                            </PaginationItem>
+                                        </PaginationContent>
+                                    </Pagination>
                                 </div>
                             )}
                         </>
                     ) : (
+                        // EMPTY STATE
                         <div className="py-20 text-center">
-                            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-orange-100 to-rose-100">
-                                <Search className="h-12 w-12 text-orange-500" />
+                            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-orange-50">
+                                <Search className="h-12 w-12 text-orange-500 opacity-50" />
                             </div>
-                            <h3 className="mb-3 text-3xl font-bold text-gray-900">
+                            <h3 className="text-2xl font-bold text-gray-900">
                                 No reporters found
                             </h3>
-                            <p className="mb-8 text-lg text-gray-600">
-                                Try adjusting your search terms
+                            <p className="mt-2 text-gray-600">
+                                Try adjusting your search terms.
                             </p>
-                            <button
+                            <Button
                                 onClick={() => handleSearch('')}
-                                className="rounded-full bg-gradient-to-r from-orange-500 to-rose-500 px-8 py-3 font-semibold text-white shadow-lg shadow-orange-500/30 transition-all hover:scale-105 hover:shadow-xl hover:shadow-orange-500/40"
+                                className="mt-6 rounded-full bg-orange-600 hover:bg-orange-700"
                             >
-                                Clear search
-                            </button>
+                                Clear filters
+                            </Button>
                         </div>
                     )}
                 </div>
             </div>
         </GuestLayout>
+    );
+}
+
+// --- card component (GRID VIEW) ---
+function ReporterCard({ reporter }: { reporter: Reporter }) {
+    return (
+        <Card className="group relative overflow-hidden rounded-3xl border-gray-100 bg-white shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
+            <CardContent className="p-8 text-center">
+                {/* Photo Wrapper */}
+                <div className="relative mx-auto mb-6 h-32 w-32">
+                    {/* Glow Effect */}
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-400 to-rose-500 opacity-20 blur-xl transition-opacity group-hover:opacity-30" />
+
+                    {/* Avatar Shadcn */}
+                    <Avatar className="relative h-full w-full rounded-full border-4 border-white shadow-xl transition-transform duration-500 group-hover:scale-110 group-hover:border-orange-400">
+                        <AvatarImage
+                            src={reporter.photo}
+                            alt={reporter.name}
+                            className="object-cover"
+                        />
+                        <AvatarFallback className="bg-orange-100 text-2xl font-bold text-orange-600">
+                            {reporter.name.charAt(0)}
+                        </AvatarFallback>
+                    </Avatar>
+
+                    {/* Floating Stats Badge */}
+                    <div className="absolute -bottom-2 -right-2 rounded-full bg-white p-1 shadow-lg">
+                        <Badge className="flex items-center gap-1 rounded-full border-none bg-gradient-to-br from-orange-500 to-rose-500 px-2 py-0.5 text-[10px] text-white hover:from-orange-600 hover:to-rose-600">
+                            <TrendingUp className="h-3 w-3" />
+                            {reporter.total_publi}
+                        </Badge>
+                    </div>
+                </div>
+
+                {/* Infos */}
+                <h3 className="mb-1 text-xl font-bold text-gray-900 transition-colors group-hover:text-orange-600">
+                    {reporter.name}
+                </h3>
+                <p className="mb-6 text-sm font-medium text-gray-500">
+                    @{reporter.username}
+                </p>
+
+                {/* Categories */}
+                <div className="mb-6 flex flex-wrap justify-center gap-2">
+                    {reporter.categories.slice(0, 3).map((cat, idx) => (
+                        <Badge
+                            key={idx}
+                            variant="outline"
+                            className="border-orange-100 bg-orange-50 px-3 py-1 font-semibold text-orange-700 hover:bg-orange-100"
+                        >
+                            {cat.name}
+                        </Badge>
+                    ))}
+                </div>
+
+                {/* Action */}
+                <Button className="w-full rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 py-6 font-semibold shadow-lg shadow-orange-500/30 transition-all hover:scale-105 hover:shadow-xl hover:shadow-orange-500/40">
+                    <a
+                        href={route('find.more', {
+                            username: reporter.username,
+                        })}
+                    >
+                        View Profile
+                    </a>
+                </Button>
+            </CardContent>
+        </Card>
+    );
+}
+
+// --- COMPOSANT CARTE (LIST VIEW) ---
+function ReporterListItem({ reporter }: { reporter: Reporter }) {
+    return (
+        <Card className="group overflow-hidden rounded-3xl border-gray-100 bg-white shadow-lg transition-all duration-300 hover:shadow-2xl">
+            <div className="flex flex-col items-center gap-8 p-8 sm:flex-row">
+                {/* Photo */}
+                <div className="relative flex-shrink-0">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-400 to-rose-500 opacity-20 blur-xl" />
+                    <Avatar className="relative h-28 w-28 rounded-full border-4 border-white shadow-xl transition-transform duration-500 group-hover:scale-110 group-hover:border-orange-400">
+                        <AvatarImage
+                            src={reporter.photo}
+                            className="object-cover"
+                        />
+                        <AvatarFallback>
+                            {reporter.name.charAt(0)}
+                        </AvatarFallback>
+                    </Avatar>
+                    <div className="absolute -bottom-2 -right-2 rounded-full bg-white p-1 shadow-lg">
+                        <Badge className="flex items-center gap-1 rounded-full border-none bg-gradient-to-br from-orange-500 to-rose-500 px-2 py-0.5 text-[10px] text-white">
+                            <TrendingUp className="h-3 w-3" />
+                            {reporter.total_publi}
+                        </Badge>
+                    </div>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 text-center sm:text-left">
+                    <h3 className="mb-2 text-2xl font-bold text-gray-900 transition-colors group-hover:text-orange-600">
+                        {reporter.name}
+                    </h3>
+                    <p className="mb-4 font-medium text-gray-500">
+                        @{reporter.username}
+                    </p>
+
+                    <div className="flex flex-wrap justify-center gap-2 sm:justify-start">
+                        {reporter.categories.map((cat, idx) => (
+                            <Badge
+                                key={idx}
+                                variant="outline"
+                                className="border-orange-100 bg-orange-50 px-3 py-1 font-semibold text-orange-700"
+                            >
+                                {cat.name}
+                            </Badge>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Button */}
+                <div className="flex-shrink-0">
+                    <Button className="rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 px-8 py-6 font-semibold shadow-lg shadow-orange-500/30 transition-all hover:scale-105 hover:shadow-xl hover:shadow-orange-500/40">
+                        <a
+                            href={route('find.more', {
+                                username: reporter.username,
+                            })}
+                        >
+                            View Profile
+                        </a>
+                    </Button>
+                </div>
+            </div>
+        </Card>
     );
 }

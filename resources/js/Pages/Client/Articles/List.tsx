@@ -1,4 +1,5 @@
 'use client';
+import { Badge } from '@/components/ui/badge'; // NEW: Add Badge for tags
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -9,7 +10,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+// Si vous avez un composant `Sheet` pour les filtres mobiles (RECOMMANDÉ)
+//import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import GuestLayout from '@/Layouts/GuestLayout';
+import { cn } from '@/lib/utils'; // Assurez-vous d'avoir l'utilitaire cn (clsx + tailwind-merge)
 import { PageProps } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import {
@@ -19,7 +23,7 @@ import {
     Eye,
     FileText,
     Grid3x3,
-    List,
+    List, // Renamed 'List' icon import to 'ListIcon' to avoid conflict
     Search,
     SlidersHorizontal,
     Tag,
@@ -27,7 +31,9 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
-// Interface Element
+const ListIcon = List; // Renaming the icon import
+
+// --- Interfaces ---
 interface Element {
     encrypted_id: number;
     title: string;
@@ -47,11 +53,214 @@ interface FlashMessages {
     error?: string;
 }
 
-// Props pour la page
 interface Props extends PageProps {
     elements: Element[];
     flash: FlashMessages;
 }
+
+// --- Utility Functions  ---
+const formatDate = (date: Date) => {
+    return new Intl.DateTimeFormat('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    }).format(new Date(date));
+};
+
+const truncateText = (text: string, maxLength: number) => {
+    const stripped = text.replace(/<[^>]+>/g, '');
+    return stripped.length > maxLength
+        ? stripped.substring(0, maxLength) + '...'
+        : stripped;
+};
+
+// --- Article Card Component (Grid View) ---
+interface ArticleCardProps {
+    element: Element;
+}
+
+const ArticleCard = ({ element }: ArticleCardProps) => (
+    <Card
+        key={element.encrypted_id}
+        className="group transform overflow-hidden rounded-xl border-0 bg-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+    >
+        {/* Cover Image */}
+        <div className="relative h-48 overflow-hidden">
+            <img
+                src={element.cover}
+                alt={element.title}
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            {/* Type Badge (uses shadcn/ui Badge now) */}
+            <Badge className="absolute left-4 top-4 bg-orange-600 px-3 py-1 text-xs font-bold text-white hover:bg-orange-700">
+                {element.et_name}
+            </Badge>
+            <div className="absolute right-4 top-4 flex items-center gap-1 rounded-full bg-black/50 px-2 py-0.5 text-xs font-medium text-white backdrop-blur-sm">
+                <Eye className="h-3 w-3" />
+                <span>{element.viewers}</span>
+            </div>
+        </div>
+
+        {/* Content */}
+        <CardContent className="p-4">
+            {/* Category */}
+            <div className="mb-2 flex items-center gap-2">
+                <Tag className="h-3 w-3 text-blue-600" />{' '}
+                {/* Use blue for category icon */}
+                <span className="text-xs font-medium text-blue-600">
+                    {element.cat_name}
+                </span>
+            </div>
+
+            {/* Title */}
+            <h3 className="mb-2 line-clamp-2 text-lg font-bold text-gray-900 transition-colors group-hover:text-orange-600">
+                {truncateText(element.title, 60)}
+            </h3>
+
+            {/* Description */}
+            <p className="mb-4 line-clamp-2 text-sm text-gray-600">
+                {truncateText(element.desc, 80)}
+            </p>
+
+            {/* Author & Date (Cleaner display) */}
+            <div className="mb-4 flex items-center justify-between border-t border-gray-100 pt-4">
+                <a
+                    href={route('find.more', { username: element.username })}
+                    className="flex items-center gap-2"
+                >
+                    <img
+                        src={element.photo}
+                        alt={element.name}
+                        className="h-7 w-7 rounded-full object-cover"
+                    />
+                    <div className="min-w-0">
+                        <p className="truncate text-sm font-medium text-gray-900">
+                            {element.name}
+                        </p>
+                        <p className="truncate text-xs text-gray-500">
+                            @{element.username}
+                        </p>
+                    </div>
+                </a>
+                <div className="flex items-center gap-1 text-xs text-gray-500">
+                    <Calendar className="h-3 w-3" />
+                    <span>{formatDate(element.updated_at)}</span>
+                </div>
+            </div>
+
+            {/* Action Button (Now uses orange consistently) */}
+            <Button className="w-full rounded-lg bg-orange-600 text-white hover:bg-orange-700">
+                <a
+                    href={route('find.pubmore', {
+                        title: element.encrypted_id,
+                    })}
+                    className="flex items-center gap-2"
+                >
+                    <Eye className="h-4 w-4" />
+                    {element.et_name === 'Video' ? 'Watch now' : 'Read Article'}
+                </a>
+            </Button>
+        </CardContent>
+    </Card>
+);
+
+// --- Article List Item Component (List View) ---
+const ArticleListItem = ({ element }: ArticleCardProps) => (
+    <Card
+        key={element.encrypted_id}
+        className="group overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg transition-all duration-300 hover:shadow-xl"
+    >
+        <CardContent className="p-0">
+            <div className="flex flex-col sm:flex-row">
+                {/* Cover Image */}
+                <div className="relative h-56 w-full flex-shrink-0 overflow-hidden sm:w-80">
+                    <img
+                        src={element.cover}
+                        alt={element.title}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <Badge className="absolute left-4 top-4 bg-orange-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-orange-700">
+                        {element.et_name}
+                    </Badge>
+                </div>
+
+                {/* Content */}
+                <div className="flex flex-1 flex-col justify-between p-6">
+                    <div>
+                        {/* Category & Date */}
+                        <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+                            {/* Category Badge */}
+                            <Badge
+                                variant="secondary"
+                                className="bg-blue-100 text-blue-700 hover:bg-blue-200"
+                            >
+                                <Tag className="mr-2 h-3.5 w-3.5" />
+                                {element.cat_name}
+                            </Badge>
+
+                            {/* Date */}
+                            <div className="flex items-center gap-2 text-sm text-gray-500">
+                                <Calendar className="h-4 w-4" />
+                                <span>{formatDate(element.updated_at)}</span>
+                            </div>
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="mb-3 text-xl font-bold text-gray-900 transition-colors group-hover:text-orange-600 sm:text-2xl">
+                            {element.title}
+                        </h3>
+
+                        {/* Description */}
+                        <p className="mb-4 leading-relaxed text-gray-600">
+                            {truncateText(element.desc, 150)}
+                        </p>
+
+                        {/* Author */}
+                        <a
+                            href={route('find.more', {
+                                username: element.username,
+                            })}
+                            className="flex items-center gap-3 transition-opacity hover:opacity-80"
+                        >
+                            <img
+                                src={element.photo}
+                                alt={element.name}
+                                className="h-10 w-10 rounded-full object-cover"
+                            />
+                            <div>
+                                <p className="text-sm font-medium text-gray-900">
+                                    {element.name}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                    @{element.username}
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+
+                    {/* Action Button (Now uses orange consistently) */}
+                    <div className="mt-6">
+                        <Button className="rounded-lg bg-orange-600 px-8 text-white hover:bg-orange-700">
+                            <a
+                                href={route('find.pubmore', {
+                                    title: element.encrypted_id,
+                                })}
+                                className="flex items-center gap-2"
+                            >
+                                <Eye className="mr-2 h-4 w-4" />
+                                {element.et_name === 'Video'
+                                    ? 'Watch now'
+                                    : 'Read Article'}
+                            </a>
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </CardContent>
+    </Card>
+);
+
+// --- Main Component ---
 
 export default function ArtilcleList() {
     const { elements, flash = {} } = usePage<Props>().props;
@@ -131,7 +340,7 @@ export default function ArtilcleList() {
     const endIndex = startIndex + itemsPerPage;
     const currentElements = filteredElements.slice(startIndex, endIndex);
 
-    // Reset to page 1 when filters change
+    // Handlers
     const handleSearch = (value: string) => {
         setSearchTerm(value);
         setCurrentPage(1);
@@ -152,51 +361,25 @@ export default function ArtilcleList() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const formatDate = (date: Date) => {
-        return new Intl.DateTimeFormat('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-        }).format(new Date(date));
-    };
-
-    const truncateText = (text: string, maxLength: number) => {
-        const stripped = text.replace(/<[^>]+>/g, '');
-        return stripped.length > maxLength
-            ? stripped.substring(0, maxLength) + '...'
-            : stripped;
-    };
-
     return (
         <GuestLayout>
             <Head title="Publications" />
-            <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100">
-                {/* Hero Header */}
-                <div className="relative overflow-hidden bg-gradient-to-r from-blue-800 via-blue-700 to-blue-800">
-                    <div className="absolute inset-0 opacity-10">
-                        <div
-                            className="absolute inset-0"
-                            style={{
-                                backgroundImage:
-                                    'radial-gradient(circle, #fff 1px, transparent 1px)',
-                                backgroundSize: '40px 40px',
-                            }}
-                        />
-                    </div>
-
+            <div className="min-h-screen bg-gray-50">
+                <div className="relative overflow-hidden bg-blue-800">
                     <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
                         <div className="text-center">
-                            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 backdrop-blur-sm">
+                            <Badge
+                                variant="outline"
+                                className="mb-4 inline-flex items-center gap-2 border-white/50 bg-white/20 px-4 py-1 text-sm font-medium text-white backdrop-blur-sm hover:bg-white/30"
+                            >
                                 <FileText className="h-4 w-4 text-white" />
-                                <span className="text-sm font-medium text-white">
-                                    {elements.length} Publications Available
-                                </span>
-                            </div>
+                                {elements.length} Publications Available
+                            </Badge>
 
-                            <h1 className="mb-4 text-4xl font-bold text-white sm:text-5xl lg:text-6xl">
-                                Latest Publications
+                            <h1 className="mb-4 text-4xl font-extrabold text-white sm:text-5xl lg:text-6xl">
+                                Publications
                             </h1>
-                            <p className="mx-auto max-w-2xl text-xl text-orange-100">
+                            <p className="mx-auto max-w-2xl text-xl text-blue-200">
                                 Discover compelling stories from our talented
                                 journalists
                             </p>
@@ -204,11 +387,11 @@ export default function ArtilcleList() {
                     </div>
                 </div>
 
-                {/* Search and Filter Section */}
-                <div className="relative z-20 mx-auto -mt-8 max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-2xl">
-                        {/* Search Bar */}
-                        <div className="mb-4 flex flex-col gap-4 lg:flex-row">
+                {/* Search and Filter Section (Cleaner design) */}
+                <div className="relative z-20 mx-auto -mt-12 max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <Card className="rounded-xl p-6 shadow-2xl">
+                        {/* Search Bar & Toggle */}
+                        <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center">
                             <div className="relative flex-1">
                                 <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                                 <Input
@@ -218,12 +401,12 @@ export default function ArtilcleList() {
                                     onChange={(e) =>
                                         handleSearch(e.target.value)
                                     }
-                                    className="rounded-2xl border-2 border-gray-200 py-6 pl-12 pr-4 text-lg transition-colors focus:border-orange-500"
+                                    className="rounded-lg py-6 pl-12 pr-4 text-base focus:border-blue-500"
                                 />
                             </div>
 
-                            {/* View Toggle */}
-                            <div className="flex items-center gap-2 rounded-2xl bg-gray-100 p-1">
+                            {/* View Toggle (Cleaner classes) */}
+                            <div className="flex items-center gap-2 rounded-lg bg-gray-100 p-1">
                                 <Button
                                     variant={
                                         viewMode === 'grid'
@@ -232,7 +415,12 @@ export default function ArtilcleList() {
                                     }
                                     size="sm"
                                     onClick={() => setViewMode('grid')}
-                                    className={`rounded-xl ${viewMode === 'grid' ? 'bg-orange-600 text-white' : 'text-gray-600'}`}
+                                    className={cn(
+                                        'rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                                        viewMode === 'grid'
+                                            ? 'bg-blue-600 text-white hover:bg-blue-700'
+                                            : 'text-gray-600 hover:bg-gray-200',
+                                    )}
                                 >
                                     <Grid3x3 className="h-4 w-4" />
                                 </Button>
@@ -244,24 +432,29 @@ export default function ArtilcleList() {
                                     }
                                     size="sm"
                                     onClick={() => setViewMode('list')}
-                                    className={`rounded-xl ${viewMode === 'list' ? 'bg-orange-600 text-white' : 'text-gray-600'}`}
+                                    className={cn(
+                                        'rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                                        viewMode === 'list'
+                                            ? 'bg-blue-600 text-white hover:bg-blue-700'
+                                            : 'text-gray-600 hover:bg-gray-200',
+                                    )}
                                 >
-                                    <List className="h-4 w-4" />
+                                    <ListIcon className="h-4 w-4" />
                                 </Button>
                             </div>
                         </div>
 
-                        {/* Filters */}
+                        {/* Filters (Cleaned up Select styles) */}
                         <div className="mb-4 flex flex-col gap-4 sm:flex-row">
                             <div className="flex-1">
                                 <Select
                                     value={filterCategory}
                                     onValueChange={handleCategoryChange}
                                 >
-                                    <SelectTrigger className="rounded-xl border-2">
+                                    <SelectTrigger className="rounded-lg">
                                         <div className="flex items-center gap-2">
-                                            <Tag className="h-4 w-4" />
-                                            <SelectValue placeholder="All Categories" />
+                                            <Tag className="h-4 w-4 text-gray-500" />
+                                            <SelectValue placeholder="Toutes Catégories" />
                                         </div>
                                     </SelectTrigger>
                                     <SelectContent>
@@ -281,10 +474,10 @@ export default function ArtilcleList() {
                                     value={filterType}
                                     onValueChange={handleTypeChange}
                                 >
-                                    <SelectTrigger className="rounded-xl border-2">
+                                    <SelectTrigger className="rounded-lg">
                                         <div className="flex items-center gap-2">
-                                            <SlidersHorizontal className="h-4 w-4" />
-                                            <SelectValue placeholder="All Types" />
+                                            <SlidersHorizontal className="h-4 w-4 text-gray-500" />
+                                            <SelectValue placeholder="Tous Types" />
                                         </div>
                                     </SelectTrigger>
                                     <SelectContent>
@@ -300,7 +493,7 @@ export default function ArtilcleList() {
                             </div>
                         </div>
 
-                        {/* Results count */}
+                        {/* Results count & Clear Filters */}
                         <div className="flex items-center justify-between text-sm text-gray-600">
                             <span>
                                 Showing {startIndex + 1}-
@@ -319,13 +512,13 @@ export default function ArtilcleList() {
                                         setFilterType('all');
                                         setCurrentPage(1);
                                     }}
-                                    className="text-orange-600 hover:text-orange-700"
+                                    className="text-orange-600 hover:bg-orange-50 hover:text-orange-700"
                                 >
-                                    Clear filters
+                                    Clear filter
                                 </Button>
                             )}
                         </div>
-                    </div>
+                    </Card>
                 </div>
 
                 {/* Publications Grid/List */}
@@ -333,227 +526,45 @@ export default function ArtilcleList() {
                     {currentElements.length > 0 ? (
                         <>
                             {viewMode === 'grid' ? (
-                                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                                <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
                                     {currentElements.map((element) => (
-                                        <Card
+                                        <ArticleCard
                                             key={element.encrypted_id}
-                                            className="group transform overflow-hidden rounded-3xl border-0 bg-white shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
-                                        >
-                                            {/* Cover Image */}
-                                            <div className="relative h-48 overflow-hidden">
-                                                <img
-                                                    src={element.cover}
-                                                    alt={element.title}
-                                                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                                />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-
-                                                {/* Type Badge */}
-                                                <div className="absolute left-4 top-4 rounded-full bg-orange-600 px-3 py-1 text-xs font-bold text-white">
-                                                    {element.et_name} -{' '}
-                                                    {element.viewers} views
-                                                </div>
-                                            </div>
-
-                                            {/* Content */}
-                                            <CardContent className="p-5">
-                                                {/* Category */}
-                                                <div className="mb-3 flex items-center gap-2">
-                                                    <Tag className="h-3.5 w-3.5 text-orange-600" />
-                                                    <span className="text-xs font-medium text-orange-600">
-                                                        {element.cat_name}
-                                                    </span>
-                                                </div>
-
-                                                {/* Title */}
-                                                <h3 className="mb-2 line-clamp-2 text-lg font-bold text-gray-900 transition-colors group-hover:text-orange-600">
-                                                    {truncateText(
-                                                        element.title,
-                                                        60,
-                                                    )}
-                                                </h3>
-
-                                                {/* Description */}
-                                                <p className="mb-4 line-clamp-2 text-sm text-gray-600">
-                                                    {truncateText(
-                                                        element.desc,
-                                                        80,
-                                                    )}
-                                                </p>
-
-                                                {/* Author & Date */}
-                                                <div className="mb-4 flex items-center gap-3 border-b border-gray-100 pb-4">
-                                                    <a
-                                                        href={route(
-                                                            'find.more',
-                                                            {
-                                                                username:
-                                                                    element.username,
-                                                            },
-                                                        )}
-                                                        className="flex items-center gap-3"
-                                                    >
-                                                        <img
-                                                            src={element.photo}
-                                                            alt={element.name}
-                                                            className="h-8 w-8 rounded-full object-cover"
-                                                        />
-                                                    </a>
-                                                    <div className="min-w-0 flex-1">
-                                                        <p className="truncate text-sm font-medium text-gray-900">
-                                                            {element.name}
-                                                        </p>
-                                                        <p className="truncate text-sm font-medium text-gray-600">
-                                                            {element.username}
-                                                        </p>
-                                                        <p className="text-xs text-gray-500">
-                                                            {formatDate(
-                                                                element.updated_at,
-                                                            )}
-                                                        </p>
-                                                    </div>
-                                                </div>
-
-                                                {/* Action Button */}
-                                                <Button className="group/btn w-full rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:from-blue-700 hover:to-blue-600">
-                                                    <a
-                                                        href={route(
-                                                            'find.pubmore',
-                                                            {
-                                                                title: element.encrypted_id,
-                                                            },
-                                                        )}
-                                                        className="flex items-center gap-2"
-                                                    >
-                                                        <Eye className="mr-2 h-4 w-4" />
-                                                        Read Article
-                                                    </a>
-                                                </Button>
-                                            </CardContent>
-                                        </Card>
+                                            element={element}
+                                        />
                                     ))}
                                 </div>
                             ) : (
-                                <div className="space-y-4">
+                                <div className="space-y-6">
                                     {currentElements.map((element) => (
-                                        <Card
+                                        <ArticleListItem
                                             key={element.encrypted_id}
-                                            className="group overflow-hidden rounded-3xl border-0 bg-white shadow-lg transition-all duration-300 hover:shadow-2xl"
-                                        >
-                                            <CardContent className="p-0">
-                                                <div className="flex flex-col sm:flex-row">
-                                                    {/* Cover Image */}
-                                                    <div className="relative h-56 w-full flex-shrink-0 overflow-hidden sm:w-80">
-                                                        <img
-                                                            src={element.cover}
-                                                            alt={element.title}
-                                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                                        />
-                                                        <div className="absolute left-4 top-4 rounded-full bg-orange-600 px-3 py-1.5 text-xs font-bold text-white">
-                                                            {element.et_name}
-                                                        </div>
-                                                    </div>
-
-                                                    {/* Content */}
-                                                    <div className="flex flex-1 flex-col justify-between p-6">
-                                                        <div>
-                                                            {/* Category & Date */}
-                                                            <div className="mb-3 flex items-center gap-4">
-                                                                <div className="flex items-center gap-2">
-                                                                    <Tag className="h-4 w-4 text-orange-600" />
-                                                                    <span className="text-sm font-medium text-orange-600">
-                                                                        {
-                                                                            element.cat_name
-                                                                        }
-                                                                    </span>
-                                                                </div>
-                                                                <div className="flex items-center gap-2 text-gray-500">
-                                                                    <Calendar className="h-4 w-4" />
-                                                                    <span className="text-sm">
-                                                                        {formatDate(
-                                                                            element.updated_at,
-                                                                        )}
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-
-                                                            {/* Title */}
-                                                            <h3 className="mb-3 text-2xl font-bold text-gray-900 transition-colors group-hover:text-orange-600">
-                                                                {element.title}
-                                                            </h3>
-
-                                                            {/* Description */}
-                                                            <p className="mb-4 leading-relaxed text-gray-600">
-                                                                {truncateText(
-                                                                    element.desc,
-                                                                    150,
-                                                                )}
-                                                            </p>
-
-                                                            {/* Author */}
-                                                            <div className="flex items-center gap-3">
-                                                                <img
-                                                                    src={
-                                                                        element.photo
-                                                                    }
-                                                                    alt={
-                                                                        element.name
-                                                                    }
-                                                                    className="h-10 w-10 rounded-full object-cover"
-                                                                />
-                                                                <div>
-                                                                    <p className="text-sm font-medium text-gray-900">
-                                                                        {
-                                                                            element.name
-                                                                        }
-                                                                    </p>
-                                                                    <p className="text-xs text-gray-500">
-                                                                        @
-                                                                        {
-                                                                            element.username
-                                                                        }
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        {/* Action Button */}
-                                                        <div className="mt-4">
-                                                            <Button className="group/btn rounded-2xl bg-gradient-to-r from-orange-600 to-orange-500 px-8 text-white hover:from-orange-700 hover:to-orange-600">
-                                                                <Eye className="mr-2 h-4 w-4" />
-                                                                Read Full
-                                                                Article
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </CardContent>
-                                        </Card>
+                                            element={element}
+                                        />
                                     ))}
                                 </div>
                             )}
 
-                            {/* Pagination */}
+                            {/* Pagination (Cleaner style) */}
                             {totalPages > 1 && (
                                 <div className="mt-12 flex flex-col items-center justify-between gap-4 sm:flex-row">
                                     <div className="text-sm text-gray-600">
-                                        Page {currentPage} of {totalPages}
+                                        Page {currentPage} on {totalPages}
                                     </div>
 
                                     <div className="flex items-center gap-2">
                                         <Button
                                             variant="outline"
-                                            size="sm"
+                                            size="icon"
                                             onClick={() =>
                                                 handlePageChange(
                                                     currentPage - 1,
                                                 )
                                             }
                                             disabled={currentPage === 1}
-                                            className="rounded-xl border-2 disabled:opacity-50"
+                                            className="h-10 w-10 rounded-full border-gray-200 disabled:opacity-50"
                                         >
                                             <ChevronLeft className="h-4 w-4" />
-                                            Previous
                                         </Button>
 
                                         <div className="flex gap-1">
@@ -574,32 +585,36 @@ export default function ArtilcleList() {
                                                                 page ===
                                                                 currentPage
                                                                     ? 'default'
-                                                                    : 'outline'
+                                                                    : 'ghost'
                                                             }
-                                                            size="sm"
+                                                            size="icon"
                                                             onClick={() =>
-                                                                setCurrentPage(
+                                                                handlePageChange(
                                                                     page,
                                                                 )
                                                             }
-                                                            className={`h-10 w-10 rounded-xl border-2 ${
+                                                            className={cn(
+                                                                'h-10 w-10 rounded-full text-sm font-medium',
                                                                 page ===
-                                                                currentPage
-                                                                    ? 'border-orange-600 bg-orange-600 text-white'
-                                                                    : 'border-gray-200 hover:border-orange-500'
-                                                            }`}
+                                                                    currentPage
+                                                                    ? 'bg-blue-600 text-white hover:bg-blue-700'
+                                                                    : 'text-gray-700 hover:bg-gray-100',
+                                                            )}
                                                         >
                                                             {page}
                                                         </Button>
                                                     );
                                                 } else if (
-                                                    page === currentPage - 2 ||
-                                                    page === currentPage + 2
+                                                    (page === currentPage - 2 &&
+                                                        currentPage > 3) ||
+                                                    (page === currentPage + 2 &&
+                                                        currentPage <
+                                                            totalPages - 2)
                                                 ) {
                                                     return (
                                                         <span
                                                             key={page}
-                                                            className="flex items-center px-2 text-gray-400"
+                                                            className="flex h-10 w-10 items-center justify-center px-2 text-gray-400"
                                                         >
                                                             ...
                                                         </span>
@@ -611,7 +626,7 @@ export default function ArtilcleList() {
 
                                         <Button
                                             variant="outline"
-                                            size="sm"
+                                            size="icon"
                                             onClick={() =>
                                                 handlePageChange(
                                                     currentPage + 1,
@@ -620,9 +635,8 @@ export default function ArtilcleList() {
                                             disabled={
                                                 currentPage === totalPages
                                             }
-                                            className="rounded-xl border-2 disabled:opacity-50"
+                                            className="h-10 w-10 rounded-full border-gray-200 disabled:opacity-50"
                                         >
-                                            Next
                                             <ChevronRight className="h-4 w-4" />
                                         </Button>
                                     </div>
@@ -630,15 +644,17 @@ export default function ArtilcleList() {
                             )}
                         </>
                     ) : (
+                        // No results state (Uses standard Empty State pattern)
                         <div className="py-20 text-center">
-                            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100">
-                                <Search className="h-10 w-10 text-gray-400" />
+                            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+                                <Search className="h-8 w-8 text-gray-400" />
                             </div>
-                            <h3 className="mb-2 text-2xl font-bold text-gray-900">
-                                No publications found
+                            <h3 className="mb-2 text-2xl font-semibold text-gray-900">
+                                No publication found
                             </h3>
                             <p className="mb-6 text-gray-600">
-                                Try adjusting your filters or search terms
+                                Try adjusting your search or filters to find
+                                what you're looking for.
                             </p>
                             <Button
                                 onClick={() => {
