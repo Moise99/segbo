@@ -7,8 +7,9 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Subscriber;
-use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\View;
+use Carbon\Carbon;
 
 class FindController extends Controller
 {
@@ -172,10 +173,21 @@ class FindController extends Controller
             ['viewers' => DB::raw('viewers + 1')]
         );
 
+        // Prepare SEO data
+        $seo = [
+            'title' => $reporter->name . ' - Segbon',
+            'description' => Str::limit(strip_tags($reporter->present), 150),
+            'image' => $reporter->photo,
+            'url' => url()->current(),
+        ];
+
+        // Share with Blade (app.blade.php)
+        View::share('seo', $seo);
+
         return Inertia::render('Client/Reporters/Details', [
             'reporter' => $reporter,
             'elements' => $elements,
-            'initialEmail' => $cookieEmail ?? '', 
+            'initialEmail' => $cookieEmail ?? '',
             'isSubscribed' => $isSubscribed,
         ]);
     }
@@ -274,6 +286,19 @@ class FindController extends Controller
         // add to article object
         $article->totalViewers = $totalViewers;
         $article->totalArticles = $totalArticles;
+
+        // Prepare SEO data
+        $pubseo = [
+            'title' => $article->title . ' - Segbon',
+            'description' => Str::limit(strip_tags($article->desc), 150),
+            'image' => $article->cover,
+            'url' => url()->current(),
+            'author' => $article->name,
+            'published_at' => Carbon::parse($article->created_at)->toIso8601String(),
+        ];
+        // Share with Blade (app.blade.php)
+        View::share('pubseo', $pubseo);
+
         return Inertia::render('Client/Articles/Details', [
             'elements' => $elements,
             'article' => $article,
