@@ -345,7 +345,7 @@ export default function Welcome() {
                                     asChild
                                 >
                                     <a href={route('register')}>
-                                        Become a Creator
+                                        Become a Segbon
                                         <ArrowRight className="ml-2 h-5 w-5" />
                                     </a>
                                 </Button>
