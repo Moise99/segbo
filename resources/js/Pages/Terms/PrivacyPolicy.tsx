@@ -91,11 +91,11 @@ export default function PrivacyPolicy() {
                                     Application” or “the Service”).
                                 </p>
                                 <p className="mt-3">
-                                    Segbon allows journalists, reporters, and
-                                    authors to share their publications as
-                                    external links, and enables users to
-                                    subscribe to their accounts to receive email
-                                    notifications about new publications.
+                                    Segbon allows authors and creators to share
+                                    their publications as external links, and
+                                    enables users to subscribe to their accounts
+                                    to receive email notifications about new
+                                    publications.
                                 </p>
                                 <p className="mt-3 border-l-4 border-blue-500 pl-4 italic text-gray-600">
                                     By using Segbon, you agree to this Privacy
@@ -172,8 +172,8 @@ export default function PrivacyPolicy() {
                                         <AccordionTrigger className="text-lg font-semibold hover:text-blue-600">
                                             <span className="flex items-center gap-2">
                                                 <Users className="h-5 w-5 text-blue-600" />
-                                                3.1. For Authors
-                                                (journalists/reporters)
+                                                3.1. For Authors (authors,
+                                                creators)
                                             </span>
                                         </AccordionTrigger>
                                         <AccordionContent>

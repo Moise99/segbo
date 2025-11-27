@@ -51,7 +51,7 @@
         <meta name="twitter:description" content="{{ $pubseo['description'] }}">
         <meta name="twitter:image" content="{{ $pubseo['image'] }}">
     @else
-        <title>{{ config('app.name', 'Segbon') }}</title>
+        <title inertia>{{ config('app.name', 'Laravel') }}</title>
         <meta name="description" content="Empower Your Stories, Amplify Your Voice, The premier platform for independent journalists to publish, connect, and inspire millions of readers globally.">
         <meta property="og:type" content="website">
         <meta property="og:title" content="Segbon">

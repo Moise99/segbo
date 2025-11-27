@@ -82,10 +82,9 @@ export default function TermsOfUse() {
                                     (hereinafter referred to as “the Service”).
                                 </p>
                                 <p className="mt-3">
-                                    Segbon allows journalists, reporters, and
-                                    authors (“Authors”) to share external links
-                                    redirecting to their publications hosted on
-                                    third-party websites.
+                                    Segbon allows authors, creators (“Authors”)
+                                    to share external links redirecting to their
+                                    publications hosted on third-party websites.
                                 </p>
                                 <p className="mt-3">
                                     Visitors (“Users”) can view these profiles

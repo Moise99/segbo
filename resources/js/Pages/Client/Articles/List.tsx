@@ -390,7 +390,7 @@ export default function ArtilcleList() {
                             </h1>
                             <p className="mx-auto max-w-2xl text-xl text-blue-200">
                                 Discover compelling stories from our talented
-                                journalists
+                                Segbons
                             </p>
                         </div>
                     </div>

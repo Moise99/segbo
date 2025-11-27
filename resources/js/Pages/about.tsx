@@ -14,9 +14,11 @@ import { Head, Link } from '@inertiajs/react';
 import {
     Bell,
     Globe,
+    Link as LinkIcon,
     LucideIcon,
     Newspaper,
-    PenTool,
+    PenTool, // Renamed Link to LinkIcon to avoid conflict
+    Search,
     Share2,
     User,
     Users,
@@ -28,8 +30,8 @@ interface FeatureCardProps {
     text: string;
 }
 
+// Card component for a defined, interactive feature box
 const FeatureCard = ({ icon: Icon, text }: FeatureCardProps) => (
-    // Card for a defined, interactive feature box
     <Card className="flex items-start gap-4 p-4 transition-shadow hover:shadow-lg">
         <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 text-orange-600">
             <Icon className="h-5 w-5" />
@@ -41,7 +43,7 @@ const FeatureCard = ({ icon: Icon, text }: FeatureCardProps) => (
 );
 
 export default function About() {
-    // Data structure for the features list
+    // Data structure for the features list (Generalizing benefits)
     const features = [
         {
             icon: PenTool,
@@ -49,7 +51,7 @@ export default function About() {
         },
         {
             icon: Globe,
-            text: 'Link to your articles anywhere (News websites, blogs...)',
+            text: 'Link to your content anywhere (Blogs, websites, platforms...)',
         },
         {
             icon: Bell,
@@ -66,19 +68,19 @@ export default function About() {
         {
             step: '1',
             title: 'Create Your Profile',
-            desc: 'Sign up for free and add your bio, photo, and areas of expertise.',
+            desc: 'Sign up for free and add your bio, photo and socials.',
             icon: Users,
         },
         {
             step: '2',
             title: 'Add Your Publications',
-            desc: 'Paste any article / Video link.',
+            desc: 'Paste any article / Video link, with cover and description',
             icon: Share2,
         },
         {
             step: '3',
             title: 'Notify Your Readers',
-            desc: 'Every new link triggers instant alerts to your followers.',
+            desc: 'Every new link publish, instant alerts to your followers.',
             icon: Bell,
         },
     ];
@@ -93,17 +95,18 @@ export default function About() {
                 <div className="absolute inset-0 bg-black/40"></div>
                 <div className="relative z-10 px-4 text-center sm:px-6 lg:px-8">
                     <h1 className="mb-6 text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl">
-                        Your Voice Deserves to Be Heard
+                        Your Work Deserves to Be Seen
                     </h1>
                     <p className="mx-auto mb-10 max-w-3xl text-lg text-orange-100 sm:text-xl">
                         Segbon is the platform built for{' '}
                         <strong className="text-white">
-                            independent journalists, reporters, and authors{' '}
+                            independent authors, creators, and content
+                            professionals{' '}
                         </strong>
                         to showcase their work, grow their audience, and stay
                         connected with readers, all in one place.
                     </p>
-                    {/* Primary CTA (Optional in Hero, but good practice) */}
+                    {/* Primary CTA */}
                     <Link href={route('register')}>
                         <Button
                             size="lg"
@@ -116,17 +119,106 @@ export default function About() {
                 </div>
             </section>
 
+            {/* The Decentralized Portfolio Problem Section */}
+            <section className="bg-gray-50 py-20">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div className="mb-12 text-center">
+                        <Badge
+                            variant="default"
+                            className="mb-4 bg-orange-600 hover:bg-orange-700"
+                        >
+                            THE PROBLEM WE SOLVE
+                        </Badge>
+                        <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+                            Stop Link-Hunting, Start Creating
+                        </h2>
+                    </div>
+
+                    <div className="grid gap-8 lg:grid-cols-3">
+                        {/* Problem Card (Using universal terms: "Content Professional") */}
+                        <Card className="border-t-4 border-t-red-500 shadow-xl">
+                            <CardHeader>
+                                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600">
+                                    <Search className="h-6 w-6" />
+                                </div>
+                                <CardTitle className="text-center text-2xl font-bold">
+                                    The Decentralized Portfolio
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="text-center text-lg text-gray-600">
+                                <p>
+                                    As an independent content professional, your
+                                    essential work is scattered across multiple
+                                    platforms, websites, and social media.
+                                </p>
+                                <p className="mt-4">
+                                    When a client, recruiter, or editor asks to
+                                    review your complete body of work, manually
+                                    compiling dozens of links is a frustrating
+                                    and time-consuming process. It's an
+                                    opportunity killer.
+                                </p>
+                            </CardContent>
+                        </Card>
+
+                        {/* Solution Card - Span 2 columns on large screens */}
+                        <Card className="border-t-4 border-t-green-500 shadow-xl lg:col-span-2">
+                            <CardHeader>
+                                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-green-600">
+                                    <LinkIcon className="h-6 w-6" />
+                                </div>
+                                <CardTitle className="text-2xl font-bold">
+                                    The Segbon Solution: Your Unified Portfolio
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="grid gap-6 pt-0 lg:grid-cols-2">
+                                <div>
+                                    <p className="text-lg text-gray-600">
+                                        Segbon centralizes your entire career.
+                                        Simply publish the link to every
+                                        article, video, or piece of work,
+                                        regardless of its original source.
+                                    </p>
+                                    <p className="mt-4 text-xl font-semibold text-gray-800">
+                                        Your Segbon profile instantly becomes
+                                        your single, dynamic, and professional
+                                        portfolio.
+                                    </p>
+                                </div>
+                                <div>
+                                    <p className="text-lg text-gray-600">
+                                        Send one link and give instant,
+                                        organized access to your full creative
+                                        output. The links you publish with us
+                                        will seamlessly redirect visitors to all
+                                        your original publications worldwide.
+                                    </p>
+                                    <Link
+                                        href={route('register')}
+                                        className="mt-6 inline-block"
+                                    >
+                                        <Button className="bg-green-600 hover:bg-green-700">
+                                            Get Your Unified Portfolio
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </div>
+            </section>
+
             {/* Mission & Vision / Why Segbon? Section */}
             <section className="bg-white py-20">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="grid gap-12 lg:grid-cols-2">
-                        {/* Mission & Vision Column */}
+                        {/* Mission & Vision Column (Generalizing the mission) */}
                         <div>
                             <Badge
                                 variant="outline"
                                 className="mb-4 border-orange-200 bg-orange-50 text-sm font-semibold text-orange-600"
                             >
-                                FOUNDATION
+                                MISSION & CORE VALUE
                             </Badge>
                             <h2 className="mb-6 text-3xl font-bold text-gray-900 sm:text-4xl">
                                 Our Mission
@@ -134,23 +226,23 @@ export default function About() {
                             <p className="mb-4 text-xl leading-relaxed text-gray-700">
                                 To empower{' '}
                                 <strong className="font-semibold text-gray-900">
-                                    independent journalists, reporters and
-                                    authors
+                                    independent authors, creators, and content
+                                    professionals
                                 </strong>{' '}
                                 with a professional and powerful space to
                                 centralize their work.
                             </p>
                             <p className="text-xl leading-relaxed text-gray-700">
-                                Every story matters. Every voice deserves an
-                                audience. We are here to make that connection
-                                real.
+                                Every piece of work matters. Every voice
+                                deserves an audience. We are here to make that
+                                connection real.
                             </p>
                         </div>
 
-                        {/* Why Segbon? Column (Uses FeatureCard component) */}
+                        {/* Key Benefits Column (Uses FeatureCard component) */}
                         <div>
                             <h2 className="mb-6 text-3xl font-bold text-gray-900 sm:text-4xl">
-                                Why Segbon?
+                                Key Benefits
                             </h2>
                             <div className="space-y-4">
                                 {features.map((item, i) => (
@@ -213,7 +305,7 @@ export default function About() {
                 </div>
             </section>
 
-            {/* For Readers Section */}
+            {/* For Readers Section (Adjusted to "Follow Your Favorite Creators") */}
             <section className="py-20">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex flex-col items-center gap-12 lg:flex-row">
@@ -224,9 +316,6 @@ export default function About() {
                                 alt="Reader following Segbon"
                                 className="h-auto w-full rounded-xl border-4 border-white object-cover shadow-2xl"
                             />
-                            {/* <div className="flex aspect-video w-full items-center justify-center rounded-xl bg-gray-200 text-gray-500 shadow-2xl">
-                                [Image of a person reading on a tablet or phone]
-                            </div> */}
                         </div>
 
                         {/* Content Column */}
@@ -237,8 +326,8 @@ export default function About() {
                             <p className="mb-4 text-xl leading-relaxed text-gray-700">
                                 Follow your{' '}
                                 <strong className="font-semibold text-gray-900">
-                                    favorite journalists / reporters / authors
-                                </strong>{' '}
+                                    favorite authors and creators{' '}
+                                </strong>
                                 with one click. Get notified the moment they
                                 publish no matter where.
                             </p>
@@ -277,7 +366,7 @@ export default function About() {
                                     className="bg-orange-600 shadow-lg hover:bg-orange-700"
                                 >
                                     <Newspaper className="mr-2 h-5 w-5" />
-                                    Discover Segbon Reporters
+                                    Discover Segbon Creators
                                 </Button>
                             </Link>
                         </div>
@@ -289,11 +378,11 @@ export default function About() {
             <section className="bg-gradient-to-r from-orange-600 to-blue-900 py-20 text-white">
                 <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
                     <h2 className="mb-6 text-3xl font-bold sm:text-4xl">
-                        Ready to Amplify Your Voice?
+                        Ready to Amplify Your Work?
                     </h2>
                     <p className="mb-10 text-xl text-orange-100">
-                        Join hundreds of independent journalists, reporters, and
-                        authors already using Segbon to grow their reach.
+                        Join hundreds of independent authors and creators
+                        already using Segbon to grow their reach.
                     </p>
                     <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
                         {/* Primary Button: White BG, Orange Text */}
@@ -303,7 +392,7 @@ export default function About() {
                                 className="bg-white text-orange-600 shadow-lg hover:bg-gray-100/90 hover:text-orange-700"
                             >
                                 <User className="mr-2 h-5 w-5" />
-                                Become a Segbon
+                                Become a Segbon Creator
                             </Button>
                         </Link>
                         {/* Secondary Button: Outline (White border/text, Blue hover) - FIXED STYLES */}
@@ -314,7 +403,7 @@ export default function About() {
                                 // Fixed styles for hover and border
                                 className="border-2 border-white bg-transparent text-white hover:border-blue-700 hover:bg-blue-700 hover:text-white"
                             >
-                                Explore Segbons
+                                Explore Creators
                             </Button>
                         </Link>
                     </div>

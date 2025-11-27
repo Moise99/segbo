@@ -67,7 +67,7 @@ export default function Reporters() {
 
     return (
         <GuestLayout>
-            <Head title="Reporters" />
+            <Head title="Segbons" />
             <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50/30 to-slate-100">
                 {/* 1. HERO HEADER */}
                 <div className="relative overflow-hidden bg-gradient-to-r from-orange-600 via-orange-500 to-orange-600">
@@ -86,7 +86,7 @@ export default function Reporters() {
                             className="mb-6 bg-white/20 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm hover:bg-white/30"
                         >
                             <Award className="mr-2 h-4 w-4" />
-                            {reporters.length} Expert Journalists
+                            {reporters.length} Segbons
                         </Badge>
 
                         <h1 className="mb-4 text-4xl font-bold text-white sm:text-5xl lg:text-6xl">

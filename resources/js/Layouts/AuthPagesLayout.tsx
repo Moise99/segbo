@@ -2,7 +2,6 @@ import ApplicationLogo from '@/components/ApplicationLogo';
 import Dropdown from '@/components/Dropdown';
 import NavLink from '@/components/NavLink';
 import ResponsiveNavLink from '@/components/ResponsiveNavLink';
-import AuthImage from '@/images/authimage.jpg';
 import { Link, usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
 
@@ -292,8 +291,8 @@ export default function AuthPages({
                                 <ApplicationLogo className="h-10 w-auto fill-current text-white transition-transform duration-300 hover:scale-105" />
                             </Link>
                             <p className="text-center text-sm text-gray-300 md:text-left">
-                                Connecting you with the best reporters,
-                                journalists, authors and publications.
+                                Connecting you with the best authors, creators
+                                and publications.
                             </p>
                         </div>
                         <div className="flex flex-col items-center md:items-start">
