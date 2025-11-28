@@ -1,5 +1,4 @@
 import InputError from '@/components/InputError';
-import PrimaryButton from '@/components/PrimaryButton';
 import AuthPagesLayout from '@/Layouts/AuthPagesLayout';
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import React, { useEffect, useRef, useState } from 'react';
@@ -105,7 +104,7 @@ export default function Login({
 
                     <form onSubmit={submit} className="space-y-6">
                         {/* EMAIL INPUT */}
-                        <div className="space-y-2">
+                        <div className="mx-2 space-y-2">
                             <label className="block text-sm font-medium text-white/90">
                                 Email
                             </label>
@@ -148,7 +147,7 @@ export default function Login({
                         </div>
 
                         {/* PASSWORD INPUT */}
-                        <div className="space-y-2">
+                        <div className="mx-2 space-y-2">
                             <label className="block text-sm font-medium text-white/90">
                                 Password
                             </label>
@@ -244,7 +243,7 @@ export default function Login({
                         />
 
                         {/* REMEMBER & FORGOT */}
-                        <div className="flex items-center justify-between text-sm">
+                        <div className="mx-2 flex items-center justify-between text-sm">
                             {canResetPassword && (
                                 <Link
                                     href={route('password.request')}
@@ -308,7 +307,7 @@ export default function Login({
                         </button>
                     </form>
 
-                    <div className="mx-2 mt-6 mb-6 flex items-center">
+                    <div className="mx-2 mb-6 mt-6 flex items-center">
                         <hr className="w-full border-gray-300" />
                         <span className="px-3 text-center text-sm text-white">
                             or
@@ -317,30 +316,29 @@ export default function Login({
                     </div>
 
                     {/* GOOGLE BUTTON */}
-                        <button
-                            className="group relative w-full"
-                            type="button"
-                            onClick={() =>
-                                (window.location.href =
-                                    route('google.redirect'))
-                            }
-                        >
-                            {/* <div className="absolute inset-0 bg-white/10 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity"></div> */}
+                    <button
+                        className="group relative w-full"
+                        type="button"
+                        onClick={() =>
+                            (window.location.href = route('google.redirect'))
+                        }
+                    >
+                        {/* <div className="absolute inset-0 bg-white/10 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity"></div> */}
 
-                            <div className="relative flex items-center justify-center space-x-3 rounded-xl border border-white/20 bg-white/5 px-6 py-3.5 font-semibold text-white backdrop-blur-sm transition-all active:scale-[0.98] group-hover:scale-[1.02] group-hover:bg-white/10">
-                                <svg
-                                    role="img"
-                                    viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="currentColor"
-                                    className="h-8 w-8"
-                                >
-                                    <title>Google</title>
-                                    <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-8.667 0-.76-.053-1.467-.173-2.053H12.48z" />
-                                </svg>
-                                <span>Continue with Google</span>
-                            </div>
-                        </button>
+                        <div className="relative flex items-center justify-center space-x-3 rounded-xl border border-white/20 bg-white/5 px-6 py-3.5 font-semibold text-white backdrop-blur-sm transition-all active:scale-[0.98] group-hover:scale-[1.02] group-hover:bg-white/10">
+                            <svg
+                                role="img"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                className="h-8 w-8"
+                            >
+                                <title>Google</title>
+                                <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-8.667 0-.76-.053-1.467-.173-2.053H12.48z" />
+                            </svg>
+                            <span>Continue with Google</span>
+                        </div>
+                    </button>
                 </div>
             </div>
         </AuthPagesLayout>

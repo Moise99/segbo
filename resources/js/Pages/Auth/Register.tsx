@@ -1,9 +1,9 @@
-"use client";
-import React, { useRef, useState } from "react";
-import { Head, Link, router, useForm } from "@inertiajs/react";
-import AuthPagesLayout from "@/Layouts/AuthPagesLayout";
-import InputError from "@/components/InputError";
-import ReCAPTCHA from "react-google-recaptcha";
+'use client';
+import AuthPagesLayout from '@/Layouts/AuthPagesLayout';
+import InputError from '@/components/InputError';
+import { Head, Link, router, useForm } from '@inertiajs/react';
+import React, { useRef, useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 export default function Register() {
     const recaptchaRef = useRef<ReCAPTCHA | null>(null);
@@ -12,12 +12,12 @@ export default function Register() {
     const [showPassword2, setShowPassword2] = useState(false);
 
     const { data, setData, processing, errors, reset } = useForm({
-        name: "",
-        username: "",
-        email: "",
-        password: "",
-        password_confirmation: "",
-        "g-recaptcha-response": "",
+        name: '',
+        username: '',
+        email: '',
+        password: '',
+        password_confirmation: '',
+        'g-recaptcha-response': '',
     });
 
     const submit = async (e: React.FormEvent) => {
@@ -27,7 +27,7 @@ export default function Register() {
         setIsSubmitting(true);
 
         if (!recaptchaRef.current) {
-            console.error("reCAPTCHA not ready");
+            console.error('reCAPTCHA not ready');
             setIsSubmitting(false);
             return;
         }
@@ -36,16 +36,16 @@ export default function Register() {
             const token = await recaptchaRef.current.executeAsync();
 
             if (!token) {
-                console.error("reCAPTCHA token null");
+                console.error('reCAPTCHA token null');
                 setIsSubmitting(false);
                 return;
             }
 
             router.post(
-                route("register"),
+                route('register'),
                 {
                     ...data,
-                    "g-recaptcha-response": token,
+                    'g-recaptcha-response': token,
                 },
                 {
                     onSuccess: () => {
@@ -55,13 +55,13 @@ export default function Register() {
                         setIsSubmitting(false);
                     },
                     onFinish: () => {
-                        reset("password", "password_confirmation");
+                        reset('password', 'password_confirmation');
                         setIsSubmitting(false);
                     },
-                }
+                },
             );
         } catch (error) {
-            console.error("reCAPTCHA error:", error);
+            console.error('reCAPTCHA error:', error);
             setIsSubmitting(false);
         }
     };
@@ -73,9 +73,8 @@ export default function Register() {
             <div className="mx-4 py-12">
                 <div className="mx-auto max-w-md rounded-lg bg-gradient-to-b from-blue-800 to-[#010336] py-12 sm:px-2 lg:px-4">
                     <form onSubmit={submit} className="space-y-6">
-
                         {/* NAME */}
-                        <div className="space-y-2">
+                        <div className="mx-2 space-y-2">
                             <label className="block text-sm font-medium text-white/90">
                                 Name
                             </label>
@@ -85,17 +84,22 @@ export default function Register() {
                                 <input
                                     type="text"
                                     value={data.name}
-                                    onChange={(e) => setData("name", e.target.value)}
-                                    className="relative w-full rounded-xl border border-white/20 bg-white/5 py-3.5 px-4 text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500/50 focus:outline-none"
+                                    onChange={(e) =>
+                                        setData('name', e.target.value)
+                                    }
+                                    className="relative w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3.5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
                                     placeholder="Your name"
                                     required
                                 />
                             </div>
-                            <InputError className="text-pink-300" message={errors.name} />
+                            <InputError
+                                className="text-pink-300"
+                                message={errors.name}
+                            />
                         </div>
 
                         {/* USERNAME */}
-                        <div className="space-y-2">
+                        <div className="mx-2 space-y-2">
                             <label className="block text-sm font-medium text-white/90">
                                 Username
                             </label>
@@ -107,22 +111,25 @@ export default function Register() {
                                     value={data.username}
                                     onChange={(e) => {
                                         const sanitized = e.target.value
-                                            .normalize("NFD")
-                                            .replace(/[\u0300-\u036f]/g, "")
-                                            .replace(/[^a-zA-Z0-9_]/g, "_")
+                                            .normalize('NFD')
+                                            .replace(/[\u0300-\u036f]/g, '')
+                                            .replace(/[^a-zA-Z0-9_]/g, '_')
                                             .toLowerCase();
-                                        setData("username", sanitized);
+                                        setData('username', sanitized);
                                     }}
-                                    className="relative w-full rounded-xl border border-white/20 bg-white/5 py-3.5 px-4 text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500/50 focus:outline-none"
+                                    className="relative w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3.5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
                                     placeholder="username"
                                     required
                                 />
                             </div>
-                            <InputError className="text-pink-300" message={errors.username} />
+                            <InputError
+                                className="text-pink-300"
+                                message={errors.username}
+                            />
                         </div>
 
                         {/* EMAIL */}
-                        <div className="space-y-2">
+                        <div className="mx-2 space-y-2">
                             <label className="block text-sm font-medium text-white/90">
                                 Email
                             </label>
@@ -148,18 +155,23 @@ export default function Register() {
                                     <input
                                         type="email"
                                         value={data.email}
-                                        onChange={(e) => setData("email", e.target.value)}
-                                        className="w-full rounded-xl border border-white/20 bg-white/5 py-3.5 pl-12 pr-4 text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500/50 focus:outline-none"
+                                        onChange={(e) =>
+                                            setData('email', e.target.value)
+                                        }
+                                        className="w-full rounded-xl border border-white/20 bg-white/5 py-3.5 pl-12 pr-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
                                         placeholder="votre@email.com"
                                         required
                                     />
                                 </div>
                             </div>
-                            <InputError className="text-pink-300" message={errors.email} />
+                            <InputError
+                                className="text-pink-300"
+                                message={errors.email}
+                            />
                         </div>
 
                         {/* PASSWORD */}
-                        <div className="space-y-2">
+                        <div className="mx-2 space-y-2">
                             <label className="block text-sm font-medium text-white/90">
                                 Password
                             </label>
@@ -183,17 +195,23 @@ export default function Register() {
                                     </svg>
 
                                     <input
-                                        type={showPassword ? "text" : "password"}
+                                        type={
+                                            showPassword ? 'text' : 'password'
+                                        }
                                         value={data.password}
-                                        onChange={(e) => setData("password", e.target.value)}
-                                        className="w-full rounded-xl border border-white/20 bg-white/5 py-3.5 pl-12 pr-12 text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500/50 focus:outline-none"
+                                        onChange={(e) =>
+                                            setData('password', e.target.value)
+                                        }
+                                        className="w-full rounded-xl border border-white/20 bg-white/5 py-3.5 pl-12 pr-12 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
                                         placeholder="••••••••"
                                         required
                                     />
 
                                     <button
                                         type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
+                                        onClick={() =>
+                                            setShowPassword(!showPassword)
+                                        }
                                         className="absolute right-4 text-gray-300 hover:text-white"
                                     >
                                         {showPassword ? (
@@ -205,11 +223,14 @@ export default function Register() {
                                 </div>
                             </div>
 
-                            <InputError className="text-pink-300" message={errors.password} />
+                            <InputError
+                                className="text-pink-300"
+                                message={errors.password}
+                            />
                         </div>
 
                         {/* PASSWORD CONFIRMATION */}
-                        <div className="space-y-2">
+                        <div className="mx-2 space-y-2">
                             <label className="block text-sm font-medium text-white/90">
                                 Confirm Password
                             </label>
@@ -219,19 +240,26 @@ export default function Register() {
 
                                 <div className="relative flex items-center">
                                     <input
-                                        type={showPassword2 ? "text" : "password"}
+                                        type={
+                                            showPassword2 ? 'text' : 'password'
+                                        }
                                         value={data.password_confirmation}
                                         onChange={(e) =>
-                                            setData("password_confirmation", e.target.value)
+                                            setData(
+                                                'password_confirmation',
+                                                e.target.value,
+                                            )
                                         }
-                                        className="w-full rounded-xl border border-white/20 bg-white/5 py-3.5 pl-4 pr-12 text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500/50 focus:outline-none"
+                                        className="w-full rounded-xl border border-white/20 bg-white/5 py-3.5 pl-4 pr-12 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
                                         placeholder="••••••••"
                                         required
                                     />
 
                                     <button
                                         type="button"
-                                        onClick={() => setShowPassword2(!showPassword2)}
+                                        onClick={() =>
+                                            setShowPassword2(!showPassword2)
+                                        }
                                         className="absolute right-4 text-gray-300 hover:text-white"
                                     >
                                         {showPassword2 ? (
@@ -279,15 +307,15 @@ export default function Register() {
                         </button>
 
                         {/* LOGIN LINK */}
-                        <div className="text-center text-white pt-2">
-                            <Link href={route("login")} className="underline">
+                        <div className="pt-2 text-center text-white">
+                            <Link href={route('login')} className="underline">
                                 Already registered?
                             </Link>
                         </div>
                     </form>
 
                     {/* SEPARATOR */}
-                    <div className="mx-2 mt-6 mb-6 flex items-center">
+                    <div className="mx-2 mb-6 mt-6 flex items-center">
                         <hr className="w-full border-gray-300" />
                         <span className="px-3 text-center text-sm text-white">
                             or
@@ -300,7 +328,7 @@ export default function Register() {
                         className="group relative w-full"
                         type="button"
                         onClick={() =>
-                            (window.location.href = route("google.redirect"))
+                            (window.location.href = route('google.redirect'))
                         }
                     >
                         <div className="relative flex items-center justify-center space-x-3 rounded-xl border border-white/20 bg-white/5 px-6 py-3.5 font-semibold text-white transition-all active:scale-[0.98] group-hover:scale-[1.02] group-hover:bg-white/10">
@@ -322,10 +350,18 @@ const EyeIcon = () => (
         viewBox="0 0 24 24"
         stroke="currentColor"
     >
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+        />
+        <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+        />
     </svg>
 );
 
@@ -336,24 +372,46 @@ const EyeOffIcon = () => (
         viewBox="0 0 24 24"
         stroke="currentColor"
     >
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+        <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+        />
     </svg>
 );
 
 const ArrowRightIcon = () => (
-    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M13 7l5 5m0 0l-5 5m5-5H6" />
+    <svg
+        className="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+    >
+        <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M13 7l5 5m0 0l-5 5m5-5H6"
+        />
     </svg>
 );
 
 const Spinner = () => (
     <svg className="h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24">
-        <circle className="opacity-25" cx="12" cy="12" r="10"
-                stroke="currentColor" strokeWidth="4"></circle>
-        <path className="opacity-75" fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+        ></circle>
+        <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
     </svg>
 );
 
@@ -363,4 +421,3 @@ const GoogleLogo = () => (
         <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-8.667 0-.76-.053-1.467-.173-2.053H12.48z" />
     </svg>
 );
-
