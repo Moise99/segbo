@@ -96,15 +96,17 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
         };
     }, [threshold]);
 
-    // Tailwind class for dynamic delay requires special handling
-    const transitionClass = isVisible
-        ? `opacity-100 translate-y-0 transition-all duration-1000 ease-out delay-[${delay}ms]`
-        : 'opacity-0 translate-y-12';
-
     return (
         <div
             ref={ref}
-            className={`transition-opacity transition-transform ${transitionClass}`}
+            className={`transition-all duration-1000 ease-out ${
+                isVisible
+                    ? 'translate-y-0 opacity-100'
+                    : 'translate-y-12 opacity-0'
+            }`}
+            style={{
+                transitionDelay: isVisible ? `${delay}ms` : '0ms',
+            }}
         >
             {children}
         </div>
