@@ -26,6 +26,7 @@ const formSchema = z.object({
     x: z.string().nullable().optional(),
     instagram: z.string().nullable().optional(),
     facebook: z.string().nullable().optional(),
+    tiktok: z.string().nullable().optional(),
     website: z.string().nullable().optional(),
     photo: z
         .custom<File | undefined | null>()
@@ -55,6 +56,7 @@ interface Acdetail {
     instagram: string;
     facebook: string;
     website: string;
+    tiktok: string;
 }
 interface FlashMessages {
     success?: string;
@@ -87,6 +89,7 @@ export default function Create() {
             x: acdetail.x || null,
             facebook: acdetail.facebook || null,
             instagram: acdetail.instagram || null,
+            tiktok: acdetail.tiktok || null,
             website: acdetail.website || null,
         },
     });
@@ -97,6 +100,7 @@ export default function Create() {
         facebook?: string | null;
         instagram?: string | null;
         linkedin?: string | null;
+        tiktok?: string | null;
         website?: string | null;
         photo?: File | null | undefined;
     }) {
@@ -237,6 +241,31 @@ export default function Create() {
                                             {errors.facebook && (
                                                 <p className="text-red-700">
                                                     {errors.facebook}
+                                                </p>
+                                            )}
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="tiktok"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>
+                                                Tiktok account (optional)
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="tiktok link"
+                                                    {...field}
+                                                    value={field.value ?? ''}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                            {errors.tiktok && (
+                                                <p className="text-red-700">
+                                                    {errors.tiktok}
                                                 </p>
                                             )}
                                         </FormItem>

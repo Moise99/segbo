@@ -20,6 +20,7 @@ class AcdetailUpdateRequest extends FormRequest
             'facebook' => ['nullable', 'string', 'regex:/^https:\/\/(www\.)?facebook\.com\/.*$/i'],
             'instagram' => ['nullable', 'string', 'regex:/^https:\/\/(www\.)?instagram\.com\/.*$/i'],
             'x' => ['nullable', 'string', 'regex:/^https:\/\/(www\.)?x\.com\/.*$/i'],
+            'tiktok' => ['nullable', 'string', 'regex:/^https:\/\/(www\.)?tiktok\.com\/.*$/i'],
             'website' => ['nullable', 'string', 'regex:/^https:\/\/.+$/i'],
         ];
     }
@@ -36,6 +37,7 @@ class AcdetailUpdateRequest extends FormRequest
             'facebook'     => 'Enter valid Facebook (https://facebook.com/...).',
             'instagram'    => 'Enter valid Instagram (https://instagram.com/...).',
             'x'            => 'Enter valid X (https://x.com/...).',
+            'tiktok'            => 'Enter valid Tiktok (https://tiktok.com/...).',
             'website'        => 'Enter valid secure website URL (https://....).',
         ];
     }

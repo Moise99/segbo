@@ -126,6 +126,7 @@ class FindController extends Controller
             'instagram' => $reporterDetails->instagram,
             'facebook' => $reporterDetails->facebook,
             'x' => $reporterDetails->x,
+            'tiktok' => $reporterDetails->tiktok,
             'website' => $reporterDetails->website,
             'total_subs' => $reporterDetails->total_subs,
             'total_viewers' => $reporterDetails->total_viewers,
