@@ -7,14 +7,7 @@ import Bg from '@/images/segbohero.webp';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { PageProps } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
-import {
-    ArrowRight,
-    Check,
-    FileText,
-    Sparkles,
-    TrendingUp,
-    Users,
-} from 'lucide-react';
+import { ArrowRight, Check, Sparkles, TrendingUp } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 // --- TYPES ---
@@ -30,11 +23,11 @@ interface Props extends PageProps {
 }
 
 // EXPANDED: Stats for a broader audience
-const stats = [
-    { icon: Users, value: '10K+', label: 'Active Creators & Authors' },
-    { icon: FileText, value: '50K+', label: 'Stories Published' },
-    { icon: TrendingUp, value: '2M+', label: 'Monthly Readers' },
-];
+// const stats = [
+//     { icon: Users, value: '10K+', label: 'Active Creators & Authors' },
+//     { icon: FileText, value: '50K+', label: 'Stories Published' },
+//     { icon: TrendingUp, value: '2M+', label: 'Monthly Readers' },
+// ];
 
 // EXPANDED: Feature descriptions for content professionals
 const features = [
@@ -184,7 +177,7 @@ export default function Welcome() {
                         </div>
 
                         {/* Stats Cards - Updated Label */}
-                        <div className="mt-20 grid grid-cols-1 gap-6 sm:grid-cols-3">
+                        {/*<div className="mt-20 grid grid-cols-1 gap-6 sm:grid-cols-3">
                             {stats.map((stat, idx) => (
                                 <Card
                                     key={idx}
@@ -197,14 +190,13 @@ export default function Welcome() {
                                         <div className="text-3xl font-bold text-slate-900">
                                             {stat.value}
                                         </div>
-                                        {/* Updated label here */}
                                         <div className="text-sm font-medium text-slate-500">
                                             {stat.label}
                                         </div>
                                     </CardContent>
                                 </Card>
                             ))}
-                        </div>
+                        </div>*/}
                     </div>
                 </section>
 

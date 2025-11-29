@@ -84,7 +84,7 @@ class FindController extends Controller
         // Now, get the top 3 categories for this specific reporter.
         $topCategories = DB::table('elements as e')
             ->join('categories as c', 'e.categorie_id', '=', 'c.id')
-            ->where('e.user_id', $reporterDetails->id)
+            ->where('e.user_id', $reporterDetails->user_id)
             ->where('e.etate', 1)
             ->select('c.cat_name as name', DB::raw('COUNT(e.id) as pub_count'))
             ->groupBy('c.id', 'c.cat_name')
@@ -94,18 +94,18 @@ class FindController extends Controller
 
         // total publications
         $totalPublications = DB::table('elements')
-                            ->where('user_id', $reporterDetails->id)
+                            ->where('user_id', $reporterDetails->user_id)
                             ->where('etate', 1)
                             ->count();
         // Total viewers of all articles by the reporter
         $totalViewers = DB::table('elements')
                             ->join('velements', 'elements.id', '=', 'velements.element_id')
-                            ->where('elements.user_id', $reporterDetails->id)
+                            ->where('elements.user_id', $reporterDetails->user_id)
                             ->where('elements.etate', 1)
                             ->sum('velements.viewers');
         // total subscribers
         $totalSubscribers = DB::table('subscribers')
-                            ->where('user_id', $reporterDetails->id)
+                            ->where('user_id', $reporterDetails->user_id)
                             ->where('is_active', true)
                             ->count();
 
@@ -139,7 +139,7 @@ class FindController extends Controller
                     ->join('elementypes', 'elements.elementype_id', '=', 'elementypes.id')
                     ->join('users', 'elements.user_id', '=', 'users.id')
                     ->join('categories', 'elements.categorie_id', '=', 'categories.id')
-                    ->where('elements.user_id', $reporterDetails->id)
+                    ->where('elements.user_id', $reporterDetails->user_id)
                     ->where('elements.etate', 1)
                     ->select('elements.*', 'elementypes.et_name', 'cat_name')
                     ->orderBy('elements.id', 'desc')
@@ -162,7 +162,7 @@ class FindController extends Controller
         if ($cookieEmail) {
             // verify if email is active in bd
             $isSubscribed = DB::table('subscribers')
-                ->where('user_id', $reporterDetails->id)
+                ->where('user_id', $reporterDetails->user_id)
                 ->where('email', $cookieEmail)
                 ->where('is_active', true)
                 ->exists();
@@ -170,7 +170,7 @@ class FindController extends Controller
 
         // register viewer
         DB::table('vusers')->updateOrInsert(
-            ['user_id' => $reporterDetails->id],
+            ['user_id' => $reporterDetails->user_id],
             ['viewers' => DB::raw('viewers + 1')]
         );
 
