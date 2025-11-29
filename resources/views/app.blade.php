@@ -7,7 +7,7 @@
     @if (isset($seo))
         {{--  SEO METAS for profile pages --}}
         {{-- DYNAMIQUE TITLE --}}
-        <title>{{ $seo['title'] ?? config('app.name', 'Segbon') }}</title>
+        <title inertia>{{ $seo['title'] ?? 'Segbon' }} - {{ config('app.name', 'Laravel') }}</title>
 
         {{-- DESCRIPTION --}}
         <meta name="description" content="{{ $seo['description'] ?? 'Empower Your Stories, Amplify Your Voice, The premier platform for independent journalists to publish, connect, and inspire millions of readers globally.' }}">
@@ -31,8 +31,8 @@
         <meta name="twitter:image" content="{{ $seo['image'] ?? asset('images/logo.png') }}">
 
     @elseif(isset($pubseo))
-        <title>{{ $pubseo['title'] }}</title>
-        <meta name="description" content="{{ $pubseo['description'] }}">
+        <title inertia>{{ $pubseo['title'] ?? 'Publication'}} - {{ config('app.name', 'Laravel') }}</title>
+        <meta name="description" content="{{ $pubseo['description'] ?? 'Empower Your Stories, Amplify Your Voice, The premier platform for independent journalists to publish, connect, and inspire millions of readers globally.' }}">
         {{-- Open Graph (Article) --}}
         <meta property="og:type" content="article">
         <meta property="og:title" content="{{ $pubseo['title'] }}">

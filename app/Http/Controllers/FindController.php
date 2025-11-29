@@ -176,7 +176,7 @@ class FindController extends Controller
 
         // Prepare SEO data
         $seo = [
-            'title' => $reporter->name . ' - Segbon',
+            'title' => $reporter->name,
             'description' => Str::limit(strip_tags($reporter->present), 150),
             'image' => $reporter->photo,
             'url' => url()->current(),
@@ -295,7 +295,7 @@ class FindController extends Controller
 
         // Prepare SEO data
         $pubseo = [
-            'title' => $article->title . ' - Segbon',
+            'title' => $article->title,
             'description' => Str::limit(strip_tags($article->desc), 150),
             'image' => $article->cover,
             'url' => url()->current(),
