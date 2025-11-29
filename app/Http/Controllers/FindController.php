@@ -193,8 +193,12 @@ class FindController extends Controller
         ]);
     }
 
-    public function findArticle()
+    public function findArticle(Request $request)
     {
+        if ($request->has('username') && !empty($request->username)) {
+            $filterByUsername = $request->username;
+        }
+
         $elements = DB::table('elements')
                     ->join('elementypes', 'elements.elementype_id', '=', 'elementypes.id')
                     ->join('users', 'elements.user_id', '=', 'users.id')
@@ -219,6 +223,7 @@ class FindController extends Controller
                     });
         return Inertia::render('Client/Articles/List', [
             'elements' => $elements,
+            'filterByUsername' => $filterByUsername ?? null,
         ]);
     }
 

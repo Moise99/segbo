@@ -17,7 +17,6 @@ import {
     Calendar,
     FileText,
     Globe,
-    Search,
     User,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -405,17 +404,23 @@ export default function ReporterProfile() {
                                         </TabsTrigger>
                                     </TabsList>
 
-                                    {/* Search visible only on articles tab ideally, but putting it here is easier */}
-                                    <div className="relative hidden w-64 sm:block">
-                                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                                        <Input
-                                            placeholder="Search stories..."
-                                            className="rounded-full border-gray-200 bg-white pl-9 focus-visible:ring-orange-500"
-                                            value={searchTerm}
-                                            onChange={(e) =>
-                                                setSearchTerm(e.target.value)
-                                            }
-                                        />
+                                    <div className="relative w-64">
+                                        <form
+                                            method="get"
+                                            action={route('find.article')}
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="username"
+                                                value={reporter.username}
+                                            />
+                                            <Button
+                                                type="submit"
+                                                className="w-full rounded-full bg-orange-500 text-white hover:bg-orange-600"
+                                            >
+                                                All my articles here
+                                            </Button>
+                                        </form>
                                     </div>
                                 </div>
 

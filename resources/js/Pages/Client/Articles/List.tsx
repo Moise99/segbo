@@ -56,6 +56,7 @@ interface FlashMessages {
 
 interface Props extends PageProps {
     elements: Element[];
+    filterByUsername?: string;
     flash: FlashMessages;
 }
 
@@ -111,6 +112,12 @@ const ArticleCard = ({ element }: ArticleCardProps) => (
                 <span className="text-xs font-medium text-blue-600">
                     {element.cat_name}
                 </span>
+                {/* date of publication */}
+                <span className="text-xs text-gray-400">•</span>
+                <Calendar className="h-3 w-3" />
+                <span className="text-xs text-gray-500">
+                    {formatDate(element.updated_at)}
+                </span>
             </div>
 
             {/* Title */}
@@ -147,10 +154,6 @@ const ArticleCard = ({ element }: ArticleCardProps) => (
                         </p>
                     </div>
                 </a>
-                <div className="flex items-center gap-1 text-xs text-gray-500">
-                    <Calendar className="h-3 w-3" />
-                    <span>{formatDate(element.updated_at)}</span>
-                </div>
             </div>
 
             {/* Action Button (Now uses orange consistently) */}
@@ -272,14 +275,14 @@ const ArticleListItem = ({ element }: ArticleCardProps) => (
 // --- Main Component ---
 
 export default function ArtilcleList() {
-    const { elements, flash = {} } = usePage<Props>().props;
+    const { elements, filterByUsername, flash = {} } = usePage<Props>().props;
     useEffect(() => {
         if (flash.success) {
             toast.success(flash.success);
         }
     }, [flash.success]);
 
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState(filterByUsername ?? '');
     const [currentPage, setCurrentPage] = useState(1);
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     const [filterCategory, setFilterCategory] = useState<string>('all');

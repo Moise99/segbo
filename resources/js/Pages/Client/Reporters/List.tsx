@@ -86,7 +86,7 @@ export default function Reporters() {
                             className="mb-6 bg-white/20 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm hover:bg-white/30"
                         >
                             <Award className="mr-2 h-4 w-4" />
-                            {reporters.length} Segbons
+                            Our Segbons
                         </Badge>
 
                         <h1 className="mb-4 text-4xl font-bold text-white sm:text-5xl lg:text-6xl">
