@@ -133,7 +133,7 @@ export default function ReporterProfile() {
             <Head title={reporter.name} />
             <Toaster position="top-center" />
 
-            <div className="min-h-screen bg-slate-50/50">
+            <div className="min-h-screen overflow-x-hidden bg-slate-50/50">
                 {/* 1. HERO COVER */}
                 <div className="relative h-64 w-full overflow-hidden bg-slate-900">
                     {/* Gradient Overlay */}
@@ -157,8 +157,8 @@ export default function ReporterProfile() {
                     </div>
                 </div>
 
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="grid gap-8 lg:grid-cols-12">
+                <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div className="grid w-full gap-8 lg:grid-cols-12">
                         {/* 2. SIDEBAR (PROFILE CARD) - Sticky Desktop */}
                         <div className="relative -mt-24 lg:col-span-4 lg:block">
                             <Card className="sticky top-6 overflow-hidden rounded-3xl border-none shadow-2xl">
@@ -176,8 +176,6 @@ export default function ReporterProfile() {
                                                     {reporter.name[0]}
                                                 </AvatarFallback>
                                             </Avatar>
-                                            {/* Badge Verified (Optionnal) */}
-                                            {/* <div className="absolute bottom-1 right-1 bg-blue-500 text-white p-1 rounded-full border-2 border-white"><Check className="h-3 w-3"/></div> */}
                                         </div>
 
                                         <div className="mt-3 text-center">
@@ -239,7 +237,7 @@ export default function ReporterProfile() {
                                     </div>
 
                                     {/* Social Media */}
-                                    <div className="mb-6 flex justify-center gap-3">
+                                    <div className="mb-6 flex flex-wrap justify-center gap-3">
                                         <SocialButton
                                             href={reporter.website}
                                             icon={Globe}
@@ -378,10 +376,10 @@ export default function ReporterProfile() {
                         </div>
 
                         {/* 3. MAIN CONTENT (Tabs) */}
-                        <div className="mt-8 pb-12 lg:col-span-8 lg:mt-0">
+                        <div className="mt-8 w-full pb-12 lg:col-span-8 lg:mt-0">
                             <Tabs defaultValue="articles" className="w-full">
-                                <div className="mb-6 flex items-center justify-between">
-                                    <TabsList className="h-auto rounded-xl border border-gray-200 bg-white p-1">
+                                <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                    <TabsList className="h-auto w-full shrink-0 rounded-xl border border-gray-200 bg-white p-1 sm:w-auto">
                                         <TabsTrigger
                                             value="articles"
                                             className="rounded-lg px-4 py-2 data-[state=active]:bg-orange-100 data-[state=active]:text-orange-700"
@@ -404,7 +402,7 @@ export default function ReporterProfile() {
                                         </TabsTrigger>
                                     </TabsList>
 
-                                    <div className="relative w-64">
+                                    <div className="relative w-full sm:w-64">
                                         <form
                                             method="get"
                                             action={route('find.article')}
