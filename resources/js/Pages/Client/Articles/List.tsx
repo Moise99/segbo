@@ -287,7 +287,7 @@ export default function ArtilcleList() {
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     const [filterCategory, setFilterCategory] = useState<string>('all');
     const [filterType, setFilterType] = useState<string>('all');
-    const itemsPerPage = 8;
+    const itemsPerPage = 16;
 
     // Get unique categories and types
     const categories = useMemo(() => {

@@ -40,7 +40,7 @@ export default function Reporters() {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-    const itemsPerPage = 4;
+    const itemsPerPage = 12;
 
     // --- LOGIC: FILTER & PAGINATION ---
     const filteredReporters = useMemo(() => {
@@ -228,7 +228,7 @@ export default function Reporters() {
                                                         }
                                                         className={
                                                             page === currentPage
-                                                                ? 'border-none bg-gradient-to-br from-orange-500 to-rose-500 text-white shadow-lg shadow-orange-500/30 hover:text-white'
+                                                                ? 'border-none bg-gradient-to-br from-orange-500 to-[#010336] text-white shadow-lg shadow-orange-500/30 hover:text-white'
                                                                 : 'cursor-pointer hover:border-orange-500 hover:text-orange-600'
                                                         }
                                                     >
@@ -294,7 +294,7 @@ function ReporterCard({ reporter }: { reporter: Reporter }) {
                 {/* Photo Wrapper */}
                 <div className="relative mx-auto mb-6 h-32 w-32">
                     {/* Glow Effect */}
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-400 to-rose-500 opacity-20 blur-xl transition-opacity group-hover:opacity-30" />
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-400 to-[#010336] opacity-20 blur-xl transition-opacity group-hover:opacity-30" />
 
                     {/* Avatar Shadcn */}
                     <Avatar className="relative h-full w-full rounded-full border-4 border-white shadow-xl transition-transform duration-500 group-hover:scale-110 group-hover:border-orange-400">
@@ -310,7 +310,7 @@ function ReporterCard({ reporter }: { reporter: Reporter }) {
 
                     {/* Floating Stats Badge */}
                     <div className="absolute -bottom-2 -right-2 rounded-full bg-white p-1 shadow-lg">
-                        <Badge className="flex items-center gap-1 rounded-full border-none bg-gradient-to-br from-orange-500 to-rose-500 px-2 py-0.5 text-[10px] text-white hover:from-orange-600 hover:to-rose-600">
+                        <Badge className="flex items-center gap-1 rounded-full border-none bg-gradient-to-br from-orange-500 to-[#010336] px-2 py-0.5 text-[10px] text-white hover:from-orange-600 hover:to-rose-600">
                             <TrendingUp className="h-3 w-3" />
                             {reporter.total_publi}
                         </Badge>
@@ -339,7 +339,7 @@ function ReporterCard({ reporter }: { reporter: Reporter }) {
                 </div>
 
                 {/* Action */}
-                <Button className="w-full rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 py-6 font-semibold shadow-lg shadow-orange-500/30 transition-all hover:scale-105 hover:shadow-xl hover:shadow-orange-500/40">
+                <Button className="w-full rounded-2xl bg-gradient-to-r from-orange-500 to-[#010336] py-6 font-semibold shadow-lg shadow-orange-800 transition-all hover:scale-105 hover:shadow-xl hover:shadow-orange-900">
                     <a
                         href={route('find.more', {
                             username: reporter.username,
@@ -360,7 +360,7 @@ function ReporterListItem({ reporter }: { reporter: Reporter }) {
             <div className="flex flex-col items-center gap-8 p-8 sm:flex-row">
                 {/* Photo */}
                 <div className="relative flex-shrink-0">
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-400 to-rose-500 opacity-20 blur-xl" />
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-400 to-[#010336] opacity-20 blur-xl" />
                     <Avatar className="relative h-28 w-28 rounded-full border-4 border-white shadow-xl transition-transform duration-500 group-hover:scale-110 group-hover:border-orange-400">
                         <AvatarImage
                             src={reporter.photo}
@@ -371,7 +371,7 @@ function ReporterListItem({ reporter }: { reporter: Reporter }) {
                         </AvatarFallback>
                     </Avatar>
                     <div className="absolute -bottom-2 -right-2 rounded-full bg-white p-1 shadow-lg">
-                        <Badge className="flex items-center gap-1 rounded-full border-none bg-gradient-to-br from-orange-500 to-rose-500 px-2 py-0.5 text-[10px] text-white">
+                        <Badge className="flex items-center gap-1 rounded-full border-none bg-gradient-to-br from-orange-500 to-[#010336] px-2 py-0.5 text-[10px] text-white">
                             <TrendingUp className="h-3 w-3" />
                             {reporter.total_publi}
                         </Badge>
@@ -402,7 +402,7 @@ function ReporterListItem({ reporter }: { reporter: Reporter }) {
 
                 {/* Button */}
                 <div className="flex-shrink-0">
-                    <Button className="rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 px-8 py-6 font-semibold shadow-lg shadow-orange-500/30 transition-all hover:scale-105 hover:shadow-xl hover:shadow-orange-500/40">
+                    <Button className="rounded-2xl bg-gradient-to-r from-orange-500 to-[#010336] px-8 py-6 font-semibold shadow-lg shadow-orange-800 transition-all hover:scale-105 hover:shadow-xl hover:shadow-orange-900">
                         <a
                             href={route('find.more', {
                                 username: reporter.username,
