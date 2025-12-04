@@ -10,12 +10,14 @@
         <title inertia>{{ $seo['title'] ?? 'Segbon' }} - {{ config('app.name', 'Laravel') }}</title>
 
         {{-- DESCRIPTION --}}
-        <meta name="description" content="{{ $seo['description'] ?? 'Empower Your Stories, Amplify Your Voice, The premier platform for independent journalists to publish, connect, and inspire millions of readers globally.' }}">
+        <meta name="description" content="{{ $seo['description'] ?? 'Empower Your Stories, Amplify Your Voice, The premier platform for independent journalists, web writers, authors, and content
+                                creators to publish, connect, and inspire millions of readers globally.' }}">
 
         {{-- OPEN GRAPH (WhatsApp, Facebook) --}}
         <meta property="og:type" content="website">
         <meta property="og:title" content="{{ $seo['title'] ?? 'Segbon' }}">
-        <meta property="og:description" content="{{ $seo['description'] ?? 'Empower Your Stories, Amplify Your Voice, The premier platform for independent journalists to publish, connect, and inspire millions of readers globally.' }}">
+        <meta property="og:description" content="{{ $seo['description'] ?? 'Empower Your Stories, Amplify Your Voice, The premier platform for independent journalists, web writers, authors, and content
+                                creators to publish, connect, and inspire millions of readers globally.' }}">
         <meta property="og:url" content="{{ $seo['url'] ?? url()->current() }}">
         <meta property="og:author" >
         <meta property="og:publisher" >
@@ -32,7 +34,8 @@
 
     @elseif(isset($pubseo))
         <title inertia>{{ $pubseo['title'] ?? 'Publication'}} - {{ config('app.name', 'Laravel') }}</title>
-        <meta name="description" content="{{ $pubseo['description'] ?? 'Empower Your Stories, Amplify Your Voice, The premier platform for independent journalists to publish, connect, and inspire millions of readers globally.' }}">
+        <meta name="description" content="{{ $pubseo['description'] ?? 'Empower Your Stories, Amplify Your Voice, The premier platform for independent journalists, web writers, authors, and content
+                                creators to publish, connect, and inspire millions of readers globally.' }}">
         {{-- Open Graph (Article) --}}
         <meta property="og:type" content="article">
         <meta property="og:title" content="{{ $pubseo['title'] }}">
@@ -52,16 +55,19 @@
         <meta name="twitter:image" content="{{ $pubseo['image'] }}">
     @else
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
-        <meta name="description" content="Empower Your Stories, Amplify Your Voice, The premier platform for independent journalists to publish, connect, and inspire millions of readers globally.">
+        <meta name="description" content="Empower Your Stories, Amplify Your Voice, The premier platform for independent journalists, web writers, authors, and content
+                                creators to publish, connect, and inspire millions of readers globally.">
         <meta property="og:type" content="website">
         <meta property="og:title" content="Segbon">
-        <meta property="og:description" content="Empower Your Stories, Amplify Your Voice, The premier platform for independent journalists to publish, connect, and inspire millions of readers globally.">
+        <meta property="og:description" content="Empower Your Stories, Amplify Your Voice, The premier platform for independent journalists, web writers, authors, and content
+                                creators to publish, connect, and inspire millions of readers globally.">
         <meta property="og:url" content="{{ url()->current() }}">
         <meta property="og:image" content="{{ asset('images/logo.png') }}">
         <meta property="og:site_name" content="Segbon">
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="Segbon">
-        <meta name="twitter:description" content="Empower Your Stories, Amplify Your Voice, The premier platform for independent journalists to publish, connect, and inspire millions of readers globally.">
+        <meta name="twitter:description" content="Empower Your Stories, Amplify Your Voice, The premier platform for independent journalists, web writers, authors, and content
+                                creators to publish, connect, and inspire millions of readers globally.">
         <meta name="twitter:image" content="{{ asset('images/logo.png') }}">
     @endif
     <!-- Fonts -->
