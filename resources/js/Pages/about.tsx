@@ -136,9 +136,9 @@ export default function About() {
 
                     <div className="grid gap-8 lg:grid-cols-3">
                         {/* Problem Card (Using universal terms: "Content Professional") */}
-                        <Card className="border-t-4 border-t-red-500 shadow-xl">
+                        <Card className="border-l-4 border-t-4 border-l-orange-600 border-t-orange-600 shadow-xl">
                             <CardHeader>
-                                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600">
+                                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-orange-600">
                                     <Search className="h-6 w-6" />
                                 </div>
                                 <CardTitle className="text-center text-2xl font-bold">
@@ -162,9 +162,9 @@ export default function About() {
                         </Card>
 
                         {/* Solution Card - Span 2 columns on large screens */}
-                        <Card className="border-t-4 border-t-green-500 shadow-xl lg:col-span-2">
+                        <Card className="to white border-r-4 border-t-4 border-r-blue-900 border-t-blue-900 shadow-xl lg:col-span-2">
                             <CardHeader>
-                                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-green-600">
+                                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-blue-900">
                                     <LinkIcon className="h-6 w-6" />
                                 </div>
                                 <CardTitle className="text-2xl font-bold">
