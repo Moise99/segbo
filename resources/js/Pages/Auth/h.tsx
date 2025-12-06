@@ -1,23 +1,17 @@
 'use client';
 import AuthPagesLayout from '@/Layouts/AuthPagesLayout';
 import InputError from '@/components/InputError';
-import { Head, Link, useForm } from '@inertiajs/react';
-import React, { useEffect, useState } from 'react';
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { Head, Link, router, useForm } from '@inertiajs/react';
+import React, { useRef, useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 
-declare global {
-    interface Window {
-        grecaptcha: any;
-    }
-}
-// Le composant Register
 export default function Register() {
-    const { executeRecaptcha } = useGoogleReCaptcha();
+    const recaptchaRef = useRef<ReCAPTCHA | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showPassword2, setShowPassword2] = useState(false);
 
-    const { data, setData, post, processing, reset, errors } = useForm({
+    const { data, setData, processing, errors, reset } = useForm({
         name: '',
         username: '',
         email: '',
@@ -26,58 +20,49 @@ export default function Register() {
         recaptcha_token: '',
     });
 
-    useEffect(() => {
-        // Si le script n'est pas encore injecté
-        const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
-        if (!document.getElementById('recaptcha-script')) {
-            const script = document.createElement('script');
-            script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
-            script.id = 'recaptcha-script';
-            script.async = true;
-            document.body.appendChild(script);
-        }
-
-        const interval = setInterval(() => {
-            if (window.grecaptcha && window.grecaptcha.execute) {
-                clearInterval(interval);
-                window.grecaptcha.ready(() => {
-                    window.grecaptcha
-                        .execute(siteKey, { action: 'register' })
-                        .then((token: string) => {
-                            setData('recaptcha_token', token);
-                        })
-                        .catch(() => {
-                            console.error('Recaptcha error');
-                        });
-                });
-            }
-        }, 500);
-    }, [setData]);
-
     const submit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (isSubmitting || processing) return;
-
+        if (isSubmitting) return;
         setIsSubmitting(true);
 
-        if (!data.recaptcha_token) {
-            const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+        if (!recaptchaRef.current) {
+            console.error('reCAPTCHA not ready');
+            setIsSubmitting(false);
+            return;
+        }
 
-            window.grecaptcha.ready(() => {
-                window.grecaptcha
-                    .execute(siteKey, { action: 'register' })
-                    .then((token: string) => {
-                        setData('recaptcha_token', token);
-                        post(route('register'), {
-                            onFinish: () => reset('password'),
-                        });
-                    });
-            });
-        } else {
-            post(route('register'), {
-                onFinish: () => reset('password'),
-            });
+        try {
+            const token = await recaptchaRef.current.executeAsync();
+
+            if (!token) {
+                console.error('reCAPTCHA token null');
+                setIsSubmitting(false);
+                return;
+            }
+            router.post(
+                route('register'),
+                {
+                    ...data,
+                    recaptcha_token: token,
+                },
+                {
+                    onSuccess: () => {
+                        setIsSubmitting(false);
+                    },
+                    onError: () => {
+                        console.log(errors);
+                        setIsSubmitting(false);
+                    },
+                    // onFinish: () => {
+                    //     reset('password', 'password_confirmation');
+                    //     setIsSubmitting(false);
+                    // },
+                },
+            );
+        } catch (error) {
+            console.error('reCAPTCHA error:', error);
+            setIsSubmitting(false);
         }
     };
 
@@ -105,11 +90,10 @@ export default function Register() {
                                     className="relative w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3.5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
                                     placeholder="Your name"
                                     required
-                                    disabled={isSubmitting}
                                 />
                             </div>
                             <InputError
-                                className="text-orange-600"
+                                className="text-pink-300"
                                 message={errors.name}
                             />
                         </div>
@@ -136,11 +120,10 @@ export default function Register() {
                                     className="relative w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3.5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
                                     placeholder="username"
                                     required
-                                    disabled={isSubmitting}
                                 />
                             </div>
                             <InputError
-                                className="text-orange-600"
+                                className="text-pink-300"
                                 message={errors.username}
                             />
                         </div>
@@ -176,14 +159,13 @@ export default function Register() {
                                             setData('email', e.target.value)
                                         }
                                         className="w-full rounded-xl border border-white/20 bg-white/5 py-3.5 pl-12 pr-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
-                                        placeholder="your@email.com"
+                                        placeholder="votre@email.com"
                                         required
-                                        disabled={isSubmitting}
                                     />
                                 </div>
                             </div>
                             <InputError
-                                className="text-orange-600"
+                                className="text-pink-300"
                                 message={errors.email}
                             />
                         </div>
@@ -191,7 +173,7 @@ export default function Register() {
                         {/* PASSWORD */}
                         <div className="mx-2 space-y-2">
                             <label className="block text-sm font-medium text-white/90">
-                                Password (min. 8 characters)
+                                Password
                             </label>
 
                             <div className="group relative">
@@ -223,8 +205,6 @@ export default function Register() {
                                         className="w-full rounded-xl border border-white/20 bg-white/5 py-3.5 pl-12 pr-12 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
                                         placeholder="••••••••"
                                         required
-                                        disabled={isSubmitting}
-                                        minLength={8}
                                     />
 
                                     <button
@@ -233,7 +213,6 @@ export default function Register() {
                                             setShowPassword(!showPassword)
                                         }
                                         className="absolute right-4 text-gray-300 hover:text-white"
-                                        disabled={isSubmitting}
                                     >
                                         {showPassword ? (
                                             <EyeOffIcon />
@@ -245,7 +224,7 @@ export default function Register() {
                             </div>
 
                             <InputError
-                                className="text-orange-600"
+                                className="text-pink-300"
                                 message={errors.password}
                             />
                         </div>
@@ -274,8 +253,6 @@ export default function Register() {
                                         className="w-full rounded-xl border border-white/20 bg-white/5 py-3.5 pl-4 pr-12 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
                                         placeholder="••••••••"
                                         required
-                                        disabled={isSubmitting}
-                                        minLength={8}
                                     />
 
                                     <button
@@ -284,7 +261,6 @@ export default function Register() {
                                             setShowPassword2(!showPassword2)
                                         }
                                         className="absolute right-4 text-gray-300 hover:text-white"
-                                        disabled={isSubmitting}
                                     >
                                         {showPassword2 ? (
                                             <EyeOffIcon />
@@ -296,20 +272,26 @@ export default function Register() {
                             </div>
 
                             <InputError
-                                className="text-orange-600"
+                                className="text-pink-300"
                                 message={errors.password_confirmation}
                             />
                         </div>
 
+                        {/* HIDDEN RECAPTCHA */}
+                        <ReCAPTCHA
+                            ref={recaptchaRef}
+                            size="invisible"
+                            sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                        />
+
                         {/* SUBMIT BUTTON */}
                         <button
-                            type="submit"
                             className="group relative w-full"
                             disabled={processing || isSubmitting}
                         >
                             <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-orange-500 to-pink-500 blur transition-all group-hover:blur-md"></div>
 
-                            <div className="relative flex items-center justify-center space-x-2 rounded-xl bg-gradient-to-r from-orange-500 to-pink-500 px-6 py-3.5 font-semibold text-white shadow-lg transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 group-hover:scale-[1.02] group-hover:shadow-orange-500/50">
+                            <div className="relative flex items-center justify-center space-x-2 rounded-xl bg-gradient-to-r from-orange-500 to-pink-500 px-6 py-3.5 font-semibold text-white shadow-lg transition-all active:scale-[0.98] group-hover:scale-[1.02] group-hover:shadow-orange-500/50">
                                 {isSubmitting ? (
                                     <>
                                         <Spinner />
@@ -348,9 +330,8 @@ export default function Register() {
                         onClick={() =>
                             (window.location.href = route('google.redirect'))
                         }
-                        disabled={isSubmitting}
                     >
-                        <div className="relative flex items-center justify-center space-x-3 rounded-xl border border-white/20 bg-white/5 px-6 py-3.5 font-semibold text-white transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 group-hover:scale-[1.02] group-hover:bg-white/10">
+                        <div className="relative flex items-center justify-center space-x-3 rounded-xl border border-white/20 bg-white/5 px-6 py-3.5 font-semibold text-white transition-all active:scale-[0.98] group-hover:scale-[1.02] group-hover:bg-white/10">
                             <GoogleLogo />
                             <span>Continue with Google</span>
                         </div>
@@ -361,7 +342,7 @@ export default function Register() {
     );
 }
 
-/* ICONS (Laissés inchangés) */
+/* ICONS */
 const EyeIcon = () => (
     <svg
         className="h-5 w-5"

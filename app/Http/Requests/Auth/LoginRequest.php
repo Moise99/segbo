@@ -30,8 +30,41 @@ class LoginRequest extends FormRequest
         return [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
-            'g-recaptcha-response' => ['required', 'string'],
+            'recaptcha_token' => ['required', 'string'],
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $renableCaptcha = config('services.recaptcha.enabled');
+
+        if ($renableCaptcha === true) {
+            $validator->after(function ($validator) {
+
+                $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                    'secret'   => config('services.recaptcha.secret'),
+                    'response' => $this->recaptcha_token,
+                    'remoteip' => $this->ip(),
+                ]);
+
+                $result = $response->json();
+
+                if (!($result['success'] ?? false)) {
+                    $validator->errors()->add('recaptcha_token', 'ReCAPTCHA verification failed. Please, refresh the page and try again.');
+                    return;
+                }
+
+                if (($result['action'] ?? '') !== 'login') {
+                    $validator->errors()->add('recaptcha_token', 'ReCAPTCHA action mismatch. Please, refresh the page and try again.');
+                    return;
+                }
+
+                if (($result['score'] ?? 0) < 0.5) {
+                    $validator->errors()->add('recaptcha_token', 'ReCAPTCHA score too low. Please, refresh the page and try again.');
+                    return;
+                }
+            });
+        }
     }
     /**
      * Attempt to authenticate the request's credentials.

@@ -18,7 +18,7 @@ export default function Login({
     const { data, setData, processing, errors, reset } = useForm({
         email: '',
         password: '',
-        'g-recaptcha-response': '',
+        recaptcha_token: '',
         remember: false,
     });
 
@@ -56,7 +56,7 @@ export default function Login({
                 {
                     email: data.email,
                     password: data.password,
-                    'g-recaptcha-response': token,
+                    recaptcha_token: token,
                     remember: data.remember,
                 },
                 {
@@ -69,7 +69,7 @@ export default function Login({
                         setIsSubmitting(false);
 
                         // Check if reCAPTCHA error still exists
-                        if (errors['g-recaptcha-response']) {
+                        if (errors['recaptcha_token']) {
                             console.error(
                                 'reCAPTCHA validation failed on server side',
                             );
