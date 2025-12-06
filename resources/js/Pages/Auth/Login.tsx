@@ -1,8 +1,13 @@
 import InputError from '@/components/InputError';
 import AuthPagesLayout from '@/Layouts/AuthPagesLayout';
-import { Head, Link, router, useForm } from '@inertiajs/react';
-import React, { useEffect, useRef, useState } from 'react';
-import ReCAPTCHA from 'react-google-recaptcha';
+import { Head, Link, useForm } from '@inertiajs/react';
+import React, { useEffect, useState } from 'react';
+
+declare global {
+    interface Window {
+        grecaptcha: any;
+    }
+}
 
 export default function Login({
     status,
@@ -11,16 +16,43 @@ export default function Login({
     status?: string;
     canResetPassword: boolean;
 }) {
-    const recaptchaRef = useRef<ReCAPTCHA | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-    const { data, setData, processing, errors, reset } = useForm({
+    const { data, post, setData, processing, errors, reset } = useForm({
         email: '',
         password: '',
         recaptcha_token: '',
         remember: false,
     });
+
+    useEffect(() => {
+        // Si le script n'est pas encore injecté
+        const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+        if (!document.getElementById('recaptcha-script')) {
+            const script = document.createElement('script');
+            script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
+            script.id = 'recaptcha-script';
+            script.async = true;
+            document.body.appendChild(script);
+        }
+
+        const interval = setInterval(() => {
+            if (window.grecaptcha && window.grecaptcha.execute) {
+                clearInterval(interval);
+                window.grecaptcha.ready(() => {
+                    window.grecaptcha
+                        .execute(siteKey, { action: 'login' })
+                        .then((token: string) => {
+                            setData('recaptcha_token', token);
+                        })
+                        .catch(() => {
+                            console.error('Recaptcha error');
+                        });
+                });
+            }
+        }, 500);
+    }, [setData]);
 
     const submit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -29,67 +61,93 @@ export default function Login({
         if (isSubmitting) return;
         setIsSubmitting(true);
 
-        if (!recaptchaRef.current) {
-            console.error('reCAPTCHA not ready');
-            setIsSubmitting(false);
-            return;
-        }
+        if (!data.recaptcha_token) {
+            const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
-        try {
-            const token = await recaptchaRef.current.executeAsync();
-            //console.log('reCAPTCHA token received:', token ? 'YES' : 'NO');
-
-            if (!token) {
-                console.error('reCAPTCHA token null');
-                setIsSubmitting(false);
-                return;
-            }
-
-            // console.log(
-            //     'Submitting login with token:',
-            //     token.substring(0, 20) + '...',
-            // );
-
-            // Use router.post directly - this GUARANTEES the token is sent
-            router.post(
-                route('login'),
-                {
-                    email: data.email,
-                    password: data.password,
-                    recaptcha_token: token,
-                    remember: data.remember,
+            window.grecaptcha.ready(() => {
+                window.grecaptcha
+                    .execute(siteKey, { action: 'login' })
+                    .then((token: string) => {
+                        setData('recaptcha_token', token);
+                        post(route('login'), {
+                            onFinish: () => reset('password'),
+                        });
+                    });
+            });
+        } else {
+            post(route('login'), {
+                onFinish: () => reset('password'),
+                onSuccess: () => {
+                    setIsSubmitting(false);
                 },
-                {
-                    onSuccess: () => {
-                        // console.log('Login successful!');
-                        setIsSubmitting(false);
-                    },
-                    onError: (errors) => {
-                        console.error('Login errors:', errors);
-                        setIsSubmitting(false);
-
-                        // Check if reCAPTCHA error still exists
-                        if (errors['recaptcha_token']) {
-                            console.error(
-                                'reCAPTCHA validation failed on server side',
-                            );
-                        }
-                    },
-                    onFinish: () => {
-                        reset('password');
-                        setIsSubmitting(false);
-                    },
+                onError: () => {
+                    setIsSubmitting(false);
                 },
-            );
-        } catch (error) {
-            console.error('reCAPTCHA execution failed:', error);
-            setIsSubmitting(false);
+            });
         }
     };
 
-    useEffect(() => {
-        return () => reset('password');
-    }, [reset]);
+    //     if (!recaptchaRef.current) {
+    //         console.error('reCAPTCHA not ready');
+    //         setIsSubmitting(false);
+    //         return;
+    //     }
+
+    //     try {
+    //         const token = await recaptchaRef.current.executeAsync();
+    //         //console.log('reCAPTCHA token received:', token ? 'YES' : 'NO');
+
+    //         if (!token) {
+    //             console.error('reCAPTCHA token null');
+    //             setIsSubmitting(false);
+    //             return;
+    //         }
+
+    //         // console.log(
+    //         //     'Submitting login with token:',
+    //         //     token.substring(0, 20) + '...',
+    //         // );
+
+    //         // Use router.post directly - this GUARANTEES the token is sent
+    //         router.post(
+    //             route('login'),
+    //             {
+    //                 email: data.email,
+    //                 password: data.password,
+    //                 recaptcha_token: token,
+    //                 remember: data.remember,
+    //             },
+    //             {
+    //                 onSuccess: () => {
+    //                     // console.log('Login successful!');
+    //                     setIsSubmitting(false);
+    //                 },
+    //                 onError: (errors) => {
+    //                     console.error('Login errors:', errors);
+    //                     setIsSubmitting(false);
+
+    //                     // Check if reCAPTCHA error still exists
+    //                     if (errors['recaptcha_token']) {
+    //                         console.error(
+    //                             'reCAPTCHA validation failed on server side',
+    //                         );
+    //                     }
+    //                 },
+    //                 onFinish: () => {
+    //                     reset('password');
+    //                     setIsSubmitting(false);
+    //                 },
+    //             },
+    //         );
+    //     } catch (error) {
+    //         console.error('reCAPTCHA execution failed:', error);
+    //         setIsSubmitting(false);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     return () => reset('password');
+    // }, [reset]);
 
     return (
         <AuthPagesLayout>
@@ -234,13 +292,6 @@ export default function Login({
                                 message={errors.password}
                             />
                         </div>
-
-                        {/* HIDDEN RECAPTCHA */}
-                        <ReCAPTCHA
-                            ref={recaptchaRef}
-                            size="invisible"
-                            sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
-                        />
 
                         {/* REMEMBER & FORGOT */}
                         <div className="mx-2 flex items-center justify-between text-sm">

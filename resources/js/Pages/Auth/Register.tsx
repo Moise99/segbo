@@ -3,7 +3,6 @@ import AuthPagesLayout from '@/Layouts/AuthPagesLayout';
 import InputError from '@/components/InputError';
 import { Head, Link, useForm } from '@inertiajs/react';
 import React, { useEffect, useState } from 'react';
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 declare global {
     interface Window {
@@ -12,7 +11,6 @@ declare global {
 }
 // Le composant Register
 export default function Register() {
-    const { executeRecaptcha } = useGoogleReCaptcha();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showPassword2, setShowPassword2] = useState(false);
